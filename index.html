@@ -749,7 +749,7 @@ const PRODUCTS = [
     points:["Targets specific pathogens","No harm to beneficial microflora","Fits AGP-free programs"], form:"Powder", dose:"TBD" },
   { id:"probe-we", name:"ProBe-Bac WE", abbr:"WE", need:"gut", cat:"Bacteriophage · drinking water", species:["Broiler","Layer"],
     desc:"Water-soluble bacteriophage solution for fast action through the drinking-water line, by water tank or Dosatron.",
-    points:["Water tank and Dosatron application","Quick response during challenge periods","Fits AGP-free programs"], form:"Water-soluble", dose:"See dosing calculator" },
+    points:["Water tank and Dosatron application","Quick response during challenge periods","Fits AGP-free programs"], form:"Water-soluble", dose:"TBD" },
   { id:"fermkito", name:"FermKito", abbr:"FK", need:"gut", cat:"Fermented functional additive", tbd:true, species:["Broiler"],
     desc:"[One-line description of FermKito and its key benefit]", points:["[Benefit 1]","[Benefit 2]"], form:"TBD", dose:"TBD" },
   { id:"qlife", name:"Q-Life", abbr:"QL", need:"cocci", cat:"Anti-coccidial support", tbd:true, species:["Broiler"],
@@ -919,7 +919,7 @@ function openSheet(id){
   $('#shDesc').innerHTML = `<span class="${p.tbd?'tbd':''}">${esc(p.desc)}</span>`;
   $('#shList').innerHTML = p.points.map(t=>`<li><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg><span class="${/\[/.test(t)?'tbd':''}">${esc(t)}</span></li>`).join('');
   const cell = v => `<span class="${/TBD/.test(v)?'tbd':''}">${esc(v)}</span>`;
-  $('#shMeta').innerHTML = `<dt>Challenge</dt><dd>${esc(needOf(p.need).label)}</dd><dt>Species</dt><dd>${esc(p.species.join(' · '))}</dd><dt>Form</dt><dd>${cell(p.form)}</dd><dt>Dosage</dt><dd>${cell(p.dose)}</dd>`;
+  $('#shMeta').innerHTML = `<dt>Challenge</dt><dd>${esc(needOf(p.need).label)}</dd><dt>Species</dt><dd>${esc(p.species.join(' · '))}</dd><dt>Form</dt><dd>${cell(p.form)}</dd><dt>Max inclusion</dt><dd>${cell(p.dose)}</dd>`;
   $('#shWa').href = waLink(`Hello Ralph, I'd like to know more about ${p.name}${guest?` (${guest})`:''}.`);
   sheet.classList.add('show'); scrim.classList.add('show'); document.body.style.overflow='hidden';
   setTimeout(()=>$('#shClose').focus(), 60);
