@@ -183,6 +183,7 @@ h3{font-weight:700;letter-spacing:-.01em}
 section{padding-block:clamp(56px,10vw,104px) 0}
 .s-head{display:grid;gap:14px;justify-items:center;margin-bottom:34px}
 .cards{display:grid;gap:14px}
+.about-card{max-width:600px;margin-inline:auto}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px;box-shadow:var(--sh-sm)}
 .card h3{font-size:19px;margin-bottom:8px}
 .card p{color:var(--ink-2);font-size:15px}
@@ -192,12 +193,6 @@ section{padding-block:clamp(56px,10vw,104px) 0}
 .kv dd{font-weight:600}
 .pillbox{display:flex;flex-wrap:wrap;gap:6px}
 .pillbox span{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--surface-2)}
-.steps{list-style:none;display:grid;gap:2px}
-.steps li{display:grid;grid-template-columns:30px 1fr;gap:12px;padding-block:12px}
-.steps li + li{border-top:1px solid var(--line)}
-.steps .n{width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-size:12px;font-weight:800}
-.steps h4{font-size:15px;font-weight:700}
-.steps p{font-size:13.5px;color:var(--ink-2)}
 
 .co-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .co-f{border-top:1px solid var(--line);padding-top:10px}
@@ -235,7 +230,6 @@ section{padding-block:clamp(56px,10vw,104px) 0}
 .p-ic.sh-logo img{width:100%;height:100%;object-fit:contain}
 .p-go{margin-left:auto;width:28px;height:28px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;flex:0 0 28px}
 .p-go svg{width:13px;height:13px;stroke:var(--ink-2);fill:none;stroke-width:2.4}
-.p-desc{font-size:13.5px;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .p-tags{display:flex;gap:5px;flex-wrap:wrap}
 .p-tags span{font-family:var(--f-mono);font-size:10px;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--ink-2)}
 .c-cost{background:#F0A429}.c-gut{background:#12B76A}.c-cocci{background:#7A9A2E}.c-heat{background:#F0642F}.c-immune{background:#2F6BFF}
@@ -376,7 +370,6 @@ footer a{color:var(--blue);font-weight:600}
   .p-name{font-size:14.5px}
   .p-cat{font-size:11.5px;line-height:1.35;margin-top:0}
   .p-go{display:none}
-  .p-desc{display:none}
   .p-tags span{font-size:9px;padding:2px 6px}
   .news{border-radius:16px}
   .n-img{aspect-ratio:16/10}
@@ -403,8 +396,7 @@ footer a{color:var(--blue);font-weight:600}
   body{padding-bottom:0}
   .dock{display:none}
   .stats{grid-template-columns:repeat(2,1fr);gap:14px;max-width:520px;margin-inline:auto}
-  .cards.two{grid-template-columns:1.15fr 1fr}
-  .co-facts{grid-template-columns:repeat(4,1fr)}
+    .co-facts{grid-template-columns:repeat(4,1fr)}
   .feat{grid-template-columns:repeat(4,1fr)}
   .prod-grid{grid-template-columns:repeat(2,1fr)}
   .news-grid{grid-template-columns:repeat(2,1fr)}
@@ -428,9 +420,9 @@ footer a{color:var(--blue);font-weight:600}
   <div class="nav-av">RK<img src="assets/ralph.jpg?v=2" alt="" onerror="this.remove()"></div>
   <div class="tabs" id="tabs">
     <a class="tab" href="#about">About</a>
+    <a class="tab" href="#news">Activity</a>
     <a class="tab" href="#company">Company</a>
     <a class="tab" href="#solutions">Products</a>
-    <a class="tab" href="#news">News</a>
   </div>
   <a class="btn btn-primary" href="#contact">Contact</a>
 </nav>
@@ -441,7 +433,7 @@ footer a{color:var(--blue);font-weight:600}
       <div class="hero-av">RK<img src="assets/ralph.jpg?v=2" alt="Ralph Kim" onerror="this.remove()"></div>
       <span class="kicker" id="kicker"><i></i>Pathway Intermediates · Regional Manager</span>
       <h1>Ralph Kim</h1>
-      <p class="sub">Feed additive solutions for poultry and dairy — partner support across <span class="serif" style="font-size:1.12em">nine countries</span> in the Middle East, Africa, South and Central Asia.</p>
+      <p class="sub">Feed additives that cut cost and lift performance. <span class="serif" style="font-size:1.12em">Nine markets</span>, one point of contact.</p>
       <div class="btn-row">
         <button class="btn btn-primary" id="heroSave"><svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M3 21c0-3.9 3.1-7 7-7 1.3 0 2.5.3 3.5.9"/><path d="M19 15v6M16 18h6"/></svg>Save my contact</button>
         <a class="btn btn-ghost" id="heroWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" style="fill:#25D366"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3Z"/></svg>WhatsApp</a>
@@ -466,8 +458,8 @@ footer a{color:var(--blue);font-weight:600}
     </div>
 
     <div class="stats stagger" id="stats">
-      <div class="stat"><div class="v num"><span data-count="9">0</span></div><div class="k">Countries covered</div></div>
-      <div class="stat"><div class="v num"><span data-count="10">0</span></div><div class="k">Feed additive solutions</div></div>
+      <div class="stat"><div class="v num"><span data-count="9">0</span></div><div class="k">Countries</div></div>
+      <div class="stat"><div class="v num"><span data-count="10">0</span></div><div class="k">Products</div></div>
     </div>
   </div>
 </header>
@@ -477,36 +469,34 @@ footer a{color:var(--blue);font-weight:600}
     <div class="s-head center rv">
       <span class="kicker"><i></i>About me</span>
       <h2>On the ground with feed mills, <span class="serif">not just</span> on email</h2>
-      <p class="sub">From first discussion to field trial to launch, partners work with the same person throughout.</p>
+      <p class="sub">Same person from first trial to launch.</p>
     </div>
-    <div class="cards two stagger">
-      <div class="card">
-        <p class="lede">I help partners raise animal performance and lower feed cost with science-based additives — choosing the right product, proving it on their farm, and staying involved after the first order.</p>
-        <p style="margin-top:12px">I visit my markets regularly and support distributors with trials, technical training and registration documents.</p>
-        <dl class="kv">
-          <dt>Based in</dt><dd>Seoul, Korea</dd>
-          <dt>Division</dt><dd>Overseas Business</dd>
-          <dt>Focus</dt><dd>Poultry · Dairy</dd>
-          <dt>Languages</dt><dd><div class="pillbox"><span>English</span><span>Korean</span></div></dd>
-        </dl>
-      </div>
-      <div class="card">
-        <h3>How we work together</h3>
-        <ol class="steps">
-          <li><span class="n">1</span><div><h4>Understand the farm</h4><p>Species, formulation, climate and the problem you want solved.</p></div></li>
-          <li><span class="n">2</span><div><h4>Match the solution</h4><p>Product choice, dosage and cost-benefit for your diets.</p></div></li>
-          <li><span class="n">3</span><div><h4>Prove it in the field</h4><p>Trial protocol design and joint review of the results.</p></div></li>
-          <li><span class="n">4</span><div><h4>Launch and follow up</h4><p>Technical training, customer visits and ongoing support.</p></div></li>
-        </ol>
-      </div>
+    <div class="card rv about-card">
+      <p class="lede">Right product. Proven on your farm. Supported long after the first order.</p>
+      <dl class="kv">
+        <dt>Based in</dt><dd>Seoul, Korea</dd>
+        <dt>Markets</dt><dd>Middle East · Africa · South &amp; Central Asia</dd>
+        <dt>Focus</dt><dd>Poultry · Dairy</dd>
+        <dt>Support</dt><dd>Trials · Training · Registration</dd>
+        <dt>Languages</dt><dd><div class="pillbox"><span>English</span><span>Korean</span></div></dd>
+      </dl>
     </div>
+  </div></section>
+
+  <section id="news"><div class="wrap">
+    <div class="s-head center rv">
+      <span class="kicker"><i></i>News</span>
+      <h2>Recent activity</h2>
+      <p class="sub">Seminars, trials and trade shows across the region.</p>
+    </div>
+    <div class="news-grid stagger" id="newsGrid"></div>
   </div></section>
 
   <section id="company"><div class="wrap">
     <div class="s-head center rv">
       <span class="kicker"><i></i>Company</span>
       <h2>Pathway Intermediates</h2>
-      <p class="sub">A Korean feed additive company in the EASYBIO Group, developing bio-based solutions for nutrient efficiency, gut health, heat stress and immunity.</p>
+      <p class="sub">Bio-based feed additives from Korea — efficiency, gut health, heat stress, immunity.</p>
     </div>
     <div class="card rv">
       <div class="co-facts">
@@ -518,13 +508,13 @@ footer a{color:var(--blue);font-weight:600}
     </div>
     <div class="card rv co-team-card">
       <img class="co-team-photo" src="assets/team.webp" alt="Pathway Intermediates and EASYBIO Group team">
-      <p class="co-team-cap">Our people across the EASYBIO Group</p>
+      <p class="co-team-cap">Our people</p>
     </div>
     <div class="feat stagger">
-      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg></div><h4>Research-backed</h4><p>In-house R&amp;D with trials run alongside universities and integrators.</p></div>
-      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/></svg></div><h4>Group strength</h4><p>Part of the EASYBIO Group — biotechnology, feed, farm and food companies, with production and offices across Korea, the UK, USA, Spain, China, Thailand and Vietnam.</p></div>
-      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h4>Local partnership</h4><p>Committed distributors in every market, with service on site.</p></div>
-      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div><h4>Registration support</h4><p>Technical dossiers and documents for local product registration.</p></div>
+      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg></div><h4>Research-backed</h4><p>In-house R&amp;D, trials with universities and integrators.</p></div>
+      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/></svg></div><h4>Group strength</h4><p>EASYBIO Group — plants and offices in 7 countries.</p></div>
+      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h4>Local partnership</h4><p>Committed distributors, service on site.</p></div>
+      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div><h4>Registration support</h4><p>Dossiers and documents for local registration.</p></div>
     </div>
   </div></section>
 
@@ -532,7 +522,7 @@ footer a{color:var(--blue);font-weight:600}
     <div class="s-head center rv">
       <span class="kicker"><i></i>Products</span>
       <h2>What challenge are <span class="serif">you facing</span>?</h2>
-      <p class="sub">Pick a challenge and species to see the matching products. Tap any product for the details.</p>
+      <p class="sub">Filter by challenge and species. Tap for details.</p>
     </div>
     <div class="segs rv">
       <div class="seg" id="segNeed" role="tablist" aria-label="Filter by challenge"></div>
@@ -540,22 +530,12 @@ footer a{color:var(--blue);font-weight:600}
     </div>
     <div class="prod-grid stagger" id="prodGrid"></div>
   </div></section>
-</main>
-
-<main>
-  <section id="news"><div class="wrap">
-    <div class="s-head center rv">
-      <span class="kicker"><i></i>News</span>
-      <h2>Recent activity</h2>
-    </div>
-    <div class="news-grid stagger" id="newsGrid"></div>
-  </div></section>
 
   <section id="contact"><div class="wrap">
     <div class="s-head center rv">
       <span class="kicker"><i></i>Contact</span>
       <h2>Let's talk about <span class="serif">your farm</span></h2>
-      <p class="sub">Fill in a few details and send them by WhatsApp or email. The message opens ready to send — nothing is stored here.</p>
+      <p class="sub">A few details, sent by WhatsApp or email. Nothing is stored here.</p>
     </div>
     <form class="card form rv" id="form" onsubmit="return false">
       <div class="row2">
@@ -757,7 +737,6 @@ $('#prodGrid').innerHTML = PRODUCTS.map(p => `
       <span class="p-go"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span>
     </span>
     <span class="p-cat ${p.tbd?'tbd':''}">${esc(p.cat)}</span>
-    <span class="p-desc ${p.tbd?'tbd':''}">${esc(p.desc)}</span>
     <span class="p-tags">${p.species.map(s=>`<span>${esc(s)}</span>`).join('')}</span>
   </button>`).join('');
 
