@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ralph Kim · Pathway Intermediates</title>
-<meta name="description" content="Ralph Kim, Overseas Sales at Pathway Intermediates. Feed additive solutions for the Middle East, Africa, South and Central Asia.">
+<meta name="description" content="Ralph Kim, Regional Manager at Pathway Intermediates. Feed additive solutions for the Middle East, Africa, South and Central Asia.">
 <meta name="theme-color" content="#F5F7FD">
 
 <meta property="og:type" content="profile">
@@ -116,10 +116,10 @@ h3{font-weight:700;letter-spacing:-.01em}
 }
 .nav.show{transform:translate(-50%,0)}
 .nav-av{width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:12.5px;font-weight:800;flex:0 0 32px;position:relative;overflow:hidden}
-.nav-av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.nav-av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
 .hero-av{width:104px;height:104px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:34px;font-weight:800;
   position:relative;overflow:hidden;box-shadow:var(--sh-lg);border:4px solid var(--surface)}
-.hero-av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
 .tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex:0 0 auto;font-size:13.5px;font-weight:600;color:var(--ink-2);padding:7px 12px;border-radius:999px;transition:.25s}
@@ -240,8 +240,11 @@ section{padding-block:clamp(56px,10vw,104px) 0}
 
 .co-facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .co-f{border-top:1px solid var(--line);padding-top:10px}
-.co-f .v{font-size:20px;font-weight:700;letter-spacing:-.02em}
+.co-f .v{font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.3}
 .co-f .k{font-size:12px;color:var(--ink-3)}
+.co-team-card{margin-top:14px;text-align:center}
+.co-team-photo{display:block;width:100%;max-width:340px;margin-inline:auto}
+.co-team-cap{margin-top:14px;font-size:13px;color:var(--ink-2)}
 .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
 .feat .f{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;box-shadow:var(--sh-sm)}
 .feat .ic{width:36px;height:36px;border-radius:11px;background:var(--blue-soft);display:grid;place-items:center;margin-bottom:10px}
@@ -319,6 +322,7 @@ section{padding-block:clamp(56px,10vw,104px) 0}
 .fine{font-size:12.5px;color:var(--ink-3);text-align:center}
 
 footer{margin-top:clamp(56px,10vw,96px);border-top:1px solid var(--line);padding-block:30px calc(34px + env(safe-area-inset-bottom, 0px));text-align:center;font-size:13px;color:var(--ink-3)}
+footer .flogo{height:28px;width:auto;margin-bottom:10px}
 footer .fbrand{font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:8px}
 footer a{color:var(--blue);font-weight:600}
 .review-btn{margin-top:14px;font-size:12px;padding:7px 12px;border-radius:999px;border:1px dashed var(--tbd-line);color:var(--ink-2)}
@@ -472,7 +476,7 @@ footer a{color:var(--blue);font-weight:600}
   <div class="wrap">
     <div class="hero-head center">
       <div class="hero-av">RK<img src="assets/ralph.jpg" alt="Ralph Kim" onerror="this.remove()"></div>
-      <span class="kicker" id="kicker"><i></i>Pathway Intermediates · Overseas Sales</span>
+      <span class="kicker" id="kicker"><i></i>Pathway Intermediates · Regional Manager</span>
       <h1>Ralph Kim<span class="kr">김우람</span></h1>
       <p class="sub">Feed additive solutions for poultry and dairy — partner support across <span class="serif" style="font-size:1.12em">nine countries</span> in the Middle East, Africa, South and Central Asia.</p>
       <div class="btn-row">
@@ -505,7 +509,7 @@ footer a{color:var(--blue);font-weight:600}
                 <div class="face front">
                   <div class="f-top"><span>Pathway Intermediates</span><span>Feed additives</span></div>
                   <div class="f-name">Ralph Kim</div>
-                  <div class="f-role">Overseas Sales · Middle East · Africa · Asia</div>
+                  <div class="f-role">Regional Manager · Middle East · Africa · Asia</div>
                   <div class="f-bottom">
                     <div class="f-codes">SA · JO · AE · BD · PK<br>NP · KE · NG · KZ</div>
                     <span class="f-hint"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Tap for QR</span>
@@ -595,19 +599,23 @@ footer a{color:var(--blue);font-weight:600}
     <div class="s-head center rv">
       <span class="kicker"><i></i>Company</span>
       <h2>Pathway Intermediates</h2>
-      <p class="sub">A Korean feed additive company in the <span class="tbd">EASYBIO Group</span>, developing bio-based solutions for nutrient efficiency, gut health, heat stress and immunity.</p>
+      <p class="sub">A Korean feed additive company in the EASYBIO Group, developing bio-based solutions for nutrient efficiency, gut health, heat stress and immunity.</p>
     </div>
     <div class="card rv">
       <div class="co-facts">
         <div class="co-f"><div class="v"><span class="tbd">20XX</span></div><div class="k">Founded</div></div>
         <div class="co-f"><div class="v"><span class="tbd">00+</span></div><div class="k">Export countries</div></div>
         <div class="co-f"><div class="v">Korea</div><div class="k">R&amp;D and production</div></div>
-        <div class="co-f"><div class="v"><span class="tbd">GMP+ · ISO</span></div><div class="k">Certifications</div></div>
+        <div class="co-f"><div class="v">HACCP · FAMI-QS<br>GMP · ISO 22000</div><div class="k">Certifications</div></div>
       </div>
+    </div>
+    <div class="card rv co-team-card">
+      <img class="co-team-photo" src="assets/team.webp" alt="Pathway Intermediates and EASYBIO Group team">
+      <p class="co-team-cap">Our people across the EASYBIO Group</p>
     </div>
     <div class="feat stagger">
       <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg></div><h4>Research-backed</h4><p>In-house R&amp;D with trials run alongside universities and integrators.</p></div>
-      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/></svg></div><h4>Group strength</h4><p><span class="tbd">[EASYBIO / EG Bio: manufacturing scale, history]</span></p></div>
+      <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M9 21v-6h6v6"/></svg></div><h4>Group strength</h4><p>Part of the EASYBIO Group — biotechnology, feed, farm and food companies, with production and offices across Korea, the UK, USA, Spain, China, Thailand and Vietnam.</p></div>
       <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h4>Local partnership</h4><p>Committed distributors in every market, with service on site.</p></div>
       <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div><h4>Registration support</h4><p>Technical dossiers and documents for local product registration.</p></div>
     </div>
@@ -670,6 +678,7 @@ footer a{color:var(--blue);font-weight:600}
 
 <footer>
   <div class="wrap">
+    <img class="flogo" src="assets/logo.png" alt="Pathway Intermediates">
     <div class="fbrand">Pathway Intermediates</div>
     <div><span class="tbd">[Company address, Korea]</span></div>
     <div style="margin-top:6px"><a href="https://www.pathway-intermediates.com/" target="_blank" rel="noopener">pathway-intermediates.com</a> · © 2026</div>
@@ -705,7 +714,7 @@ footer a{color:var(--blue);font-weight:600}
 const CONFIG = {
   pageUrl:  "https://pathway-bd.github.io/Profile/",
   firstName:"Ralph", lastName:"Kim",
-  title:    "Overseas Sales Manager",                // TODO
+  title:    "Regional Manager",
   company:  "Pathway Intermediates",
   whatsapp: "8210XXXXXXXX",                          // TODO: digits only, country code first
   phone:    "+82 10-XXXX-XXXX",                      // TODO
@@ -730,9 +739,9 @@ const PRODUCTS = [
   { id:"lipidol", name:"Lipidol", abbr:"Li", need:"cost", cat:"Nutritional emulsifier", species:["Broiler","Layer","Dairy"],
     desc:"Lysophospholipid-based emulsifier that improves fat digestion and energy use, so diets can be formulated at lower cost without losing performance.",
     points:["Better fat and energy digestibility","Energy matrix value for least-cost formulation","Supports growth and FCR"], form:"Powder", dose:"TBD" },
-  { id:"endopower", name:"Endopower", abbr:"En", need:"cost", cat:"Feed enzyme", tbd:true, species:["Broiler","Layer"],
-    desc:"Enzyme solution that breaks down anti-nutritional factors and releases more nutrients from feed ingredients.",
-    points:["More nutrients from the same ingredients","[Confirm key claim]"], form:"TBD", dose:"TBD" },
+  { id:"endopower", name:"Endopower", abbr:"En", need:"cost", cat:"NSP enzyme complex", species:["Broiler","Layer"],
+    desc:"A four-enzyme complex (α-Galactosidase, β-Mannanase, Xylanase, β-Glucanase) that degrades non-starch polysaccharides, unlocking more energy and nutrients from alternative feedstuffs such as rapeseed (canola) meal, copra meal and cotton meal.",
+    points:["Best for diets with alternative feedstuffs","Stable across a wide pH and temperature range","Non-GMO, produced by fermentation"], form:"Powder, 20 kg bag", dose:"TBD" },
   { id:"growmax", name:"Growmax", abbr:"Gm", need:"cost", cat:"Growth performance", tbd:true, species:["Broiler"],
     desc:"[One-line description of Growmax and its key benefit]", points:["[Benefit 1]","[Benefit 2]"], form:"TBD", dose:"TBD" },
   { id:"probe-pe", name:"ProBe-Bac PE", abbr:"PE", need:"gut", cat:"Bacteriophage · in-feed", species:["Broiler","Layer"],
