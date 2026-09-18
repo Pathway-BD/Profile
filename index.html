@@ -583,8 +583,6 @@ footer a{color:var(--blue);font-weight:600}
     <div class="stats stagger" id="stats">
       <div class="stat"><div class="v num"><span data-count="9">0</span></div><div class="k">Countries covered</div></div>
       <div class="stat"><div class="v num"><span data-count="10">0</span></div><div class="k">Feed additive solutions</div></div>
-      <div class="stat"><div class="v num"><span class="tbd">00</span><sup>+</sup></div><div class="k">Years in animal nutrition</div></div>
-      <div class="stat"><div class="v num"><span class="tbd">00</span><sup>+</sup></div><div class="k">Distributor partners</div></div>
     </div>
   </div>
 </header>
@@ -603,9 +601,8 @@ footer a{color:var(--blue);font-weight:600}
         <dl class="kv">
           <dt>Based in</dt><dd>Seoul, Korea</dd>
           <dt>Division</dt><dd>Overseas Business</dd>
-          <dt>Focus</dt><dd>Poultry · Dairy · <span class="tbd">Aqua?</span></dd>
+          <dt>Focus</dt><dd>Poultry · Dairy</dd>
           <dt>Languages</dt><dd><div class="pillbox"><span>English</span><span>Korean</span></div></dd>
-          <dt>Education</dt><dd><span class="tbd">Degree, University</span></dd>
         </dl>
       </div>
       <div class="card">
@@ -791,12 +788,24 @@ const REGIONS = [
 ];
 
 const NEWS = [
-  { idx:176, page:3, tag:"News", date:"YYYY.MM.DD", title:"News title #176", summary:"One-line summary of the article." },
-  { idx:174, page:3, tag:"News", date:"YYYY.MM.DD", title:"News title #174", summary:"One-line summary of the article." },
-  { idx:162, page:4, tag:"News", date:"YYYY.MM.DD", title:"News title #162", summary:"One-line summary of the article." },
-  { idx:155, page:4, tag:"News", date:"YYYY.MM.DD", title:"News title #155", summary:"One-line summary of the article." },
-  { idx:151, page:5, tag:"News", date:"YYYY.MM.DD", title:"News title #151", summary:"One-line summary of the article." },
-  { idx:148, page:5, tag:"News", date:"YYYY.MM.DD", title:"News title #148", summary:"One-line summary of the article." }
+  { idx:176, page:3, tag:"News", date:"2026.01.02", img:"assets/news/176.jpg",
+    title:"Pathway Intermediates USA Completes Strategic Acquisition of BioMatrix International",
+    summary:"Pathway Intermediates USA has acquired 100% of BioMatrix International, strengthening its presence in North America." },
+  { idx:174, page:3, tag:"News", date:"2025.11", img:"assets/news/174.jpg",
+    title:"Pathway Intermediates Hosted 8th Solution Creation University",
+    summary:"Pathway members from offices worldwide gathered in Korea to share the company's 2030 and 2040 vision and strategy." },
+  { idx:162, page:4, tag:"News", date:"2025.03.20", img:"assets/news/162.jpg",
+    title:"Pathway Intermediates Achieves Great Success at VIV Asia 2025",
+    summary:"Lipidol, Endo-Power and ProBe-Bac took centre stage at Asia's largest livestock exhibition in Bangkok." },
+  { idx:155, page:4, tag:"News", date:"2024.11.22", img:"assets/news/155.jpg",
+    title:"Pathway Intermediates Shines at EuroTier 2024",
+    summary:"Lipidol Prime, Protect and Green launched in Hannover, alongside a new partnership with Brenntag for Benelux and the Nordics." },
+  { idx:151, page:5, tag:"News", date:"2024.08.28", img:"assets/news/151.jpg",
+    title:"Pathway Intermediates holds Sales Training Seminar in Kenya",
+    summary:"Ralph led a Lipidol seminar at a distributor's FY2025 kickoff, in a market where feed production grew over 25% since 2021." },
+  { idx:148, page:5, tag:"News", date:"2024.07.08", img:"assets/news/148.jpg",
+    title:"Pathway Intermediates Holds 2nd Seminar on Optimal Nutrient Utilization in Pakistan",
+    summary:"Ralph presented Lipidol and Endo-Power to nutritionists in Islamabad, covering higher NSP levels in soybean-meal alternatives." }
 ];
 
 /* =========================================================
@@ -959,11 +968,11 @@ updateTimes(); setInterval(updateTimes, 30000);
 
 $('#newsGrid').innerHTML = NEWS.map(n => `
   <a class="news" href="https://www.pathway-intermediates.com/sub/news_view.php?idx=${n.idx}&page=${n.page}" target="_blank" rel="noopener">
-    <div class="n-img"><span>${esc(n.tag)}</span></div>
+    <div class="n-img">${n.img?`<img src="${n.img}" alt="" loading="lazy" onerror="this.remove()">`:''}<span>${esc(n.tag)}</span></div>
     <div class="n-body">
-      <span class="n-date tbd">${esc(n.date)}</span>
-      <h3><span class="tbd">${esc(n.title)}</span></h3>
-      <p><span class="tbd">${esc(n.summary)}</span></p>
+      <span class="n-date ${/^\d{4}\.\d{2}\.\d{2}$/.test(n.date)?'':'tbd'}">${esc(n.date)}</span>
+      <h3><span class="${n.tbd?'tbd':''}">${esc(n.title)}</span></h3>
+      <p><span class="${n.tbd?'tbd':''}">${esc(n.summary)}</span></p>
       <span class="n-more">Read the article →</span>
     </div>
   </a>`).join('');
