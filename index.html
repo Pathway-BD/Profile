@@ -143,15 +143,18 @@ h3{font-weight:700;letter-spacing:-.01em}
 .hero .note svg{width:14px;height:14px;stroke:var(--green);fill:none;stroke-width:2.4}
 
 /* Product bag showcase */
-.stage{position:relative;display:flex;justify-content:center;align-items:flex-end;gap:clamp(2px,2.5vw,34px);padding-block:14px 26px}
-.bag{display:flex;flex-direction:column;align-items:center;gap:14px;flex:0 0 auto}
-.bag img{display:block;width:auto;height:auto;filter:drop-shadow(0 26px 34px rgba(14,22,56,.26))}
+.stage{position:relative;display:flex;justify-content:center;align-items:flex-end;padding-block:14px 26px}
+.bag{display:flex;flex-direction:column;align-items:center;gap:12px;flex:0 0 auto}
+.bag img{display:block;width:auto;height:auto;transform:rotate(var(--tilt,0deg));
+  filter:drop-shadow(0 26px 34px rgba(14,22,56,.26))}
 .bag.main img{height:clamp(196px,30vw,296px)}
-.bag.side img{height:clamp(152px,23vw,232px)}
-.bag figcaption{display:flex;flex-direction:column;gap:2px;text-align:center;font-size:13.5px;font-weight:700;letter-spacing:-.01em;max-width:15ch}
-.bag figcaption span{font-weight:500;font-size:11.5px;color:var(--ink-2)}
+.bag.side img{height:clamp(150px,23vw,230px)}
+.bag figcaption{display:flex;flex-direction:column;gap:2px;text-align:center;font-size:13px;font-weight:700;letter-spacing:-.01em;max-width:14ch}
+.bag figcaption span{font-weight:500;font-size:11px;color:var(--ink-2)}
 .bag.main{z-index:2}
-.bag.side{padding-bottom:22px}
+.bag.side{padding-bottom:26px}
+.bag:first-child{--tilt:-7deg;margin-right:-4.5%}
+.bag:last-child{--tilt:7deg;margin-left:-4.5%}
 @media (prefers-reduced-motion: no-preference){
   .bag{animation:bagIn .9s var(--ease) both}
   .bag:nth-child(2){animation-delay:.1s}
@@ -160,7 +163,10 @@ h3{font-weight:700;letter-spacing:-.01em}
   .bag:nth-child(2) img{animation-delay:-2.2s}
   .bag:nth-child(3) img{animation-delay:-4.4s}
   @keyframes bagIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
-  @keyframes bagFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  @keyframes bagFloat{
+    0%,100%{transform:rotate(var(--tilt,0deg)) translateY(0)}
+    50%{transform:rotate(var(--tilt,0deg)) translateY(-14px)}
+  }
 }
 
 
@@ -666,22 +672,22 @@ const REGIONS = [
 
 const NEWS = [
   { idx:176, page:3, tag:"News", date:"2026.01.02", img:"assets/news/176.jpg",
-    title:"Pathway Intermediates USA Completes Strategic Acquisition of BioMatrix International",
+    title:"Pathway USA acquires BioMatrix International",
     summary:"Pathway Intermediates USA has acquired 100% of BioMatrix International, strengthening its presence in North America." },
   { idx:174, page:3, tag:"News", date:"2025.11", img:"assets/news/174.jpg",
-    title:"Pathway Intermediates Hosted 8th Solution Creation University",
+    title:"8th Solution Creation University",
     summary:"Pathway members from offices worldwide gathered in Korea to share the company's 2030 and 2040 vision and strategy." },
   { idx:162, page:4, tag:"News", date:"2025.03.20", img:"assets/news/162.jpg",
-    title:"Pathway Intermediates Achieves Great Success at VIV Asia 2025",
+    title:"VIV Asia 2025, Bangkok",
     summary:"Lipidol, Endo-Power and ProBe-Bac took centre stage at Asia's largest livestock exhibition in Bangkok." },
   { idx:155, page:4, tag:"News", date:"2024.11.22", img:"assets/news/155.jpg",
-    title:"Pathway Intermediates Shines at EuroTier 2024",
+    title:"EuroTier 2024, Hannover",
     summary:"Lipidol Prime, Protect and Green launched in Hannover, alongside a new partnership with Brenntag for Benelux and the Nordics." },
   { idx:151, page:5, tag:"News", date:"2024.08.28", img:"assets/news/151.jpg",
-    title:"Pathway Intermediates holds Sales Training Seminar in Kenya",
+    title:"Sales training seminar, Kenya",
     summary:"Ralph led a Lipidol seminar at a distributor's FY2025 kickoff, in a market where feed production grew over 25% since 2021." },
   { idx:148, page:5, tag:"News", date:"2024.07.08", img:"assets/news/148.jpg",
-    title:"Pathway Intermediates Holds 2nd Seminar on Optimal Nutrient Utilization in Pakistan",
+    title:"Nutrient utilization seminar, Pakistan",
     summary:"Ralph presented Lipidol and Endo-Power to nutritionists in Islamabad, covering higher NSP levels in soybean-meal alternatives." }
 ];
 
