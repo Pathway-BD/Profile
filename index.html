@@ -201,13 +201,26 @@ h3{font-weight:700;letter-spacing:-.01em}
 .mock .m-h{font-size:13px;font-weight:700;letter-spacing:-.02em}
 .mock .m-s{font-size:10.5px;color:var(--ink-3);margin-top:-6px}
 .m-row{display:flex;align-items:center;gap:9px;padding:9px;border-radius:12px;background:var(--surface-2)}
-.m-ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:800;flex:0 0 26px}
+.m-ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:800;flex:0 0 30px;overflow:hidden;background:var(--surface)}
+.m-ic img{width:100%;height:100%;object-fit:cover}
 .m-t{font-size:11px;font-weight:700;line-height:1.2}
 .m-t span{display:block;font-weight:500;font-size:9.5px;color:var(--ink-3)}
 .m-time{margin-left:auto;font-family:var(--f-mono);font-size:10px;color:var(--ink-2);display:flex;align-items:center;gap:5px}
 .m-time i{width:5px;height:5px;border-radius:50%;background:var(--ink-3)}
 .m-time i.day{background:var(--green)}
 .m-flag{font-size:16px;line-height:1}
+
+/* Mobile product strip (auto-scrolling) */
+.mobi-prod{margin-top:22px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mobi-prod-track{display:flex;gap:10px;width:max-content;animation:mobiScroll 16s linear infinite}
+.mobi-card{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:7px 16px 7px 7px;box-shadow:var(--sh-sm);flex:0 0 auto}
+.mobi-card img{width:36px;height:36px;border-radius:10px;object-fit:cover;flex:0 0 36px;background:var(--surface-2)}
+.mobi-t{display:flex;flex-direction:column;gap:1px}
+.mobi-t b{font-size:12.5px;font-weight:700}
+.mobi-t small{font-size:10.5px;color:var(--ink-2)}
+@keyframes mobiScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.mobi-prod-track{animation:none}}
+@media (min-width:760px){.mobi-prod{display:none}}
 
 /* Stats */
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:26px}
@@ -268,7 +281,10 @@ section{padding-block:clamp(56px,10vw,104px) 0}
 .p-ic{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:14px;position:relative;overflow:hidden;flex:0 0 42px}
 .p-ic::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.3),transparent 60%)}
 .p-name{font-size:17px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
-.p-cat{font-size:12.5px;color:var(--ink-2)}
+.p-logo{height:28px;width:auto;max-width:100%;object-fit:contain;object-position:left center}
+.p-cat{font-size:12.5px;color:var(--ink-2);margin-top:-4px}
+.p-ic.sh-logo{background:var(--surface);padding:8px}
+.p-ic.sh-logo img{width:100%;height:100%;object-fit:contain}
 .p-go{margin-left:auto;width:28px;height:28px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;flex:0 0 28px}
 .p-go svg{width:13px;height:13px;stroke:var(--ink-2);fill:none;stroke-width:2.4}
 .p-desc{font-size:13.5px;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -401,8 +417,9 @@ footer a{color:var(--blue);font-weight:600}
   .prod{padding:13px;gap:9px;border-radius:16px}
   .p-head{flex-direction:column;align-items:flex-start;gap:8px}
   .p-ic{width:34px;height:34px;flex:0 0 34px;border-radius:11px;font-size:12px}
+  .p-logo{height:22px}
   .p-name{font-size:14.5px}
-  .p-cat{font-size:11.5px;line-height:1.35}
+  .p-cat{font-size:11.5px;line-height:1.35;margin-top:0}
   .p-go{display:none}
   .p-desc{display:none}
   .p-tags span{font-size:9px;padding:2px 6px}
@@ -461,12 +478,11 @@ footer a{color:var(--blue);font-weight:600}
 <script>document.documentElement.classList.add('js')</script>
 
 <nav class="nav" id="nav" aria-label="Sections">
-  <div class="nav-av">RK<img src="assets/ralph.jpg" alt="" onerror="this.remove()"></div>
+  <div class="nav-av">RK<img src="assets/ralph.jpg?v=2" alt="" onerror="this.remove()"></div>
   <div class="tabs" id="tabs">
     <a class="tab" href="#about">About</a>
     <a class="tab" href="#company">Company</a>
     <a class="tab" href="#solutions">Products</a>
-    <a class="tab" href="#markets">Markets</a>
     <a class="tab" href="#news">News</a>
   </div>
   <a class="btn btn-primary" href="#contact">Contact</a>
@@ -475,9 +491,9 @@ footer a{color:var(--blue);font-weight:600}
 <header class="hero" id="top">
   <div class="wrap">
     <div class="hero-head center">
-      <div class="hero-av">RK<img src="assets/ralph.jpg" alt="Ralph Kim" onerror="this.remove()"></div>
+      <div class="hero-av">RK<img src="assets/ralph.jpg?v=2" alt="Ralph Kim" onerror="this.remove()"></div>
       <span class="kicker" id="kicker"><i></i>Pathway Intermediates · Regional Manager</span>
-      <h1>Ralph Kim<span class="kr">김우람</span></h1>
+      <h1>Ralph Kim</h1>
       <p class="sub">Feed additive solutions for poultry and dairy — partner support across <span class="serif" style="font-size:1.12em">nine countries</span> in the Middle East, Africa, South and Central Asia.</p>
       <div class="btn-row">
         <button class="btn btn-primary" id="heroSave"><svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M3 21c0-3.9 3.1-7 7-7 1.3 0 2.5.3 3.5.9"/><path d="M19 15v6M16 18h6"/></svg>Save my contact</button>
@@ -486,16 +502,26 @@ footer a{color:var(--blue);font-weight:600}
       <p class="note"><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg>Saves straight to your phone · no app needed</p>
     </div>
 
+    <div class="mobi-prod" aria-hidden="true">
+      <div class="mobi-prod-track">
+        <div class="mobi-card"><img src="assets/bags/lipidol.png" alt=""><div class="mobi-t"><b>Lipidol Plus</b><small>Energy &amp; feed cost</small></div></div>
+        <div class="mobi-card"><img src="assets/bags/probe-pe.png" alt=""><div class="mobi-t"><b>ProBe-Bac PE</b><small>Bacteriophage</small></div></div>
+        <div class="mobi-card"><img src="assets/bags/endopower.png" alt=""><div class="mobi-t"><b>Endopower Plus</b><small>NSP enzyme</small></div></div>
+        <div class="mobi-card"><img src="assets/bags/lipidol.png" alt=""><div class="mobi-t"><b>Lipidol Plus</b><small>Energy &amp; feed cost</small></div></div>
+        <div class="mobi-card"><img src="assets/bags/probe-pe.png" alt=""><div class="mobi-t"><b>ProBe-Bac PE</b><small>Bacteriophage</small></div></div>
+        <div class="mobi-card"><img src="assets/bags/endopower.png" alt=""><div class="mobi-t"><b>Endopower Plus</b><small>NSP enzyme</small></div></div>
+      </div>
+    </div>
+
     <div class="stage" id="stage">
       <div class="phone side left" aria-hidden="true">
         <div class="screen">
           <div class="mock">
-            <div class="m-h">Find by challenge</div>
-            <p class="m-s">Heat stress · matching products</p>
-            <div class="m-row"><span class="m-ic c-heat">Sx</span><span class="m-t">StreX<span>Heat stress</span></span></div>
-            <div class="m-row"><span class="m-ic c-cost">Li</span><span class="m-t">Lipidol<span>Energy &amp; feed cost</span></span></div>
-            <div class="m-row"><span class="m-ic c-gut">PE</span><span class="m-t">ProBe-Bac PE<span>Bacteriophage</span></span></div>
-            <div class="m-row"><span class="m-ic c-immune">YU</span><span class="m-t">YeaMune-UP<span>Immunity</span></span></div>
+            <div class="m-h">Featured products</div>
+            <p class="m-s">Real Pathway packaging</p>
+            <div class="m-row"><span class="m-ic"><img src="assets/bags/lipidol.png" alt=""></span><span class="m-t">Lipidol Plus<span>Energy &amp; feed cost</span></span></div>
+            <div class="m-row"><span class="m-ic"><img src="assets/bags/probe-pe.png" alt=""></span><span class="m-t">ProBe-Bac PE<span>Bacteriophage</span></span></div>
+            <div class="m-row"><span class="m-ic"><img src="assets/bags/endopower.png" alt=""></span><span class="m-t">Endopower Plus<span>NSP enzyme</span></span></div>
           </div>
         </div>
       </div>
@@ -534,7 +560,6 @@ footer a{color:var(--blue);font-weight:600}
             </div>
             <div class="scr-links">
               <a class="scr-link" href="#solutions"><span class="sl-k">Products</span><span class="sl-v">10 solutions · filter by challenge</span></a>
-              <a class="scr-link" href="#markets"><span class="sl-k">Markets</span><span class="sl-v">9 countries · local time now</span></a>
             </div>
             <button class="scr-cta" id="scrShare"><svg viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Share this card</button>
           </div>
@@ -603,8 +628,8 @@ footer a{color:var(--blue);font-weight:600}
     </div>
     <div class="card rv">
       <div class="co-facts">
-        <div class="co-f"><div class="v"><span class="tbd">20XX</span></div><div class="k">Founded</div></div>
-        <div class="co-f"><div class="v"><span class="tbd">00+</span></div><div class="k">Export countries</div></div>
+        <div class="co-f"><div class="v">2001</div><div class="k">Founded</div></div>
+        <div class="co-f"><div class="v">60+</div><div class="k">Export countries</div></div>
         <div class="co-f"><div class="v">Korea</div><div class="k">R&amp;D and production</div></div>
         <div class="co-f"><div class="v">HACCP · FAMI-QS<br>GMP · ISO 22000</div><div class="k">Certifications</div></div>
       </div>
@@ -634,15 +659,6 @@ footer a{color:var(--blue);font-weight:600}
     <div class="prod-grid stagger" id="prodGrid"></div>
   </div></section>
 </main>
-
-<section class="band" id="markets"><div class="wrap">
-  <div class="s-head center rv">
-    <span class="kicker"><i></i>Markets</span>
-    <h2>Nine countries, four regions,<br><span class="serif">one</span> point of contact</h2>
-    <p class="sub">Local times update live. A green dot means it is business hours there.</p>
-  </div>
-  <div class="regions stagger" id="regions"></div>
-</div></section>
 
 <main>
   <section id="news"><div class="wrap">
@@ -680,9 +696,8 @@ footer a{color:var(--blue);font-weight:600}
   <div class="wrap">
     <img class="flogo" src="assets/logo.png" alt="Pathway Intermediates">
     <div class="fbrand">Pathway Intermediates</div>
-    <div><span class="tbd">[Company address, Korea]</span></div>
+    <div>6th Floor, 308 Gangnam-daero, Seoul, South Korea</div>
     <div style="margin-top:6px"><a href="https://www.pathway-intermediates.com/" target="_blank" rel="noopener">pathway-intermediates.com</a> · © 2026</div>
-    <button class="review-btn" id="reviewBtn">Hide review highlights</button>
   </div>
 </footer>
 
@@ -736,33 +751,36 @@ const NEEDS = [
 const SPECIES = ["All species","Broiler","Layer","Dairy","Aqua"];
 
 const PRODUCTS = [
-  { id:"lipidol", name:"Lipidol", abbr:"Li", need:"cost", cat:"Nutritional emulsifier", species:["Broiler","Layer","Dairy"],
+  { id:"lipidol", name:"Lipidol Plus", abbr:"Li", logo:"assets/logos/lipidol.png", need:"cost", cat:"The First Absorption Accelerator", species:["Broiler","Layer","Dairy"],
     desc:"Lysophospholipid-based emulsifier that improves fat digestion and energy use, so diets can be formulated at lower cost without losing performance.",
     points:["Better fat and energy digestibility","Energy matrix value for least-cost formulation","Supports growth and FCR"], form:"Powder", dose:"TBD" },
-  { id:"endopower", name:"Endopower", abbr:"En", need:"cost", cat:"NSP enzyme complex", species:["Broiler","Layer"],
+  { id:"endopower", name:"Endopower Plus", abbr:"En", logo:"assets/logos/endopower.png", need:"cost", cat:"Optimal Complex Enzyme for Animal Feed", species:["Broiler","Layer"],
     desc:"A four-enzyme complex (α-Galactosidase, β-Mannanase, Xylanase, β-Glucanase) that degrades non-starch polysaccharides, unlocking more energy and nutrients from alternative feedstuffs such as rapeseed (canola) meal, copra meal and cotton meal.",
     points:["Best for diets with alternative feedstuffs","Stable across a wide pH and temperature range","Non-GMO, produced by fermentation"], form:"Powder, 20 kg bag", dose:"TBD" },
-  { id:"growmax", name:"Growmax", abbr:"Gm", need:"cost", cat:"Growth performance", tbd:true, species:["Broiler"],
-    desc:"[One-line description of Growmax and its key benefit]", points:["[Benefit 1]","[Benefit 2]"], form:"TBD", dose:"TBD" },
-  { id:"probe-pe", name:"ProBe-Bac PE", abbr:"PE", need:"gut", cat:"Bacteriophage · in-feed", species:["Broiler","Layer"],
+  { id:"growmax", name:"GrowMax", abbr:"Gm", logo:"assets/logos/growmax.png", need:"cost", cat:"Organic Chromium for Animal Performance", species:["Broiler"],
+    desc:"Organic chromium supplement formulated to support animal growth performance.",
+    points:["Organic chromium source","Supports overall animal performance"], form:"TBD", dose:"TBD" },
+  { id:"probe-pe", name:"ProBe-Bac PE", abbr:"PE", logo:"assets/logos/probe-pe.png", need:"gut", cat:"New Preventive Approach for Bacterial Infection", species:["Broiler","Layer"],
     desc:"Bacteriophages that target specific pathogenic bacteria and leave beneficial gut flora intact — a natural tool for antibiotic-reduction programs.",
     points:["Targets specific pathogens","No harm to beneficial microflora","Fits AGP-free programs"], form:"Powder", dose:"TBD" },
   { id:"probe-we", name:"ProBe-Bac WE", abbr:"WE", need:"gut", cat:"Bacteriophage · drinking water", species:["Broiler","Layer"],
     desc:"Water-soluble bacteriophage solution for fast action through the drinking-water line, by water tank or Dosatron.",
     points:["Water tank and Dosatron application","Quick response during challenge periods","Fits AGP-free programs"], form:"Water-soluble", dose:"TBD" },
-  { id:"fermkito", name:"FermKito", abbr:"FK", need:"gut", cat:"Fermented functional additive", tbd:true, species:["Broiler"],
-    desc:"[One-line description of FermKito and its key benefit]", points:["[Benefit 1]","[Benefit 2]"], form:"TBD", dose:"TBD" },
+  { id:"fermkito", name:"Fermkito", abbr:"FK", logo:"assets/logos/fermkito.png", need:"gut", cat:"Natural Fermented Chitosan and COS", species:["Broiler"],
+    desc:"Natural fermented chitosan and chito-oligosaccharide (COS) additive that supports gut and immune health.",
+    points:["Natural fermented chitosan and COS","Supports gut and immune health"], form:"TBD", dose:"TBD" },
   { id:"qlife", name:"Q-Life", abbr:"QL", need:"cocci", cat:"Anti-coccidial support", tbd:true, species:["Broiler"],
     desc:"Helps control coccidiosis and protect intestinal integrity. [Confirm: natural or plant-based?]",
     points:["Coccidiosis control","Intestinal integrity"], form:"TBD", dose:"TBD" },
-  { id:"strex", name:"StreX", abbr:"Sx", need:"heat", cat:"Heat stress solution", species:["Broiler","Layer","Dairy"],
+  { id:"strex", name:"StreX", abbr:"Sx", logo:"assets/logos/strex.png", need:"heat", cat:"A Complete Solution for Heat Stress Management", species:["Broiler","Layer","Dairy"],
     desc:"Helps animals keep feed intake, growth and egg production through hot seasons, when heat stress limits performance.",
     points:["Performance under high THI","Fewer summer losses","Supports feed intake"], form:"TBD", dose:"TBD" },
-  { id:"yeamune", name:"YeaMune-UP", abbr:"YU", need:"immune", cat:"Yeast-based immunity", tbd:true, species:["Broiler","Layer","Dairy"],
-    desc:"Yeast-derived components that support natural immunity and resilience. [Confirm details]",
-    points:["Supports immune response","Resilience during stress"], form:"TBD", dose:"TBD" },
-  { id:"genikan", name:"GenIkan", abbr:"GI", need:"immune", cat:"[Category TBD]", tbd:true, species:["Aqua"],
-    desc:"[One-line description of GenIkan and its key benefit]", points:["[Benefit 1]","[Benefit 2]"], form:"TBD", dose:"TBD" }
+  { id:"yeamune", name:"YeaMune-UP", abbr:"YU", logo:"assets/logos/yeamune.png", need:"immune", cat:"Immune Accelerator", species:["Broiler","Layer","Dairy"],
+    desc:"Yeast-derived components that support natural immunity and resilience.",
+    points:["Yeast-derived immune support","Supports resilience during stress"], form:"TBD", dose:"TBD" },
+  { id:"genikan", name:"Genikan", abbr:"GI", logo:"assets/logos/genikan.png", need:"immune", cat:"High-quality Yeast Culture", species:["Aqua"],
+    desc:"High-quality yeast culture formulated for aquaculture.",
+    points:["High-quality yeast culture","Formulated for aquaculture"], form:"TBD", dose:"TBD" }
 ];
 
 const REGIONS = [
@@ -774,6 +792,7 @@ const REGIONS = [
 
 const NEWS = [
   { idx:176, page:3, tag:"News", date:"YYYY.MM.DD", title:"News title #176", summary:"One-line summary of the article." },
+  { idx:174, page:3, tag:"News", date:"YYYY.MM.DD", title:"News title #174", summary:"One-line summary of the article." },
   { idx:162, page:4, tag:"News", date:"YYYY.MM.DD", title:"News title #162", summary:"One-line summary of the article." },
   { idx:155, page:4, tag:"News", date:"YYYY.MM.DD", title:"News title #155", summary:"One-line summary of the article." },
   { idx:151, page:5, tag:"News", date:"YYYY.MM.DD", title:"News title #151", summary:"One-line summary of the article." },
@@ -794,10 +813,6 @@ let toastT;
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
 
 if(!CONFIG.reviewMode) document.body.classList.add('clean');
-$('#reviewBtn').onclick = () => {
-  const c = document.body.classList.toggle('clean');
-  $('#reviewBtn').textContent = c ? 'Show review highlights' : 'Hide review highlights';
-};
 
 const hello = guest ? `Hello Ralph, this is ___ from ${guest}. ` : "Hello Ralph, nice to meet you. This is ___ from ___. ";
 ['#aWa','#dWa','#heroWa'].forEach(s => $(s).href = waLink(hello));
@@ -883,13 +898,17 @@ $('#segNeed').innerHTML = NEEDS.map(n =>
   `<button role="tab" data-k="${n.key}" class="${n.key===needSel?'on':''}">${n.color?`<span class="sw" style="background:${n.color}"></span>`:''}${esc(n.label)}</button>`).join('');
 $('#segSp').innerHTML = SPECIES.map(s => `<button role="tab" data-s="${s}" class="${s===spSel?'on':''}">${esc(s)}</button>`).join('');
 
+const prodHead = p => p.logo
+  ? `<img class="p-logo" src="${p.logo}" alt="${esc(p.name)}">`
+  : `<span class="p-ic c-${p.need}">${esc(p.abbr)}</span><span class="p-name">${esc(p.name)}</span>`;
+
 $('#prodGrid').innerHTML = PRODUCTS.map(p => `
   <button class="prod" data-id="${p.id}" data-need="${p.need}" data-sp="${p.species.join(',')}">
     <span class="p-head">
-      <span class="p-ic c-${p.need}">${esc(p.abbr)}</span>
-      <span><span class="p-name">${esc(p.name)}</span><br><span class="p-cat ${p.tbd?'tbd':''}">${esc(p.cat)}</span></span>
+      ${prodHead(p)}
       <span class="p-go"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span>
     </span>
+    <span class="p-cat ${p.tbd?'tbd':''}">${esc(p.cat)}</span>
     <span class="p-desc ${p.tbd?'tbd':''}">${esc(p.desc)}</span>
     <span class="p-tags">${p.species.map(s=>`<span>${esc(s)}</span>`).join('')}</span>
   </button>`).join('');
@@ -912,7 +931,8 @@ let lastFocus;
 function openSheet(id){
   const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
   lastFocus = document.activeElement;
-  $('#shIc').className = `p-ic c-${p.need}`; $('#shIc').textContent = p.abbr;
+  if(p.logo){ $('#shIc').className = 'p-ic sh-logo'; $('#shIc').innerHTML = `<img src="${p.logo}" alt="${esc(p.name)}">`; }
+  else { $('#shIc').className = `p-ic c-${p.need}`; $('#shIc').textContent = p.abbr; }
   $('#shCat').innerHTML = `<span class="${p.tbd?'tbd':''}">${esc(p.cat)}</span>`;
   $('#shName').textContent = p.name;
   $('#shDesc').innerHTML = `<span class="${p.tbd?'tbd':''}">${esc(p.desc)}</span>`;
@@ -933,13 +953,8 @@ sheet.addEventListener('touchmove', e => { if(y0===null) return; const d=e.touch
 sheet.addEventListener('touchend', e => { if(y0===null) return; const d=e.changedTouches[0].clientY-y0; sheet.style.transform=''; y0=null; if(d>90) closeSheet(); });
 
 /* =========================================================
-   MARKETS + NEWS
+   NEWS
    ========================================================= */
-$('#regions').innerHTML = REGIONS.map(r => `
-  <div class="region">
-    <div class="r-head"><span>${esc(r.name)}</span><span>${r.countries.length}</span></div>
-    ${r.countries.map(([fl,nm,tz])=>`<div class="country"><span class="m-flag" aria-hidden="true">${fl}</span><span class="nm">${esc(nm)}</span><span class="tm num" data-tz="${tz}"></span></div>`).join('')}
-  </div>`).join('');
 updateTimes(); setInterval(updateTimes, 30000);
 
 $('#newsGrid').innerHTML = NEWS.map(n => `
