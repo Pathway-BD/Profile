@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -810,8 +810,7 @@ function vcardText(){
   return ["BEGIN:VCARD","VERSION:3.0",
     `N:${CONFIG.lastName};${CONFIG.firstName};;;`,`FN:${CONFIG.firstName} ${CONFIG.lastName}`,
     `ORG:${CONFIG.company}`,`TITLE:${CONFIG.title}`,
-    `TEL;TYPE=CELL:${CONFIG.phone}`,`EMAIL;TYPE=WORK:${CONFIG.email}`,
-    `URL:${pageUrl()}`,`NOTE:LinkedIn ${CONFIG.linkedin}`,"END:VCARD"].join("\r\n");
+    `TEL;TYPE=CELL:${CONFIG.phone}`,`EMAIL;TYPE=WORK:${CONFIG.email}`,"END:VCARD"].join("\r\n");
 }
 function saveContact(){
   const url = URL.createObjectURL(new Blob([vcardText()], {type:"text/vcard;charset=utf-8"}));
