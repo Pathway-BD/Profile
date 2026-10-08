@@ -17,6 +17,11 @@ permissions:
   contents: write
   actions: write
 
+# 수동 실행과 예약 실행이 겹쳐도 데이터 업로드가 동시에 일어나지 않게 합니다.
+concurrency:
+  group: customs-data
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
