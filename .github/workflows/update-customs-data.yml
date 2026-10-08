@@ -19,32 +19,17 @@ permissions:
 
 jobs:
   update:
-    runs-on: ubuntu-latest
+    # data.go.kr이 GitHub 서버(해외)에서 온 요청을 거절하므로, 국내 PC에 설치한 self-hosted runner에서 실행합니다.
+    # PC가 꺼져 있으면 켜질 때까지(최대 24시간) 대기했다가 실행됩니다. 설치 방법은 feed-additive-dashboard/README.md 참고.
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
       - name: Fetch data from data.go.kr
         env:
           DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
         run: python feed-additive-dashboard/scripts/fetch_data.py
-      - name: Commit if changed
-        id: commit
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add feed-additive-dashboard/data/feed_additive.json
-          if git diff --cached --quiet; then
-            echo "변경 없음"
-          else
-            git commit -m "data: 관세청 사료첨가제 수출 데이터 갱신"
-            git push
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
-      # GITHUB_TOKEN으로 한 push는 다른 워크플로를 깨우지 않으므로 Pages 배포를 직접 실행합니다.
-      - name: Redeploy GitHub Pages
-        if: steps.commit.outputs.changed == 'true'
+      # git 없이 GitHub API로 데이터 파일을 올리고 Pages 배포를 다시 실행합니다.
+      - name: Publish data and redeploy Pages
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy-pages.yml --ref "${{ github.ref_name }}"
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python feed-additive-dashboard/scripts/publish_data.py

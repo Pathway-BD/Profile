@@ -32,6 +32,15 @@ python scripts/fetch_data.py
 git add data/feed_additive.json && git commit -m "data update" && git push
 ```
 
+## 자동 갱신은 국내 PC(self-hosted runner)에서 실행
+data.go.kr이 GitHub 서버(해외)의 요청을 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR`로 거절해서,
+`Update customs data` 워크플로는 국내 PC에 설치한 runner에서 돕니다. PC에 한 번만 설치하면 됩니다.
+
+1. PC에 Python 3 설치 (명령 프롬프트에서 `python --version` 이 되어야 함)
+2. 저장소 `Settings → Actions → Runners → New self-hosted runner → Windows` 화면의 명령을 PowerShell에 그대로 붙여 넣기
+3. `config.cmd` 질문에는 모두 Enter, "run as service?" 에는 `Y` → PC를 켜 두면 매달 자동 실행
+4. 워크플로는 PC에서 데이터를 받아 GitHub API로 올리고 Pages를 다시 배포합니다 (`scripts/publish_data.py`).
+
 ## 참고
 - 회사별 내역은 공개되지 않으며 한국 전체 합계입니다. 평균단가 = 금액 ÷ 중량(USD/kg).
 - 같은 제품이라도 다른 HS코드로 신고되면 집계되지 않습니다.
