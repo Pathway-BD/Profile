@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>첨가제별 동향 · 사료첨가제 수출</title>
+<script src="common.js"></script>
+<script src="estimate.js"></script>
+<script src="chart.umd.js"></script>
+<style>
+:root{--ink:#37352f;--ink2:#6b6a66;--mute:#9b9a97;--line:#e9e9e7;--soft:#f7f6f3;--hover:#efefed;--brand:#0f5c43;--new:#7c3aed}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:#fff;color:var(--ink);font:15px/1.6 "Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
+.page{max-width:1000px;margin:0 auto;padding:40px 24px 80px}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.nav a{border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:14px}.nav a:hover{background:var(--hover)}
+.icon{font-size:52px;line-height:1}
+h1{font-size:30px;margin:10px 0 4px;letter-spacing:-.02em}
+.sub{color:var(--ink2);font-size:14px}
+section{margin-top:32px}
+h2{font-size:19px;margin:0 0 12px}
+.muted{color:var(--mute);font-size:13px;font-weight:400}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;background:var(--soft);border-radius:8px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:6px;padding:5px 12px;font-size:13.5px;color:var(--ink2)}
+.seg button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.lbl{font-size:13px;color:var(--mute)}
+.callout{background:var(--soft);border-radius:8px;padding:14px 16px;font-size:13.5px;color:var(--ink2);line-height:1.7}
+.box{border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.cbox{position:relative;height:300px}
+details.t{border:1px solid var(--line);border-radius:10px;margin-top:10px;overflow:hidden}
+details.t>summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr)) 20px;gap:12px;align-items:center}
+details.t>summary::-webkit-details-marker{display:none}
+details.t>summary:hover{background:var(--hover)}
+details.t>summary .arr{color:var(--mute);transition:transform .15s}
+details.t[open]>summary .arr{transform:rotate(90deg)}
+.tn b{display:block;font-size:15px}.tn span{font-size:12.5px;color:var(--mute)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:0}
+.st .l{display:block;font-size:12px;color:var(--mute)}.st .v{font-weight:700}
+.tops{padding:0 16px 8px;font-size:13px;color:var(--ink2)}
+.tw{overflow-x:auto;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:7px 12px;border-bottom:1px solid #f1f1ef;text-align:right;white-space:nowrap}
+th{font-size:12px;color:var(--ink2);font-weight:600;background:#fbfbfa}
+.l,th.l,td.l{text-align:left}
+tr.go{cursor:pointer}tr.go:hover td{background:var(--hover)}
+.conf{font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:5px}
+.conf.h{background:#dcfce7;color:#166534}.conf.m{background:#fef9c3;color:#854d0e}.conf.lo{background:#f3f4f6;color:#4b5563}.conf.mix{background:#eef2ff;color:#4338ca}
+.err{background:#fef3f2;border:1px solid #fecdca;color:#7a271a;border-radius:10px;padding:16px 18px}
+@media(max-width:760px){
+  .page{padding:24px 16px 60px}h1{font-size:24px}
+  details.t>summary{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 16px}
+  details.t>summary .hide-m{display:none}
+  .cbox{height:240px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="nav"><a href="index.html">← 개요</a><a href="dashboard.html">📊 세부 수출기록</a><a href="scenario.html">🔎 제품 추정 시나리오</a></div>
+  <div class="icon">📈</div>
+  <h1>첨가제별 동향</h1>
+  <div class="sub" id="sub">수출 건의 단가로 추정한 첨가제 유형별 물량·단가·주요 국가</div>
+  <div id="app"></div>
+</div>
+<script>
+const COLORS=['#0f5c43','#1d5fd1','#d97706','#7c3aed','#0891b2','#65a30d','#db2777','#64748b'];
+const ST={basis:'single',span:'12'};
+let CN={},DATA=null,ALL=[],chart=null;
+
+function render(){
+  const L=parseM(DATA.latest),n=ST.span==='all'?999:+ST.span;
+  const fromKey=ST.span==='all'?'0000.00':mkey(addM(L,-(n-1)));
+  // Basis: single-product-looking rows (conf h/m) or every row of 1 MT+ (mixes priced at their average)
+  const rows=ALL.filter(r=>r.m>=fromKey&&(ST.basis==='single'?r.conf==='h'||r.conf==='m':r.kg>=1000));
+  // Every month in the span (empty months show as 0 instead of being skipped)
+  const first=ST.span==='all'?rows.reduce((a,r)=>r.m<a?r.m:a,DATA.latest):fromKey,months=[];
+  for(let c=parseM(first);mkey(c)<=DATA.latest;c=addM(c,1))months.push(mkey(c));
+  const byT={};
+  for(const r of rows){const t=r.cands[0].n;const o=byT[t]=byT[t]||{t:r.cands[0],kg:0,usd:0,n:0,lo:1e9,hi:0,c:{},rows:[]};
+    o.kg+=r.kg;o.usd+=r.usd;o.n++;o.lo=Math.min(o.lo,r.p);o.hi=Math.max(o.hi,r.p);o.c[r.c]=(o.c[r.c]||0)+r.kg;o.rows.push(r)}
+  const types=Object.keys(byT).sort((a,b)=>byT[b].kg-byT[a].kg);
+  const color=t=>COLORS[Math.min(types.indexOf(t),COLORS.length-1)];
+  const totKg=rows.reduce((s,r)=>s+r.kg,0);
+
+  let h=`<section><div class="bar">
+    <span class="lbl">기준</span><div class="seg" id="sB">${[['single','단일 제품으로 보이는 건'],['all','전체 (평균 단가 포함)']].map(([v,t])=>`<button data-v="${v}" class="${ST.basis===v?'on':''}">${t}</button>`).join('')}</div>
+    <span class="lbl">기간</span><div class="seg" id="sS">${[['12','최근 12개월'],['24','24개월'],['all','전체']].map(([v,t])=>`<button data-v="${v}" class="${ST.span===v?'on':''}">${t}</button>`).join('')}</div></div>
+    <div class="callout" style="margin-top:12px">${ST.basis==='single'
+      ?'💡 물량이 MT 단위로 딱 떨어지고, 단가가 딱 떨어지거나 · 같은 나라로 반복되거나 · 20MT 이상인 건만 셉니다. 한 제품이 그대로 나갔을 가능성이 높은 건들이라 단가 추정이 비교적 믿을 만합니다.'
+      :'💡 1MT 이상인 모든 건을 셉니다. 여러 제품이 섞인 달은 <b>평균 단가</b>로 추정되므로 유형 구분이 흐려질 수 있습니다.'}
+      유형은 단가를 벌크 거래 단가대에 대입한 <b>추정</b>이며, 신고 금액은 FOB 기준입니다.</div></section>`;
+
+  if(!rows.length){$('#app').innerHTML=h+'<section><div class="callout">이 조건에 맞는 수출 건이 없습니다.</div></section>';bind();return}
+
+  h+=`<section><h2>월별 물량 <span class="muted">추정 첨가제별 · MT</span></h2><div class="box"><div class="cbox"><canvas id="ch"></canvas></div></div></section>`;
+  h+=`<section><h2>추정 첨가제별 정리 <span class="muted">물량 순 · 누르면 건별 기록</span></h2>
+    ${types.map(t=>{const o=byT[t],tops=Object.keys(o.c).sort((a,b)=>o.c[b]-o.c[a]).slice(0,4),last=o.rows.map(r=>r.m).sort().pop();
+      return`<details class="t"><summary>
+        <span class="tn"><b><span class="sw" style="background:${color(t)}"></span>${esc(t)}</b><span>${esc(o.t.k)}${o.t.lo?` · 기준 단가 $${o.t.lo}–${o.t.hi}`:''}</span></span>
+        <span class="st"><span class="l">물량</span><span class="v num">${fMT(o.kg)}</span></span>
+        <span class="st"><span class="l">단가 (평균)</span><span class="v num">${fPv(o.usd/o.kg)}<span class="muted">/kg</span></span><span class="l num">${fPv(o.lo)}–${fPv(o.hi)}</span></span>
+        <span class="st hide-m"><span class="l">건수 · 최근</span><span class="v num">${o.n}건</span><span class="l">${last}</span></span>
+        <span class="arr">›</span></summary>
+        <div class="tops">주요 국가: ${tops.map(c=>`<b>${esc(CN[c]||c)}</b> ${fMT(o.c[c])}`).join(' · ')} · 비중 ${(o.kg/totKg*100).toFixed(1)}%</div>
+        <div class="tw"><table><thead><tr><th class="l">월</th><th class="l">나라</th><th class="l">세부 품목</th><th>물량</th><th>단가</th><th>금액</th><th class="l">다음 후보</th><th class="l">신뢰도</th></tr></thead><tbody>
+        ${o.rows.sort((a,b)=>b.m.localeCompare(a.m)||b.kg-a.kg).map(r=>`<tr class="go" data-href="${'dashboard.html#c='+r.c+'&per=m:'+r.m.replace('.','')}"><td class="l num">${r.m}</td><td class="l">${esc(CN[r.c]||r.c)}</td><td class="l">${esc(ITEM_LABEL[r.h]||r.h)}</td><td class="num">${fMT(r.kg)}</td><td class="num"><b>${fPv(r.p)}</b>/kg</td><td class="num">${fUSD(r.usd)}</td><td class="l" style="color:var(--mute)">${r.cands.slice(1,3).map(x=>esc(x.n)).join(' · ')||'-'}</td><td class="l"><span class="conf ${r.conf}">${CONF_LABEL[r.conf]}</span></td></tr>`).join('')}
+        </tbody></table></div></details>`}).join('')}</section>`;
+  $('#app').innerHTML=h;bind();
+
+  chart?.destroy();
+  chart=new Chart($('#ch'),{type:'bar',data:{labels:months.map(m=>m.slice(2)),datasets:types.map(t=>({label:t,backgroundColor:color(t),stack:'s',borderRadius:2,
+      data:months.map(m=>byT[t].rows.filter(r=>r.m===m).reduce((s,r)=>s+r.kg,0)/1000)}))},
+    options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'bottom',labels:{boxWidth:10,boxHeight:10,font:{size:11.5}}},
+        tooltip:{filter:it=>it.parsed.y>0,callbacks:{title:it=>korM(months[it[0].dataIndex]),label:c=>` ${c.dataset.label}: ${c.parsed.y.toLocaleString(undefined,{maximumFractionDigits:1})} MT`}}},
+      scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:11}}},y:{stacked:true,border:{display:false},grid:{color:'#f1f1ef'},ticks:{font:{size:11},callback:v=>`${v.toLocaleString()} MT`}}}}});
+}
+function bind(){
+  document.querySelectorAll('#sB button').forEach(b=>b.onclick=()=>{ST.basis=b.dataset.v;render()});
+  document.querySelectorAll('#sS button').forEach(b=>b.onclick=()=>{ST.span=b.dataset.v;render()});
+  document.querySelectorAll('tr[data-href]').forEach(tr=>tr.onclick=()=>location.href=tr.dataset.href);
+}
+
+if(location.protocol==='file:')$('#app').innerHTML='<div class="err"><b>파일을 직접 열면 데이터를 읽을 수 없습니다.</b> GitHub Pages 주소로 접속하세요.</div>';
+else loadData().then(({CN:c,DATA:d})=>{CN=c;DATA=d;
+  $('#sub').textContent=`수출 건의 단가로 추정한 첨가제 유형별 물량·단가·주요 국가 · 데이터 ${d.latest}까지`;
+  ALL=estimateRows(d.rows.map(([m,c,h,usd,kg])=>({m,c,h,usd,kg})));render()})
+  .catch(()=>{$('#app').innerHTML='<div class="err"><b>아직 데이터가 만들어지지 않았습니다.</b> 데이터 파일(data/feed_additive.json)이 생성된 뒤 다시 열어 주세요.</div>'});
+</script>
+</body>
+</html>

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>제품 추정 시나리오 · 사료첨가제 수출</title>
+<script src="estimate.js"></script>
 <style>
 :root{--bg:#f4f5f2;--card:#fff;--ink:#17201b;--ink2:#47524c;--mute:#7b857f;--line:#e2e5e0;--line2:#eef0ec;--brand:#0f5c43;--brand-2:#e7f1ec;--brand-ink:#0a3f2e;--up:#0f7b4f;--down:#c2410c;--warn:#b45309;--new:#7c3aed}
 *{box-sizing:border-box}html,body{margin:0}
@@ -68,56 +69,18 @@ tr.rp td{background:#fcfbff}
 <body>
 <header><div class="hd">
   <div><h1>제품 추정 시나리오<small>HS 2309.90-30</small></h1><div class="sub" id="sub">단일 제품으로 나간 것처럼 보이는 수출 건을 골라 단가로 제품 유형을 추정합니다</div></div>
-  <div class="r"><a href="index.html">← 개요</a> <a href="dashboard.html">📊 대시보드</a></div>
+  <div class="r"><a href="index.html">← 개요</a> <a href="trends.html">📈 첨가제별 동향</a> <a href="dashboard.html">📊 세부 수출기록</a></div>
 </div></header>
 <main id="main"><div class="card state"><b>불러오는 중…</b></div></main>
 
 <script>
-/* ── 단가대별 제품 유형 (국제 벌크 거래의 대략적인 FOB/CIF 범위, USD/kg) ──
-   q = 대량(100MT급) 거래 가능성 1~5. 정확한 가격표가 아니라 추정용 기준표입니다. */
-const TYPES=[
-  {n:'Mineral carrier / pellet binder',k:'미네랄 캐리어·펠렛 바인더',lo:.3,hi:.8,q:5},
-  {n:'Toxin binder (저가형)',k:'독소흡착제',lo:.35,hi:.8,q:5},
-  {n:'Mold inhibitor / 저가 acidifier',k:'곰팡이 억제제·저가 산제',lo:.6,hi:1.5,q:5},
-  {n:'일반 acidifier premix',k:'산제 프리믹스',lo:1,hi:2.5,q:4},
-  {n:'Yeast cell wall / MOS',k:'효모세포벽·MOS',lo:1.5,hi:4,q:3},
-  {n:'Phytogenic premix',k:'식물추출물 프리믹스',lo:2,hi:8,q:2},
-  {n:'Lecithin / LPL',k:'레시틴·LPL',lo:2.5,hi:5,q:1},
-  {n:'Phytase',k:'피타아제',lo:3,hi:10,q:1},
-  {n:'NSP enzyme',k:'NSP 효소',lo:5,hi:20,q:1},
-  {n:'Phage',k:'박테리오파지',lo:5,hi:20,q:1},
-  {n:'Probiotic',k:'생균제',lo:5,hi:30,q:1},
-];
 const HS={'2309903010':'항생물질 위주','2309903020':'비타민 위주','2309903030':'미량광물질 위주','2309903090':'기타 사료첨가제'};
-const NEAR=0.003;   // 2자리 단가와 0.3% 이내 = 환산·운임 차감 오차로 보고 '근접'
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fUSD=v=>v>=1e6?`$${(v/1e6).toFixed(2)}M`:v>=1e3?`$${(v/1e3).toFixed(1)}K`:`$${Math.round(v)}`;
 const stars=q=>'★'.repeat(q)+'<span style="color:#e5e7eb">'+'★'.repeat(5-q)+'</span>';
 let CN={},ALL=[];
 const ST={conf:'hm',hs:'all',type:'all'};
-
-/* 단가에 맞는 후보 유형: 범위 안에 드는 것만, 대량이면 대량 거래 가능성 우선, 아니면 범위 중심(로그)에 가까운 순 */
-function candidates(p,mt){
-  const inb=TYPES.filter(t=>p>=t.lo&&p<=t.hi).map(t=>{const c=Math.sqrt(t.lo*t.hi);return{...t,fit:Math.abs(Math.log(p/c))/Math.log(t.hi/t.lo)}});
-  if(!inb.length)return p<TYPES[0].lo?[{n:'초저가 원료성 첨가제',k:'캐리어·희석제 등',q:5,fit:0,out:true}]:[{n:'고가 특수제품 ($30/kg 초과)',k:'고농도 생균·효소·특수 원료',q:1,fit:0,out:true}];
-  return inb.sort((a,b)=>mt>=20?(b.q-a.q)||(a.fit-b.fit):(a.fit-b.fit)||(b.q-a.q));
-}
-
-function analyse(rows){
-  const whole=rows.filter(r=>r.kg>=1000&&r.kg%1000===0);   // MT 정수가 아니면 여러 건이 섞인 합계로 보고 제외
-  // 반복 주문: 같은 나라·세부코드·물량이 다른 달에도 있고 단가도 ±15% 안이면 같은 제품의 정기 거래로 봄
-  const same=(a,b)=>a.c===b.c&&a.h===b.h&&a.kg===b.kg&&Math.abs(Math.log((a.usd/a.kg)/(b.usd/b.kg)))<=Math.log(1.15);
-  return whole.map(r=>{
-    const p=r.usd/r.kg,mt=r.kg/1000,q=Math.round(p*100)/100;
-    const exact=Math.abs(q*r.kg-r.usd)<=1,dev=Math.abs(p-q)/p;
-    const near=!exact&&p<1&&dev<=NEAR;                     // $1 이상은 아무 값이나 2자리 단가에 쉽게 붙어서 단서로 안 씀
-    const rep=whole.filter(o=>same(o,r)).length;
-    const big=mt>=20;
-    const conf=exact||rep>=2?'h':big||near?'m':'lo';
-    return{...r,p,mt,q,exact,dev,near,rep,big,conf,cands:candidates(p,mt)};
-  });
-}
 
 function render(){
   const pass=r=>(ST.conf==='h'?r.conf==='h':ST.conf==='hm'?r.conf!=='lo':true)&&(ST.hs==='all'||r.h===ST.hs)&&(ST.type==='all'||r.cands[0].n===ST.type);
@@ -197,7 +160,7 @@ function render(){
 if(location.protocol==='file:'){$('#main').innerHTML='<div class="err"><b>파일을 직접 열면 데이터를 읽을 수 없습니다.</b> GitHub Pages 주소로 접속하세요.</div>'}
 else Promise.all([fetch('codes.json').then(r=>r.json()),fetch('data/feed_additive.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})])
   .then(([c,d])=>{CN=Object.fromEntries(c.country);window.DATA_UPDATED=d.updated;
-    ALL=analyse(d.rows.map(([m,c,h,usd,kg])=>({m,c,h,usd,kg})));render()})
+    ALL=estimateRows(d.rows.map(([m,c,h,usd,kg])=>({m,c,h,usd,kg}))).filter(r=>r.conf!=='mix');render()})
   .catch(()=>{$('#main').innerHTML='<div class="err"><b>데이터 파일을 불러오지 못했습니다.</b> 잠시 뒤 새로고침해 주세요.</div>'});
 </script>
 </body>

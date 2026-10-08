@@ -9,7 +9,9 @@
 | `index.html` | 개요(홈) 화면 — 이번 달 요약·인기 국가·지역 비중·신규/이탈 시장 |
 | `dashboard.html` | 상세 대시보드 (주소 `#scope=mine`, `#c=BD`, `#per=m:202608` 등으로 바로 열기) |
 | `scenario.html` | 단일 제품으로 보이는 건의 제품 유형 추정 |
-| `common.js` | 두 화면이 함께 쓰는 지역·담당시장·품목명·숫자 형식 |
+| `trends.html` | 추정 첨가제 유형별 월별 물량·단가·주요 국가 |
+| `common.js` | 화면들이 함께 쓰는 지역·담당시장·품목명·숫자 형식 |
+| `estimate.js` | 단가로 첨가제 유형을 추정하는 공용 로직 (단가대 기준표 포함) |
 | `chart.umd.js` | 차트 라이브러리 (Chart.js 4.4.1) |
 | `codes.json` | 국가코드 → 한글 국가명 |
 | `data/feed_additive.json` | 수출 데이터 (Actions가 자동 생성·갱신) |

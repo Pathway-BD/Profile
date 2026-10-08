@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pathway 사료첨가제 수출 인텔리전스</title>
 <script src="common.js"></script>
+<script src="estimate.js"></script>
 <script src="chart.umd.js"></script>
 <style>
 :root{--ink:#37352f;--ink2:#6b6a66;--mute:#9b9a97;--line:#e9e9e7;--soft:#f7f6f3;--hover:#efefed;--brand:#0f5c43;--brand-2:#e7f1ec;--up:#0f7b4f;--down:#c2410c;--new:#7c3aed}
@@ -24,9 +25,6 @@ h3{font-size:15px;margin:0 0 10px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff;transition:background .12s}
 .chip:hover{background:var(--hover)}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.kpi{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-.kpi .l{font-size:12.5px;color:var(--ink2)}.kpi .v{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-top:2px}.kpi .s{font-size:12.5px;color:var(--mute)}
 .up{color:var(--up)}.down{color:var(--down)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
 .box{border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
@@ -54,13 +52,6 @@ a.reg:hover{background:var(--hover)}
 .list .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .list .r{font-size:13px;color:var(--ink2);text-align:right;white-space:nowrap}
 .none{color:var(--mute);font-size:14px;padding:6px}
-.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.menu h3{color:var(--ink2);font-size:13px;font-weight:600;margin:0 0 6px}
-.menu a{display:flex;gap:10px;padding:7px 8px;border-radius:6px;align-items:flex-start}
-.menu a:hover{background:var(--hover)}
-.menu .e{font-size:18px;line-height:1.4}
-.menu b{display:block;font-weight:500;font-size:14.5px}
-.menu span.d{display:block;color:var(--mute);font-size:12.5px;line-height:1.45}
 .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
 .step{background:var(--soft);border-radius:8px;padding:12px 14px}
 .step b{display:block;font-size:14px}.step div{font-size:13px;color:var(--ink2);margin-top:2px;line-height:1.55}
@@ -70,13 +61,35 @@ ul.facts li{margin:3px 0}
 hr{border:0;border-top:1px solid var(--line);margin:44px 0 0}
 .err{background:#fef3f2;border:1px solid #fecdca;color:#7a271a;border-radius:10px;padding:16px 18px;margin-top:24px}
 .foot{margin-top:40px;color:var(--mute);font-size:12px}
+.tw{overflow-x:auto;margin:0 -6px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:8px 6px;border-bottom:1px solid #f1f1ef;text-align:right;white-space:nowrap}
+th{font-size:12px;color:var(--mute);font-weight:500}
+th.l,td.l{text-align:left}
+tr.go{cursor:pointer}tr.go:hover td{background:var(--hover)}
+td .alt{display:block;color:var(--mute);font-size:12px}
+.conf{font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:5px}
+.conf.h{background:#dcfce7;color:#166534}.conf.m{background:#fef9c3;color:#854d0e}.conf.lo{background:#f3f4f6;color:#4b5563}.conf.mix{background:#eef2ff;color:#4338ca}
+.tbar{height:6px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:4px}.tbar i{display:block;height:100%;background:var(--brand)}
+.bigs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.big{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:18px;transition:background .12s,box-shadow .12s}
+.big:hover{background:var(--soft);box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.big .e{font-size:28px;line-height:1}
+.big b{display:block;font-size:16px;margin-bottom:2px}
+.big .d{display:block;color:var(--mute);font-size:13px;line-height:1.5}
+details.fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;border-radius:8px;padding:4px 6px;margin:0 -6px}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary:hover{background:var(--hover)}
+details.fold>summary h2{margin:0}
+details.fold>summary .arr{color:var(--mute);transition:transform .15s;font-size:14px}
+details.fold[open]>summary .arr{transform:rotate(90deg)}
+details.fold>.inner{margin-top:14px}
 @media(max-width:760px){
   .page{padding:32px 16px 60px}
   h1{font-size:26px}.icon{font-size:48px}
-  .kpis{grid-template-columns:1fr 1fr}
-  .grid2,.menu{grid-template-columns:1fr}
+  .grid2,.bigs{grid-template-columns:1fr}
+  .hide-m{display:none}
   .flow{grid-template-columns:1fr 1fr}
-  .kpi .v{font-size:20px}
 }
 </style>
 </head>
@@ -109,17 +122,16 @@ const rank=m=>Object.keys(m).sort((a,b)=>m[b].usd-m[a].usd);
 
 function build(CN,DATA){
   const rows=DATA.rows.map(([m,c,h,usd,kg])=>({m,c,h,usd,kg}));
-  const L=parseM(DATA.latest),Lk=mkey(L),Pk=mkey(addM(L,-1)),Yk=mkey(addM(L,-12));
+  const L=parseM(DATA.latest),Lk=mkey(L),Pk=mkey(addM(L,-1));
   const inMonths=ks=>{const s=new Set(ks);return rows.filter(r=>s.has(r.m))};
   const months=(from,n)=>Array.from({length:n},(_,i)=>mkey(addM(from,i)));
   const last12=months(addM(L,-11),12),prev12=months(addM(L,-23),12);
 
   $('#subtitle').textContent=`관세청 무역통계 · HS 2309.90-30 · 데이터 ${DATA.latest}까지 · 갱신 ${DATA.updated}`;
 
-  // Latest month vs same month last year
-  const cur=inMonths([Lk]),ly=inMonths([Yk]);
-  const U=cur.reduce((s,r)=>s+r.usd,0),W=cur.reduce((s,r)=>s+r.kg,0),UY=ly.reduce((s,r)=>s+r.usd,0);
-  const yoy=UY>0?U/UY-1:null;
+  // Latest month
+  const cur=inMonths([Lk]);
+  const U=cur.reduce((s,r)=>s+r.usd,0),W=cur.reduce((s,r)=>s+r.kg,0);
   const byC=sumBy(cur,r=>r.c),order=rank(byC);
   const byPrev=sumBy(inMonths([Pk]),r=>r.c),prevOrder=rank(byPrev);
 
@@ -127,8 +139,16 @@ function build(CN,DATA){
   const before=new Set(inMonths(months(addM(L,-12),12)).map(r=>r.c));
   const freshNow=order.filter(c=>!before.has(c));
 
-  // 12-month bars
+  // 12-month volume bars
   const mTot=sumBy(inMonths(last12),r=>r.m);
+
+  // Product-type estimates (repeat signals use every month, so estimate all rows then keep the latest month)
+  const curE=estimateRows(rows).filter(r=>r.m===Lk).sort((a,b)=>b.kg-a.kg);
+  const byType={};
+  for(const r of curE){const t=r.cands[0];const o=byType[t.n]=byType[t.n]||{t,kg:0,usd:0,lo:1e9,hi:0,c:[]};
+    o.kg+=r.kg;o.usd+=r.usd;o.lo=Math.min(o.lo,r.p);o.hi=Math.max(o.hi,r.p);if(!o.c.includes(r.c))o.c.push(r.c)}
+  const typeOrder=Object.keys(byType).sort((a,b)=>byType[b].kg-byType[a].kg);
+  const pr=o=>o.hi-o.lo<.005?`${fPv(o.lo)}/kg`:`${fPv(o.lo)}–${fPv(o.hi)}/kg`;
 
   // Region share, last 12 months
   const r12=inMonths(last12),T12=r12.reduce((s,r)=>s+r.usd,0);
@@ -141,13 +161,14 @@ function build(CN,DATA){
   for(const r of prvRows)if(!lastM[r.c]||r.m>lastM[r.c])lastM[r.c]=r.m;
   const newM=rank(curP).filter(c=>!prvP[c]),lostM=rank(prvP).filter(c=>!curP[c]);
 
-  // One-line summary (plain text, no flags, so it copies cleanly)
+  // One-line summary (plain text so it copies cleanly)
   let line='';
-  if(U>0){
-    line=`${korM(Lk)} 사료첨가제 수출은 ${fUSD(U)}로`+(yoy==null?' 집계되었습니다.':` 전년 같은 달보다 ${Math.abs(yoy*100).toFixed(0)}% ${yoy>=0?'늘었습니다':'줄었습니다'}.`);
-    const top=cnm(CN,order[0]);
-    const fresh=freshNow.slice(0,3).map(c=>cnm(CN,c));
-    line+=fresh.length?` ${ga(top)} 1위이며, ${ga(joinKo(fresh))} 새로 수출국에 들어왔습니다.`:` ${ga(top)} 1위입니다.`;
+  if(W>0){
+    line=`${korM(Lk)}에는 ${order.length}개국에 ${fMT(W)}가 나갔습니다.`;
+    const tt=byType[typeOrder[0]];
+    if(tt)line+=` 물량 기준으로 가장 많이 나간 추정 첨가제는 ${tt.t.k}(${pr(tt)}, ${fMT(tt.kg)})입니다.`;
+    const top=cnm(CN,order[0]),fresh=freshNow.slice(0,3).map(c=>cnm(CN,c));
+    line+=fresh.length?` ${ga(top)} 금액 1위이며, ${ga(joinKo(fresh))} 새로 수출국에 들어왔습니다.`:` ${ga(top)} 금액 1위입니다.`;
   }
 
   let h='';
@@ -160,28 +181,40 @@ function build(CN,DATA){
     <a class="chip" href="#about">📘 데이터 설명</a>
     <a class="chip" href="${D}">📊 전체 대시보드</a></div></section>`;
 
-  // 3. At a glance
-  if(U>0){
-    h+=`<section id="summary"><h2>📊 한눈에 보기 <span class="muted" style="font-weight:400">${korM(Lk)} · 전년 같은 달 대비</span></h2>
-    <div class="kpis">
-      <div class="kpi"><div class="l">수출액</div><div class="v num">${fUSD(U)}</div><div class="s">${fMT(W)}</div></div>
-      ${yoy!=null?`<div class="kpi"><div class="l">전년 같은 달 대비</div><div class="v num ${yoy>=0?'up':'down'}">${fPct(yoy)}</div><div class="s">${korM(Yk)} ${fUSD(UY)}</div></div>`:''}
-      ${W>0?`<div class="kpi"><div class="l">평균단가</div><div class="v num">${fPv(U/W)}<span style="font-size:13px;font-weight:500">/kg</span></div><div class="s">금액 ÷ 중량</div></div>`:''}
-      <div class="kpi"><div class="l">수출국 수</div><div class="v num">${order.length}개국</div><div class="s">1위 ${esc(cnm(CN,order[0]))}</div></div>
-    </div>
-    ${line?`<div class="callout"><div class="e">💬</div><div class="txt"><b>이번 달 한 줄 요약</b><div id="line" style="margin-top:4px">${esc(line)}</div></div><button class="btn" id="copy">복사</button></div>`:''}
+  // 3. At a glance: where it went, how much, at what unit price, and which additive that price points to
+  const newTag=c=>before.has(c)?'':' <span class="badge">신규 국가</span>';
+  if(curE.length){
+    h+=`<section id="summary"><h2>📊 한눈에 보기 <span class="muted" style="font-weight:400">${korM(Lk)} · ${order.length}개국 · ${fMT(W)}</span></h2>
+    ${line?`<div class="callout" style="margin-top:0"><div class="e">💬</div><div class="txt"><b>이번 달 한 줄 요약</b><div id="line" style="margin-top:4px">${esc(line)}</div></div><button class="btn" id="copy">복사</button></div>`:''}
+    <div class="box" style="margin-top:14px"><h3>🌐 나라별 수출 · 추정 첨가제 <span class="muted" style="font-weight:400">물량 순 · 단가 USD/kg · 누르면 그 나라 상세</span></h3>
+      <div class="tw"><table><thead><tr><th class="l">나라</th><th class="l hide-m">세부 품목</th><th>물량</th><th>단가</th><th class="l">추정 첨가제</th><th class="l hide-m">추정 근거</th></tr></thead><tbody>
+      ${curE.map(r=>`<tr class="go" data-href="${dl({c:r.c,per:'m:'+Lk.replace('.','')})}"><td class="l"><b>${esc(cnm(CN,r.c))}</b>${newTag(r.c)}</td><td class="l hide-m" style="color:var(--ink2)">${esc(ITEM_LABEL[r.h]||r.h)}</td><td class="num">${fMT(r.kg)}</td><td class="num"><b>${fPv(r.p)}</b></td><td class="l"><b>${esc(r.cands[0].k)}</b><span class="alt">${esc(r.cands[0].n)}${r.cands[1]?' · 또는 '+esc(r.cands[1].k):''}</span></td><td class="l hide-m"><span class="conf ${r.conf}">${r.conf==='mix'?'혼합 (평균 단가)':'단일 제품 '+CONF_LABEL[r.conf]}</span></td></tr>`).join('')}
+      </tbody></table></div>
+      <div class="muted" style="margin-top:8px">추정 첨가제는 단가를 벌크 거래 단가대에 대입한 추정입니다. '혼합'은 물량이 MT 단위로 떨어지지 않아 여러 건이 섞인 평균 단가로 본 건입니다.</div></div>
     <div class="grid2">
-      ${Object.keys(mTot).length?`<div class="box"><h3>월별 수출액 <span class="muted" style="font-weight:400">최근 12개월 · 막대를 누르면 그 달 상세</span></h3><div class="cbox"><canvas id="ch"></canvas></div></div>`:''}
-      <div class="box"><h3>🔥 인기 국가 Top 5 <span class="muted" style="font-weight:400">${korM(Lk)} · 순위는 전월 대비</span></h3>
+      ${typeOrder.length?`<div class="box"><h3>🧪 추정 첨가제 구성 <span class="muted" style="font-weight:400">물량 기준</span></h3>
+        ${typeOrder.map(k=>{const o=byType[k];return`<a class="reg" href="trends.html"><div class="top"><span><b>${esc(o.t.k)}</b> <span class="muted">${pr(o)}</span></span><span class="num">${fMT(o.kg)} · <b>${(o.kg/W*100).toFixed(0)}%</b></span></div><div class="tbar"><i style="width:${o.kg/byType[typeOrder[0]].kg*100}%"></i></div><div class="muted" style="margin-top:2px">${o.c.map(c=>esc(cnm(CN,c))).join(', ')}</div></a>`}).join('')}</div>`:''}
+      <div class="box"><h3>🔥 인기 국가 Top 5 <span class="muted" style="font-weight:400">금액 기준 · 순위는 전월 대비</span></h3>
         ${order.slice(0,5).map((c,i)=>{const p=prevOrder.indexOf(c),d=p<0?null:p-i;
-          const chg=d==null?'<span class="badge">신규</span>':d>0?`<span class="chg up">▲${d}</span>`:d<0?`<span class="chg down">▼${-d}</span>`:'<span class="chg" style="color:var(--mute)">–</span>';
-          return`<a class="row" href="${dl({c})}"><span class="no">${i+1}</span><span class="nm">${esc(cnm(CN,c))} ${chg}</span><span class="r num"><b>${fUSD(byC[c].usd)}</b> · ${(byC[c].usd/U*100).toFixed(0)}%</span></a>`}).join('')}
+          const chg=d==null?'<span class="chg" style="color:var(--mute)">전월 없음</span>':d>0?`<span class="chg up">▲${d}</span>`:d<0?`<span class="chg down">▼${-d}</span>`:'<span class="chg" style="color:var(--mute)">–</span>';
+          return`<a class="row" href="${dl({c})}"><span class="no">${i+1}</span><span class="nm">${esc(cnm(CN,c))}${newTag(c)} ${chg}</span><span class="r num"><b>${fUSD(byC[c].usd)}</b> · ${(byC[c].usd/U*100).toFixed(0)}%</span></a>`}).join('')}
       </div>
     </div>
-    ${T12>0?`<div class="box" style="margin-top:14px"><h3>🌍 지역 비중 <span class="muted" style="font-weight:400">최근 12개월 (${last12[0]} ~ ${Lk}) · 누르면 그 지역만</span></h3>
-      <div class="grid2" style="margin-top:0;gap:2px 18px">${regs.map(k=>`<a class="reg" href="${dl({scope:k})}"><div class="top"><span>${esc(k)}</span><span class="num">${fUSD(byR[k].usd)} · <b>${(byR[k].usd/T12*100).toFixed(1)}%</b></span></div><div class="t"><i style="width:${byR[k].usd/byR[regs[0]].usd*100}%"></i></div></a>`).join('')}</div></div>`:''}
+    <div class="grid2">
+      ${Object.keys(mTot).length?`<div class="box"><h3>월별 물량 <span class="muted" style="font-weight:400">최근 12개월 · MT · 막대를 누르면 그 달 상세</span></h3><div class="cbox"><canvas id="ch"></canvas></div></div>`:''}
+      ${T12>0?`<div class="box"><h3>🌍 지역 비중 <span class="muted" style="font-weight:400">최근 12개월 금액 · 누르면 그 지역만</span></h3>
+        ${regs.map(k=>`<a class="reg" href="${dl({scope:k})}"><div class="top"><span>${esc(k)}</span><span class="num">${fUSD(byR[k].usd)} · <b>${(byR[k].usd/T12*100).toFixed(1)}%</b></span></div><div class="t"><i style="width:${byR[k].usd/byR[regs[0]].usd*100}%"></i></div></a>`).join('')}</div>`:''}
+    </div>
     </section>`;
   }
+
+  // Big buttons into the detail pages
+  const big=(e,l,d,href)=>`<a class="big" href="${href}"><span class="e">${e}</span><span><b>${l}</b><span class="d">${d}</span></span></a>`;
+  h+=`<section><h2>🚀 더 자세히 보기</h2><div class="bigs">
+    ${big('📊','세부 수출기록 확인하기','나라·지역·세부 품목·월별 수출 기록을 표와 차트로','dashboard.html')}
+    ${big('📈','첨가제별 동향','추정 첨가제 유형별 월별 물량·단가·주요 국가','trends.html')}
+    ${big('🔎','제품 추정 시나리오','단일 제품으로 보이는 건만 골라 추정 근거와 함께','scenario.html')}
+  </div></section>`;
 
   // 4. New / lost markets
   h+=`<section id="markets"><h2>🆕 신규 · 이탈 시장 <span class="muted" style="font-weight:400">최근 12개월 vs 그 전 12개월</span></h2><div class="grid2" style="margin-top:0">
@@ -191,27 +224,8 @@ function build(CN,DATA){
       ${lostM.length?lostM.map(c=>`<a href="${dl({c,per:'m:'+lastM[c].replace('.','')})}"><span class="nm">${esc(cnm(CN,c))}</span><span class="r">마지막 ${lastM[c]} · 이전 ${fUSD(prvP[c].usd)}</span></a>`).join(''):'<div class="none">해당 없음</div>'}</div></div>
   </div></section>`;
 
-  // 5. Menu
-  const item=(e,l,d,href)=>`<a href="${href}"><span class="e">${e}</span><span><b>${l}</b><span class="d">${d}</span></span></a>`;
-  h+=`<section><h2>🗂️ 메뉴</h2><div class="menu">
-    <div><h3>📂 시장 보기</h3>
-      ${item('🌏','국가별 순위','전체 수출국을 금액 순으로',dl({scope:'all'}))}
-      ${item('🗺️','지역별','아시아·중동·아프리카 등 7개 지역',dl({scope:'아시아'}))}
-      ${item('🎯',`담당 시장 ${MARKETS.length}개국`,'중동·아프리카·서남아 담당국만',dl({scope:'mine'}))}
-      ${item('🆕','신규·이탈 시장','새로 생기거나 끊긴 수출국','#markets')}</div>
-    <div><h3>📦 품목·가격</h3>
-      ${item('🧪','세부 품목','비타민·미량광물질·항생물질·기타',dl({scope:'all'}))}
-      ${item('💲','평균단가 추이','월별 USD/kg 변화 (차트에서 평균단가 선택)',dl({scope:'all',per:'12'}))}
-      ${item('📅','월별 상세','최근 12개월 월별 표',dl({scope:'all',per:'12'}))}
-      ${item('🔎','제품 추정 시나리오','단일 제품으로 보이는 건의 제품 유형 추정','scenario.html')}</div>
-    <div><h3>📚 참고</h3>
-      ${item('📘','이 데이터는 어디서 오나요?','수출신고부터 이 페이지까지','#about')}
-      ${item('🔢','HS코드 안내','2309.90-30이 무엇인지','#hs')}
-      ${item('🔄','업데이트 기록',`최근 갱신 ${esc(DATA.updated)}`,'#updates')}</div>
-  </div></section>`;
-
   // 6. About the data
-  h+=`<section id="about"><h2>📘 이 데이터는 어디서 오나요?</h2>
+  h+=`<section id="about"><details class="fold" id="aboutD"><summary><span class="arr">▶</span><h2>📘 이 데이터는 어디서 오나요?</h2><span class="muted">누르면 펼쳐집니다</span></summary><div class="inner">
     <p style="margin:0;color:var(--ink2)">우리나라에서 물건을 해외로 팔 때는 반드시 <b>세관(관세청)에 수출신고</b>를 해야 합니다. 신고서에는 <b>무슨 물건인지(HS코드)</b>, <b>어느 나라로</b>, <b>몇 kg</b>, <b>얼마(달러)</b>에 보내는지가 적힙니다. 관세청은 이 신고서를 매달 모아 합계를 공개하고, 이 페이지는 그 공개 자료를 자동으로 불러와 보여줍니다.</p>
     <div class="flow">
       <div class="step"><b><span class="n">1</span>수출신고</b><div>회사가 물건을 보낼 때 세관에 품목·나라·무게·금액을 신고</div></div>
@@ -226,7 +240,7 @@ function build(CN,DATA){
       <li><b>평균단가 = 금액 ÷ 중량</b> (USD/kg). 같은 제품이라도 다른 HS코드로 신고되면 집계되지 않습니다.</li>
     </ul></div>
     <div id="updates" class="callout" style="scroll-margin-top:16px"><div class="e">🔄</div><div class="txt"><b>업데이트 기록</b><div class="muted" style="font-size:14px;margin-top:2px">데이터 ${esc(DATA.latest)}까지 · 마지막 갱신 ${esc(DATA.updated)} · 매달 16~20일 오전 10시 자동 갱신<br>출처: ${esc(DATA.source||'관세청 품목별 국가별 수출입실적')} · <a href="${LINK}" target="_blank" rel="noopener" style="text-decoration:underline">공공데이터포털</a></div></div></div>
-  </section>`;
+  </div></details></section>`;
 
   // 7. External links
   const ext=EXTERNAL_LINKS.filter(x=>x.url);
@@ -234,15 +248,21 @@ function build(CN,DATA){
 
   $('#app').innerHTML=h;
 
+  // Anchors into the folded data section open it first
+  const openAbout=()=>{if(['#about','#hs','#updates'].includes(location.hash)){$('#aboutD').open=true;document.querySelector(location.hash)?.scrollIntoView()}};
+  window.addEventListener('hashchange',openAbout);openAbout();
+  document.querySelectorAll('a[href="#about"]').forEach(a=>a.addEventListener('click',()=>{$('#aboutD').open=true}));
+  document.querySelectorAll('tr[data-href]').forEach(tr=>tr.onclick=()=>location.href=tr.dataset.href);
+
   if($('#copy'))$('#copy').onclick=()=>{
     const done=()=>{$('#copy').textContent='복사됨 ✓';setTimeout(()=>$('#copy').textContent='복사',1500)};
     (navigator.clipboard?.writeText(line)||Promise.reject()).then(done).catch(()=>{const t=document.createElement('textarea');t.value=line;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();done()});
   };
   if($('#ch')){
-    const labels=last12,vals=last12.map(k=>mTot[k]?.usd||0);
+    const labels=last12,vals=last12.map(k=>(mTot[k]?.kg||0)/1000);
     new Chart($('#ch'),{type:'bar',data:{labels:labels.map(k=>k.slice(2)),datasets:[{data:vals,backgroundColor:labels.map(k=>k===Lk?'#0f5c43':'#9cc9b6'),borderRadius:3}]},
-      options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:it=>korM(labels[it[0].dataIndex]),label:c=>` ${fUSD(c.parsed.y)}`}}},
-        scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{border:{display:false},grid:{color:'#f1f1ef'},ticks:{font:{size:11},callback:v=>fUSD(v)}}},
+      options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:it=>korM(labels[it[0].dataIndex]),label:c=>` ${c.parsed.y.toLocaleString(undefined,{maximumFractionDigits:1})} MT`}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{border:{display:false},grid:{color:'#f1f1ef'},ticks:{font:{size:11},callback:v=>`${v.toLocaleString()} MT`}}},
         onHover:(e,els)=>{e.native.target.style.cursor=els.length?'pointer':'default'},
         onClick:(e,els)=>{if(els.length)location.href=dl({per:'m:'+labels[els[0].index].replace('.','')})}}});
   }
