@@ -46,3 +46,16 @@ function estimateRows(rows){
     return{...r,p,mt,q,exact,dev,near,rep,big,conf,cands,single:conf!=='lo'};
   });
 }
+
+// Display groups for the overview matrix (several price-band types roll up into one product family)
+const GROUPS=[
+  {id:'acid',k:'곰팡이 억제제·산제',types:['Mold inhibitor / 저가 acidifier','일반 acidifier premix'],c:'#1e40af'},
+  {id:'yeast',k:'효모세포벽·MOS',types:['Yeast cell wall / MOS'],c:'#f59e0b'},
+  {id:'phyto',k:'식물추출물 프리믹스',types:['Phytogenic premix'],c:'#e0718a'},
+  {id:'toxin',k:'독소흡착제·바인더',types:['Toxin binder (저가형)','Mineral carrier / pellet binder'],c:'#5b9a5f'},
+  {id:'lec',k:'레시틴·LPL',types:['Lecithin / LPL'],c:'#3b9be0'},
+  {id:'enz',k:'효소 (피타아제·NSP)',types:['Phytase','NSP enzyme'],c:'#8b5cf6'},
+  {id:'bio',k:'생균제·파지',types:['Probiotic','Phage'],c:'#0d9488'},
+  {id:'etc',k:'기타 (특수·초저가)',types:[],c:'#94a3b8'},
+];
+const groupOf=typeName=>GROUPS.find(g=>g.types.includes(typeName))||GROUPS[GROUPS.length-1];
