@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>제품 추정 시나리오 · 사료첨가제 수출</title>
+<style>
+:root{--bg:#f4f5f2;--card:#fff;--ink:#17201b;--ink2:#47524c;--mute:#7b857f;--line:#e2e5e0;--line2:#eef0ec;--brand:#0f5c43;--brand-2:#e7f1ec;--brand-ink:#0a3f2e;--up:#0f7b4f;--down:#c2410c;--warn:#b45309;--new:#7c3aed}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.55 "Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
+header{background:var(--brand-ink);color:#fff}
+.hd{max-width:1280px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hd h1{margin:0;font-size:18px;letter-spacing:-.01em}.hd h1 small{font-size:12px;font-weight:500;color:#a8c9bb;margin-left:6px}
+.hd .sub{font-size:12px;color:#a8c9bb}
+.hd .r{margin-left:auto}.hd a{color:#fff;font-size:13px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:6px 12px}
+.hd a:hover{background:rgba(255,255,255,.1)}
+main{max-width:1280px;margin:0 auto;padding:18px 20px 40px;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(16,24,20,.04)}
+.pad{padding:16px 18px}
+h2{font-size:15px;margin:0 0 4px}
+.hintc{font-size:12px;color:var(--mute)}
+p{margin:4px 0 0;color:var(--ink2);font-size:13.5px;line-height:1.7}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+@media(max-width:800px){.rules{grid-template-columns:1fr}}
+.rule{background:#f7f8f6;border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink2);line-height:1.6}
+.rule>b:first-child{display:block;color:var(--ink);font-size:13px;margin-bottom:2px}
+.warnbox{margin-top:10px;font-size:12.5px;color:#7a4a0c;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:9px 12px;line-height:1.65}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;background:#f0f2ef;border-radius:9px;padding:3px;gap:3px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:7px;padding:5px 12px;font-size:13px;color:var(--ink2);white-space:nowrap}
+.seg button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.lbl{font-size:12px;color:var(--mute)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:800px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{padding:14px 18px}.kpi .l{font-size:12px;color:var(--mute)}.kpi .v{font-size:24px;font-weight:800;letter-spacing:-.02em}.kpi .s{font-size:12.5px;color:var(--ink2)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:900px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line2);text-align:right;white-space:nowrap;vertical-align:top}
+th{font-size:12px;color:var(--ink2);font-weight:600;background:#fafbf9;position:sticky;top:0}
+.l,th.l,td.l{text-align:left}
+.tw{overflow-x:auto}
+td.wrap{white-space:normal;min-width:220px}
+.stars{color:#d97706;letter-spacing:-1px;font-size:12px}
+.chip{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;margin:1px 3px 1px 0;font-weight:600;white-space:nowrap}
+.c-mt{background:#e7f1ec;color:#0a3f2e}.c-px{background:#e0ecff;color:#1d4ed8}.c-pn{background:#eef2ff;color:#4338ca}.c-rp{background:#f1ebfd;color:#6d28d9}.c-bg{background:#fef3c7;color:#92400e}
+.conf{font-weight:800;font-size:12px;padding:2px 8px;border-radius:6px}
+.conf.h{background:#dcfce7;color:#166534}.conf.m{background:#fef9c3;color:#854d0e}.conf.lo{background:#f3f4f6;color:#4b5563}
+.cand{display:flex;flex-direction:column;gap:2px}
+.cand div{display:flex;gap:6px;align-items:baseline}
+.cand div:first-child b{color:var(--brand-ink)}
+.cand div+div{color:var(--mute);font-size:12px}
+.hbar{display:grid;grid-template-columns:170px 1fr 70px;gap:8px;align-items:center;padding:5px 0;border-top:1px solid var(--line2);font-size:13px}
+.hbar:first-of-type{border-top:0}
+.hbar i{display:block;height:8px;border-radius:99px;background:var(--brand)}
+.hbar .t{background:#e8ece9;border-radius:99px;overflow:hidden}
+.band{position:relative;height:16px;background:#f3f5f2;border-radius:4px;min-width:160px}
+.band i{position:absolute;top:3px;height:10px;border-radius:3px;background:#9cc9b6}
+.note{font-size:12px;color:var(--mute);line-height:1.6}
+.state{padding:40px 20px;text-align:center;color:var(--ink2)}
+.err{color:#7a271a;background:#fef3f2;border:1px solid #fecdca;border-radius:12px;padding:14px 16px;font-size:13px}
+tr.rp td{background:#fcfbff}
+</style>
+</head>
+<body>
+<header><div class="hd">
+  <div><h1>제품 추정 시나리오<small>HS 2309.90-30</small></h1><div class="sub" id="sub">단일 제품으로 나간 것처럼 보이는 수출 건을 골라 단가로 제품 유형을 추정합니다</div></div>
+  <div class="r"><a href="index.html">← 수출 현황 대시보드</a></div>
+</div></header>
+<main id="main"><div class="card state"><b>불러오는 중…</b></div></main>
+
+<script>
+/* ── 단가대별 제품 유형 (국제 벌크 거래의 대략적인 FOB/CIF 범위, USD/kg) ──
+   q = 대량(100MT급) 거래 가능성 1~5. 정확한 가격표가 아니라 추정용 기준표입니다. */
+const TYPES=[
+  {n:'Mineral carrier / pellet binder',k:'미네랄 캐리어·펠렛 바인더',lo:.3,hi:.8,q:5},
+  {n:'Toxin binder (저가형)',k:'독소흡착제',lo:.35,hi:.8,q:5},
+  {n:'Mold inhibitor / 저가 acidifier',k:'곰팡이 억제제·저가 산제',lo:.6,hi:1.5,q:5},
+  {n:'일반 acidifier premix',k:'산제 프리믹스',lo:1,hi:2.5,q:4},
+  {n:'Yeast cell wall / MOS',k:'효모세포벽·MOS',lo:1.5,hi:4,q:3},
+  {n:'Phytogenic premix',k:'식물추출물 프리믹스',lo:2,hi:8,q:2},
+  {n:'Lecithin / LPL',k:'레시틴·LPL',lo:2.5,hi:5,q:1},
+  {n:'Phytase',k:'피타아제',lo:3,hi:10,q:1},
+  {n:'NSP enzyme',k:'NSP 효소',lo:5,hi:20,q:1},
+  {n:'Phage',k:'박테리오파지',lo:5,hi:20,q:1},
+  {n:'Probiotic',k:'생균제',lo:5,hi:30,q:1},
+];
+const HS={'2309903010':'항생물질 위주','2309903020':'비타민 위주','2309903030':'미량광물질 위주','2309903090':'기타 사료첨가제'};
+const NEAR=0.003;   // 2자리 단가와 0.3% 이내 = 환산·운임 차감 오차로 보고 '근접'
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fUSD=v=>v>=1e6?`$${(v/1e6).toFixed(2)}M`:v>=1e3?`$${(v/1e3).toFixed(1)}K`:`$${Math.round(v)}`;
+const stars=q=>'★'.repeat(q)+'<span style="color:#e5e7eb">'+'★'.repeat(5-q)+'</span>';
+let CN={},ALL=[];
+const ST={conf:'hm',hs:'all',type:'all'};
+
+/* 단가에 맞는 후보 유형: 범위 안에 드는 것만, 대량이면 대량 거래 가능성 우선, 아니면 범위 중심(로그)에 가까운 순 */
+function candidates(p,mt){
+  const inb=TYPES.filter(t=>p>=t.lo&&p<=t.hi).map(t=>{const c=Math.sqrt(t.lo*t.hi);return{...t,fit:Math.abs(Math.log(p/c))/Math.log(t.hi/t.lo)}});
+  if(!inb.length)return p<TYPES[0].lo?[{n:'초저가 원료성 첨가제',k:'캐리어·희석제 등',q:5,fit:0,out:true}]:[{n:'고가 특수제품 ($30/kg 초과)',k:'고농도 생균·효소·특수 원료',q:1,fit:0,out:true}];
+  return inb.sort((a,b)=>mt>=20?(b.q-a.q)||(a.fit-b.fit):(a.fit-b.fit)||(b.q-a.q));
+}
+
+function analyse(rows){
+  const whole=rows.filter(r=>r.kg>=1000&&r.kg%1000===0);   // MT 정수가 아니면 여러 건이 섞인 합계로 보고 제외
+  // 반복 주문: 같은 나라·세부코드·물량이 다른 달에도 있고 단가도 ±15% 안이면 같은 제품의 정기 거래로 봄
+  const same=(a,b)=>a.c===b.c&&a.h===b.h&&a.kg===b.kg&&Math.abs(Math.log((a.usd/a.kg)/(b.usd/b.kg)))<=Math.log(1.15);
+  return whole.map(r=>{
+    const p=r.usd/r.kg,mt=r.kg/1000,q=Math.round(p*100)/100;
+    const exact=Math.abs(q*r.kg-r.usd)<=1,dev=Math.abs(p-q)/p;
+    const near=!exact&&p<1&&dev<=NEAR;                     // $1 이상은 아무 값이나 2자리 단가에 쉽게 붙어서 단서로 안 씀
+    const rep=whole.filter(o=>same(o,r)).length;
+    const big=mt>=20;
+    const conf=exact||rep>=2?'h':big||near?'m':'lo';
+    return{...r,p,mt,q,exact,dev,near,rep,big,conf,cands:candidates(p,mt)};
+  });
+}
+
+function render(){
+  const pass=r=>(ST.conf==='h'?r.conf==='h':ST.conf==='hm'?r.conf!=='lo':true)&&(ST.hs==='all'||r.h===ST.hs)&&(ST.type==='all'||r.cands[0].n===ST.type);
+  const list=ALL.filter(pass).sort((a,b)=>b.m.localeCompare(a.m)||b.usd-a.usd);
+  const base=ALL.filter(r=>(ST.conf==='h'?r.conf==='h':ST.conf==='hm'?r.conf!=='lo':true)&&(ST.hs==='all'||r.h===ST.hs));
+  const tot=list.reduce((s,r)=>s+r.usd,0),totW=list.reduce((s,r)=>s+r.kg,0);
+  // 1순위 후보별 집계
+  const byT={};for(const r of base){const n=r.cands[0].n;(byT[n]=byT[n]||{n:0,usd:0,kg:0}).n++;byT[n].usd+=r.usd;byT[n].kg+=r.kg}
+  const tKeys=Object.keys(byT).sort((a,b)=>byT[b].usd-byT[a].usd),maxU=Math.max(1,...tKeys.map(k=>byT[k].usd));
+  // 반복 주문 패턴
+  const grp={};for(const r of ALL)if(r.rep>=2){const k=`${r.c}|${r.h}|${r.kg}`;const gs=(grp[k]=grp[k]||[]);const g=gs.find(g=>g.some(o=>Math.abs(Math.log(o.p/r.p))<=Math.log(1.15)));g?g.push(r):gs.push([r])}
+  const pats=Object.values(grp).flat().filter(g=>g.length>=2).filter(g=>(ST.hs==='all'||g[0].h===ST.hs)).sort((a,b)=>b.length-a.length||b[0].kg-a[0].kg);
+  const lowP=a=>Math.min(...a.map(r=>r.p)),highP=a=>Math.max(...a.map(r=>r.p));
+  const pmax=30,pos=v=>Math.min(100,Math.log(Math.max(v,.25)/.25)/Math.log(pmax/.25)*100);
+
+  $('#main').innerHTML=`
+  <div class="card pad">
+    <h2>🔎 이 페이지는 무엇을 보여주나요?</h2>
+    <p>관세청 통계는 <b>한 달 · 한 나라 · 한 세부코드</b>의 합계라서, 보통은 여러 회사·여러 제품이 섞여 평균 단가가 나옵니다. 그런데 물량이 <b>MT 단위로 딱 떨어지고</b> 단가도 <b>$0.89처럼 깔끔한 값</b>에 가깝다면, 한 제품이 한 번(또는 같은 조건으로 몇 번) 나간 것일 가능성이 큽니다. 그런 건만 골라 <b>단가대</b>로 어떤 제품일지 추정합니다.</p>
+    <div class="rules">
+      <div class="rule"><b>① 물량이 MT 정수</b>1MT 이상이고 1,000kg 단위로 떨어지는 건만 봅니다. 11,009kg처럼 끝자리가 있으면 여러 건 합계로 보고 제외합니다.</div>
+      <div class="rule"><b>② 단가가 깔끔한가</b>금액 ÷ 물량이 $0.82처럼 <b>딱 떨어지면</b> 강한 단서입니다. $1 미만에서 0.3% 이내로 <b>근접</b>하면(환율 환산·운임 차감 오차) 보조 단서로만 봅니다.</div>
+      <div class="rule"><b>③ 반복 주문</b>같은 나라·같은 세부코드로 같은 물량이 다른 달에도 나가고 단가도 ±15% 안이면 정기 거래처의 같은 제품으로 봅니다.</div>
+    </div>
+    <div class="warnbox">⚠️ <b>추정입니다.</b> 신고 금액은 FOB(본선인도) 기준 달러라 CIF 오퍼보다 낮게 나올 수 있고, 단가가 높을수록 아무 값이나 2자리 단가에 가깝게 나와 ②는 $1 미만에서만 의미가 있습니다. 단가대 기준표는 국제 벌크 거래의 대략적인 범위이며, 실제 제품명은 수출업체·B/L 데이터로 확인해야 합니다.</div>
+  </div>
+
+  <div class="card pad bar">
+    <span class="lbl">신뢰도</span>
+    <div class="seg" id="sConf">${[['h','높음만'],['hm','높음+중간'],['all','전체(낮음 포함)']].map(([v,t])=>`<button data-v="${v}" class="${ST.conf===v?'on':''}">${t}</button>`).join('')}</div>
+    <span class="lbl" style="margin-left:8px">세부 품목</span>
+    <div class="seg" id="sHs">${[['all','전체'],...Object.entries(HS)].filter(([v])=>v==='all'||ALL.some(r=>r.h===v)).map(([v,t])=>`<button data-v="${v}" class="${ST.hs===v?'on':''}">${t}</button>`).join('')}</div>
+    ${ST.type!=='all'?`<span class="chip c-px" style="font-size:12.5px;padding:4px 10px">유형: ${esc(ST.type)} <button id="tX" style="border:0;background:none;padding:0 0 0 4px">✕</button></span>`:''}
+  </div>
+
+  <div class="kpis">
+    <div class="card kpi"><div class="l">추정 대상 건수</div><div class="v num">${list.length}건</div><div class="s">MT 정수 건 ${ALL.length}건 중</div></div>
+    <div class="card kpi"><div class="l">수출액 합계</div><div class="v num">${fUSD(tot)}</div><div class="s">물량 ${Math.round(totW/1000).toLocaleString()} MT</div></div>
+    <div class="card kpi"><div class="l">평균 단가</div><div class="v num">${totW?`$${(tot/totW).toFixed(2)}`:'-'}<span style="font-size:14px">/kg</span></div><div class="s">추정 대상만 기준</div></div>
+    <div class="card kpi"><div class="l">반복 주문 패턴</div><div class="v num">${pats.length}개</div><div class="s">같은 나라·물량·비슷한 단가 2회 이상</div></div>
+  </div>
+
+  <div class="two">
+    <div class="card pad"><h2>1순위 추정 유형별 금액</h2><div class="hintc" style="margin-bottom:6px">누르면 그 유형만 표에서 봅니다 · 현재 신뢰도·품목 기준</div>
+      ${tKeys.map(k=>`<div class="hbar" data-type="${esc(k)}" style="cursor:pointer"><span>${esc(k)} <span class="hintc">${byT[k].n}건</span></span><span class="t"><i style="width:${byT[k].usd/maxU*100}%"></i></span><span class="num" style="text-align:right">${fUSD(byT[k].usd)}</span></div>`).join('')||'<div class="hintc">해당 건이 없습니다.</div>'}
+    </div>
+    <div class="card pad"><h2>단가대 기준표</h2><div class="hintc" style="margin-bottom:6px">막대 = 유형별 대략적인 벌크 단가 범위(로그 눈금, $0.25~$30) · 별 = 대량(100MT급) 거래 가능성</div>
+      <table><tbody>${TYPES.map(t=>`<tr><td class="l">${esc(t.n)}<div class="hintc">${esc(t.k)}</div></td><td class="num">$${t.lo}–${t.hi}</td><td><span class="stars">${stars(t.q)}</span></td><td style="width:40%"><div class="band"><i style="left:${pos(t.lo)}%;width:${pos(t.hi)-pos(t.lo)}%"></i></div></td></tr>`).join('')}</tbody></table>
+    </div>
+  </div>
+
+  <div class="card pad"><h2>🔁 반복 주문 패턴</h2><div class="hintc" style="margin-bottom:6px">같은 나라·세부코드·물량이 여러 달 반복 = 정기 거래처의 같은 제품일 가능성이 가장 높은 묶음</div>
+    <div class="tw"><table><thead><tr><th class="l">나라</th><th class="l">세부 품목</th><th>물량/회</th><th>횟수</th><th>단가 범위</th><th class="l">추정 유형</th><th class="l">거래 월</th></tr></thead><tbody>
+    ${pats.map(g=>{const a=lowP(g),b=highP(g),c=candidates((a+b)/2,g[0].mt);return`<tr class="rp"><td class="l"><b>${esc(CN[g[0].c]||g[0].c)}</b></td><td class="l">${HS[g[0].h]}</td><td class="num">${g[0].mt} MT</td><td class="num">${g.length}회</td><td class="num">$${a.toFixed(2)}${b-a>=.005?`–${b.toFixed(2)}`:''}</td><td class="l"><b>${esc(c[0].n)}</b>${c[1]?` <span class="hintc">/ ${esc(c[1].n)}</span>`:''}</td><td class="l hintc" style="white-space:normal">${g.map(r=>r.m).sort().join(', ')}</td></tr>`}).join('')||'<tr><td class="l hintc" colspan="7">반복 패턴이 없습니다.</td></tr>'}
+    </tbody></table></div>
+  </div>
+
+  <div class="card"><div class="pad" style="padding-bottom:6px"><h2>건별 추정</h2><div class="hintc">최근 월 순 · 단가 아래는 가장 가까운 2자리 단가와 차이</div></div>
+    <div class="tw"><table><thead><tr><th class="l">월</th><th class="l">나라</th><th class="l">세부 품목</th><th>물량</th><th>금액</th><th>단가</th><th class="l">단서</th><th class="l">추정 유형 (1순위 / 다음 후보)</th><th class="l">신뢰도</th></tr></thead><tbody>
+    ${list.map(r=>{const c=r.cands;return`<tr>
+      <td class="l num">${r.m}</td><td class="l"><b>${esc(CN[r.c]||r.c)}</b></td><td class="l">${HS[r.h]}<div class="hintc">${r.h}</div></td>
+      <td class="num">${r.mt.toLocaleString()} MT</td><td class="num">${fUSD(r.usd)}</td>
+      <td class="num"><b>$${r.p.toFixed(r.p<10?3:2)}</b><div class="hintc">${r.exact?`= $${r.q.toFixed(2)} 딱`:`≈ $${r.q.toFixed(2)} (${(r.dev*100).toFixed(2)}%)`}</div></td>
+      <td class="l"><span class="chip c-mt">MT 정수</span>${r.exact?'<span class="chip c-px">단가 딱</span>':r.near?'<span class="chip c-pn">단가 근접</span>':''}${r.rep>=2?`<span class="chip c-rp">반복 ${r.rep}회</span>`:''}${r.big?'<span class="chip c-bg">20MT+</span>':''}</td>
+      <td class="l wrap"><div class="cand"><div><b>${esc(c[0].n)}</b><span class="stars">${stars(c[0].q)}</span></div>${c.length>1?`<div>${c.slice(1,3).map(t=>esc(t.n)).join(' · ')}</div>`:''}${r.h!=='2309903090'?`<div>세관 분류상 ${HS[r.h]} 프리믹스</div>`:''}</div></td>
+      <td class="l"><span class="conf ${r.conf}">${{h:'높음',m:'중간',lo:'낮음'}[r.conf]}</span></td></tr>`}).join('')||'<tr><td class="l hintc" colspan="9">조건에 맞는 건이 없습니다.</td></tr>'}
+    </tbody></table></div>
+  </div>
+  <div class="note">신뢰도 — <b>높음</b>: 단가가 딱 떨어지거나 반복 주문. <b>중간</b>: 20MT 이상 대량이거나 $1 미만 단가 근접. <b>낮음</b>: MT 정수만 해당. 데이터: 관세청 품목별 국가별 수출입실적 · 갱신 ${esc(window.DATA_UPDATED||'')}</div>`;
+
+  document.querySelectorAll('#sConf button').forEach(b=>b.onclick=()=>{ST.conf=b.dataset.v;render()});
+  document.querySelectorAll('#sHs button').forEach(b=>b.onclick=()=>{ST.hs=b.dataset.v;ST.type='all';render()});
+  document.querySelectorAll('[data-type]').forEach(el=>el.onclick=()=>{ST.type=ST.type===el.dataset.type?'all':el.dataset.type;render()});
+  if($('#tX'))$('#tX').onclick=()=>{ST.type='all';render()};
+}
+
+if(location.protocol==='file:'){$('#main').innerHTML='<div class="err"><b>파일을 직접 열면 데이터를 읽을 수 없습니다.</b> GitHub Pages 주소로 접속하세요.</div>'}
+else Promise.all([fetch('codes.json').then(r=>r.json()),fetch('data/feed_additive.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})])
+  .then(([c,d])=>{CN=Object.fromEntries(c.country);window.DATA_UPDATED=d.updated;
+    ALL=analyse(d.rows.map(([m,c,h,usd,kg])=>({m,c,h,usd,kg})));render()})
+  .catch(()=>{$('#main').innerHTML='<div class="err"><b>데이터 파일을 불러오지 못했습니다.</b> 잠시 뒤 새로고침해 주세요.</div>'});
+</script>
+</body>
+</html>
