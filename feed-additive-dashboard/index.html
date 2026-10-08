@@ -7,7 +7,6 @@
 <script src="common.js"></script>
 <script src="estimate.js"></script>
 <script src="world.js"></script>
-<script src="chart.umd.js"></script>
 <style>
 :root{--navy:#0b2559;--navy2:#1e3a8a;--ink:#111827;--ink2:#4b5563;--mute:#8a94a6;--line:#e5e9f0;--soft:#f5f7fb;--blue-soft:#eef3fc;--new:#e11d48;--up:#15803d;--down:#c2410c}
 *{box-sizing:border-box}html,body{margin:0}
@@ -43,6 +42,10 @@ button,select{font:inherit;color:inherit}
 .badge{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#fff;background:var(--new);border-radius:4px;padding:1px 6px;vertical-align:1px;margin-left:5px}
 .grid{display:grid;gap:12px;margin-top:12px}
 .g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.newc{border-color:#fbc8d1;background:#fff8f9}
+.newc h2{color:var(--new)}
+.sub2{display:block;font-size:11.5px;color:var(--mute);font-weight:400}
 .g-map{grid-template-columns:1.7fr 1fr}
 .map{position:relative}
 .map svg{width:100%;height:auto;display:block}
@@ -85,7 +88,6 @@ tr.go{cursor:pointer}tr.go:hover td{background:var(--soft)}
 .op .v{font-size:19px;font-weight:800;color:var(--navy);margin-top:4px;line-height:1.3}
 .op .s{font-size:12.5px;color:var(--ink2);margin-top:4px;line-height:1.55}
 .op.new{background:#fff1f3}.op.new .l{color:var(--new)}
-.cbox{position:relative;height:190px}
 .bigs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
 .big{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:16px;transition:background .12s}
 .big:hover{background:var(--soft)}
@@ -102,8 +104,8 @@ details.fold[open]>summary .arr{transform:rotate(90deg)}
 ul.facts{margin:6px 0 0;padding-left:20px;color:var(--ink2);font-size:13.5px}
 .note{font-size:12px;color:var(--mute);margin-top:8px;line-height:1.6}
 .err{background:#fef3f2;border:1px solid #fecdca;color:#7a271a;border-radius:10px;padding:16px 18px;margin-top:20px}
-@media(max-width:1000px){.row1{grid-template-columns:1fr 1fr}.row1 .take{grid-column:1/-1}.g-map{grid-template-columns:1fr}.opps{grid-template-columns:1fr 1fr}}
-@media(max-width:640px){.page{padding:20px 14px 48px}.top h1{font-size:23px}.g2,.bigs,.flow{grid-template-columns:1fr}.opps{grid-template-columns:1fr}.kpi .v{font-size:28px}.kpi.hero .v{font-size:34px}.hide-m{display:none}}
+@media(max-width:1000px){.g3{grid-template-columns:1fr 1fr}.g3 .newc{grid-column:1/-1}.row1{grid-template-columns:1fr 1fr}.row1 .take{grid-column:1/-1}.g-map{grid-template-columns:1fr}.opps{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.page{padding:20px 14px 48px}.top h1{font-size:23px}.g2,.g3,.bigs,.flow{grid-template-columns:1fr}.opps{grid-template-columns:1fr}.kpi .v{font-size:28px}.kpi.hero .v{font-size:34px}.hide-m{display:none}}
 </style>
 </head>
 <body>
@@ -127,7 +129,7 @@ const dl=o=>D+'#'+Object.entries(o).map(([k,v])=>`${k}=${encodeURIComponent(v)}`
 const NUM_MT=kg=>(kg/1000).toLocaleString(undefined,{maximumFractionDigits:kg<100000?1:0});
 const hasB=w=>{const ch=String(w).trim().slice(-1).charCodeAt(0);return ch>=0xAC00&&ch<=0xD7A3&&(ch-0xAC00)%28>0};
 const joinKo=a=>a.join('·');
-let CN={},DATA=null,EST=[],chart=null;
+let CN={},DATA=null,EST=[];
 
 function analyse(M){
   const L=parseM(M),prevM=mkey(addM(L,-1));
@@ -195,16 +197,19 @@ function render(){
     svg+=`<text class="lab" x="${box.x}" y="${box.y+fs}" style="font-size:${fs}px;stroke-width:${3*k}px">${esc(name)}</text><text class="lab2" x="${box.x}" y="${box.y+fs+fs2+2*k}" style="font-size:${fs2}px;stroke-width:${3*k}px">${NUM_MT(o.kg)} MT</text>`;
     if(o.isNew){const bx=box.x+name.length*fs*.98+4*k,by=box.y+1*k;svg+=`<rect class="nb" x="${bx}" y="${by}" width="${28*k}" height="${13*k}" rx="${3*k}"/><text class="nbt" x="${bx+14*k}" y="${by+9.6*k}" text-anchor="middle" style="font-size:${9*k}px">NEW</text>`}}
   svg+='</svg>';
-  const rankTable=(list,val,head)=>`<table><thead><tr><th class="l">#</th><th class="l">나라</th><th>${head}</th><th>비중</th><th></th></tr></thead><tbody>${list.map((o,i)=>`<tr class="go" data-href="${dl({c:o.c,per})}"><td class="l rk">${i+1}</td><td class="l"><b>${nm(o.c)}</b></td><td class="num"><b>${val(o)}</b></td><td class="num" style="color:var(--mute)">${o.share}</td><td>${newTag(o)}</td></tr>`).join('')}</tbody></table>`;
+  const uprice=o=>`${fPv(o.usd/o.kg)}`;
+  const rankTable=(list,val,head)=>`<table><thead><tr><th class="l">#</th><th class="l">나라</th><th>${head}</th><th>단가 $/kg</th><th class="hide-m">비중</th><th></th></tr></thead><tbody>${list.map((o,i)=>`<tr class="go" data-href="${dl({c:o.c,per})}"><td class="l rk">${i+1}</td><td class="l"><b>${nm(o.c)}</b></td><td class="num"><b>${val(o)}</b></td><td class="num">${uprice(o)}</td><td class="num hide-m" style="color:var(--mute)">${o.share}</td><td>${newTag(o)}</td></tr>`).join('')}</tbody></table>`;
   const U=countries.reduce((s,o)=>s+o.usd,0);
   const byVol=countries.slice(0,5).map(o=>({...o,share:pct(o.kg)}));
   const byVal=[...countries].sort((a,b)=>b.usd-a.usd).slice(0,5).map(o=>({...o,share:`${(o.usd/U*100).toFixed(0)}%`}));
   h+=`<div class="card" style="margin-top:12px"><div class="ttl"><h2>나라별 수출 물량</h2><span class="u">MT · 원 크기 = 물량 · 이번 달 수출국 영역으로 확대 · 누르면 그 나라 상세</span></div>
       <div class="map">${svg}</div>
       <div class="legend"><span><i style="background:#0b2559"></i>50 MT 이상</span><span><i style="background:#3b6fc9"></i>10–50</span><span><i style="background:#9db9e8"></i>1–10</span><span><i style="background:#d6e2f6"></i>1 미만</span><span>· 라벨은 겹치지 않는 상위 국가만</span></div></div>
-    <div class="grid g2">
+    <div class="grid g3">
       <div class="card"><div class="ttl"><h2>물량 Top 5</h2><span class="u">MT</span><a class="more" href="${dl({scope:'all',per})}">전체 보기 ›</a></div>${rankTable(byVol,o=>NUM_MT(o.kg),'물량')}</div>
       <div class="card"><div class="ttl"><h2>금액 Top 5</h2><span class="u">USD</span><a class="more" href="${dl({scope:'all',per})}">전체 보기 ›</a></div>${rankTable(byVal,o=>fUSD(o.usd),'금액')}</div>
+      <div class="card newc"><div class="ttl"><h2>신규 진출국</h2><span class="u">이전 12개월 실적 없음</span></div>
+        ${newC.length?`<table><thead><tr><th class="l">나라</th><th>물량</th><th>단가 $/kg</th><th>금액</th></tr></thead><tbody>${newC.map(o=>`<tr class="go" data-href="${dl({c:o.c,per})}"><td class="l"><b>${nm(o.c)}</b><span class="badge">NEW</span><span class="sub2">${esc(o.main.k)}</span></td><td class="num"><b>${NUM_MT(o.kg)} MT</b></td><td class="num"><b>${uprice(o)}</b></td><td class="num">${fUSD(o.usd)}</td></tr>`).join('')}</tbody></table>`:'<div class="note" style="margin-top:0">이번 달 새로 진출한 나라가 없습니다.</div>'}</div>
     </div>`;
 
   // ── Product × country matrix (the core view)
@@ -239,9 +244,6 @@ function render(){
     <div class="op"><div class="l">교차 판매 후보</div>${narrow.length?narrow.slice(0,2).map(x=>`<div class="s"><b>${esc(x.g.k)}</b> — 지금 ${x.cs.map(c=>nm(c)).join('·')}${x.cs.length===1?'만':''} → ${esc(joinKo(cross(x)))}에 제안 검토</div>`).join(''):'<div class="s">모든 제품이 3개국 이상에 나갔습니다.</div>'}</div>
   </div></div>`;
 
-  // ── Monthly trend (supporting)
-  h+=`<div class="card" style="margin-top:12px"><div class="ttl"><h2>월별 수출 물량</h2><span class="u">최근 12개월 · MT · 참고 · 막대를 누르면 그 달로</span></div><div class="cbox"><canvas id="ch"></canvas></div></div>`;
-
   // ── Detail pages
   const big=(e,l,d,href)=>`<a class="big" href="${href}"><span class="e">${e}</span><span><b>${l}</b><span class="d">${d}</span></span></a>`;
   h+=`<div class="bigs">${big('📊','세부 수출기록 확인하기','나라·지역·세부 품목·월별 수출 기록',dl({scope:'all',per}))}${big('📈','첨가제별 동향','추정 첨가제 유형별 월별 물량·단가·주요 국가','trends.html')}${big('🔎','제품 추정 시나리오','단일 제품으로 보이는 건의 추정 근거','scenario.html')}</div>`;
@@ -259,16 +261,6 @@ function render(){
   document.querySelectorAll('[data-href]').forEach(el=>el.onclick=()=>location.href=el.dataset.href);
   document.querySelectorAll('.map [data-c]').forEach(el=>el.onclick=()=>location.href=dl({c:el.dataset.c,per}));
 
-  // Monthly volume chart, selected month highlighted with its value
-  const months=Array.from({length:12},(_,i)=>mkey(addM(parseM(M),i-11)));
-  const vals=months.map(m=>EST.filter(r=>r.m===m).reduce((s,r)=>s+r.kg,0)/1000);
-  chart?.destroy();
-  chart=new Chart($('#ch'),{type:'bar',data:{labels:months.map(m=>{const[y,mm]=parseM(m);return`${mm}월 '${String(y).slice(2)}`}),datasets:[{data:vals,backgroundColor:months.map(m=>m===M?'#0b2559':'#b9cdee'),borderRadius:4}]},
-    options:{maintainAspectRatio:false,layout:{padding:{top:22}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.y.toLocaleString(undefined,{maximumFractionDigits:1})} MT`}}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{border:{display:false},grid:{color:'#f0f2f6'},ticks:{font:{size:11}}}},
-      onHover:(e,els)=>{e.native.target.style.cursor=els.length?'pointer':'default'},
-      onClick:(e,els)=>{if(els.length){$('#mon').value=months[els[0].index];if($('#mon').value===months[els[0].index])render()}}},
-    plugins:[{id:'hl',afterDatasetsDraw(c){const i=months.indexOf(M),el=c.getDatasetMeta(0).data[i];if(!el)return;const x=c.ctx;x.save();x.font='700 12px sans-serif';x.fillStyle='#0b2559';x.textAlign='center';x.fillText(`${vals[i].toLocaleString(undefined,{maximumFractionDigits:1})} MT`,el.x,el.y-6);x.restore()}}]});
 }
 
 if(location.protocol==='file:')$('#app').innerHTML='<div class="err"><b>파일을 직접 열면 데이터를 읽을 수 없습니다.</b> GitHub Pages 주소로 접속하거나, 이 폴더에서 <code>python -m http.server</code> 실행 후 http://localhost:8000 으로 여세요.</div>';
