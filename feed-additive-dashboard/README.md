@@ -6,12 +6,13 @@
 ## 구조
 | 파일 | 역할 |
 |---|---|
-| `index.html` | 개요(홈) 화면 — 이번 달 요약·인기 국가·지역 비중·신규/이탈 시장 |
+| `index.html` | Export Intelligence 개요 — 신규 시장·나라별 지도·나라×추정 제품 매트릭스·제품별 물량/진출 국가 수·확장 기회 |
 | `dashboard.html` | 상세 대시보드 (주소 `#scope=mine`, `#c=BD`, `#per=m:202608` 등으로 바로 열기) |
 | `scenario.html` | 단일 제품으로 보이는 건의 제품 유형 추정 |
 | `trends.html` | 추정 첨가제 유형별 월별 물량·단가·주요 국가 |
 | `common.js` | 화면들이 함께 쓰는 지역·담당시장·품목명·숫자 형식 |
-| `estimate.js` | 단가로 첨가제 유형을 추정하는 공용 로직 (단가대 기준표 포함) |
+| `estimate.js` | 단가로 첨가제 유형을 추정하는 공용 로직 (단가대 기준표·제품 그룹 포함) |
+| `world.js` | 지도용 국가 경계 (Natural Earth 1:110m, 퍼블릭 도메인) |
 | `chart.umd.js` | 차트 라이브러리 (Chart.js 4.4.1) |
 | `codes.json` | 국가코드 → 한글 국가명 |
 | `data/feed_additive.json` | 수출 데이터 (Actions가 자동 생성·갱신) |
