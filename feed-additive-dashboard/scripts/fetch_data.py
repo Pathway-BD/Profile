@@ -10,7 +10,9 @@ import urllib.request, urllib.parse, urllib.error
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
 
-KEY = os.environ.get("DATA_GO_KR_KEY", "").strip()
+KEY = "".join(os.environ.get("DATA_GO_KR_KEY", "").split())  # 붙여넣을 때 섞인 공백·줄바꿈 제거
+# Encoding 키(%2B 등 포함)는 그대로, Decoding 키(+ / = 포함)는 URL 인코딩해서 보냄 → 어느 쪽을 등록해도 동작
+KEY_Q = KEY if "%" in KEY else urllib.parse.quote(KEY, safe="")
 BASE = os.environ.get("CUSTOMS_BASE", "https://apis.data.go.kr/1220000")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "feed_additive.json")
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36",
@@ -28,7 +30,7 @@ def add_month(y, m, k):
 
 
 def fetch(start, end):
-    url = f"{BASE}/nitemtrade/getNitemtradeList?serviceKey={KEY}&" + urllib.parse.urlencode(
+    url = f"{BASE}/nitemtrade/getNitemtradeList?serviceKey={KEY_Q}&" + urllib.parse.urlencode(
         {"strtYymm": start, "endYymm": end, "hsSgn": QUERY})
     last = None
     for attempt in range(3):
@@ -58,6 +60,8 @@ def fetch(start, end):
 def main():
     if not KEY:
         sys.exit("환경변수 DATA_GO_KR_KEY 가 없습니다.")
+    kind = "Encoding" if "%" in KEY else ("Decoding" if any(c in KEY for c in "+/=") else "영숫자")
+    print(f"인증키 길이 {len(KEY)}자, 형식 {kind}")  # 키 값은 출력하지 않음
     kst = datetime.now(timezone(timedelta(hours=9)))
     end = add_month(kst.year, kst.month, -1)                 # 지난달까지 요청 (미집계 월은 그냥 비어서 옴)
     start = add_month(*end, -(MONTHS_BACK - 1))
