@@ -123,7 +123,9 @@ const EXTERNAL_LINKS=[
 ];
 const D='dashboard.html';
 const dl=o=>D+'#'+Object.entries(o).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&');
-const NUM_MT=kg=>(kg/1000).toLocaleString(undefined,{maximumFractionDigits:kg<100000?1:0});
+// Tonnage without unit for MT columns; 100 kg or less would round to 0 MT, so show it in kg instead
+const NUM_MT=kg=>kg<=100?`${Math.round(kg)} kg`:(kg/1000).toLocaleString(undefined,{maximumFractionDigits:kg<100000?1:0});
+const QTY=kg=>kg<=100?`${Math.round(kg)} kg`:`${NUM_MT(kg)} MT`;   // tonnage with unit
 const hasB=w=>{const ch=String(w).trim().slice(-1).charCodeAt(0);return ch>=0xAC00&&ch<=0xD7A3&&(ch-0xAC00)%28>0};
 const joinKo=a=>a.join('·');
 let CN={},DATA=null,EST=[];
@@ -155,12 +157,12 @@ function render(){
 
   // ── Key takeaway (auto)
   let take='';
-  if(newC.length){const n=newC[0];take+=`<b>${esc(plain(n.c))}</b>${hasB(plain(n.c))?'이':'가'} <b>${NUM_MT(n.kg)} MT</b> 신규 시장으로 들어왔고, 주로 <b>${esc(n.main.k)}</b>${hasB(n.main.k)?'으로':'로'} 추정됩니다. `;
+  if(newC.length){const n=newC[0];take+=`<b>${esc(plain(n.c))}</b>${hasB(plain(n.c))?'이':'가'} <b>${QTY(n.kg)}</b> 신규 시장으로 들어왔고, 주로 <b>${esc(n.main.k)}</b>${hasB(n.main.k)?'으로':'로'} 추정됩니다. `;
     if(newC.length>1)take+=`그 밖에 ${joinKo(newC.slice(1).map(o=>esc(plain(o.c))))}도 새로 들어왔습니다. `}
-  if(top)take+=`<b>${esc(top.g.k)}</b>${hasB(top.g.k)?'이':'가'} 전체 물량의 <b>${pct(top.kg)}</b>(${NUM_MT(top.kg)} MT)를 차지하며 ${joinKo(top.cs.slice(0,3).map(c=>esc(plain(c))))}${top.cs.length>3?' 등':''}${hasB(plain(top.cs[Math.min(2,top.cs.length-1)]))?'으로':'로'} 나갔습니다.`;
+  if(top)take+=`<b>${esc(top.g.k)}</b>${hasB(top.g.k)?'이':'가'} 전체 물량의 <b>${pct(top.kg)}</b>(${QTY(top.kg)})를 차지하며 ${joinKo(top.cs.slice(0,3).map(c=>esc(plain(c))))}${top.cs.length>3?' 등':''}${hasB(plain(top.cs[Math.min(2,top.cs.length-1)]))?'으로':'로'} 나갔습니다.`;
 
   let h=`<div class="row1">
-    <a class="card kpi hero" href="#opp"><div class="l">신규 시장</div><div class="v num">${newC.length}</div><div class="s">${newC.length?newC.slice(0,2).map(o=>`${esc(plain(o.c))} · ${NUM_MT(o.kg)} MT`).join('<br>'):'이번 달 신규 시장 없음'}</div></a>
+    <a class="card kpi hero" href="#opp"><div class="l">신규 시장</div><div class="v num">${newC.length}</div><div class="s">${newC.length?newC.slice(0,2).map(o=>`${esc(plain(o.c))} · ${QTY(o.kg)}`).join('<br>'):'이번 달 신규 시장 없음'}</div></a>
     <div class="card kpi"><div class="l">활성 시장</div><div class="v num">${A.active}</div><div class="s">${A.prevActive?`<span class="${A.active>=A.prevActive?'':'down'}" style="color:${A.active>=A.prevActive?'var(--up)':'var(--down)'};font-weight:700">${A.active-A.prevActive>=0?'+':''}${A.active-A.prevActive}</span> vs ${korM(A.prevM).replace(/^\d+년 /,'')}`:'개국'}</div></div>
     <div class="card kpi"><div class="l">제품 카테고리</div><div class="v num">${groups.length}</div><div class="s">단가 기반 추정 분류</div></div>
     <div class="card take"><div class="l">💡 KEY TAKEAWAY</div><p>${take}</p></div>
@@ -180,8 +182,8 @@ function render(){
   const labels=countries.filter(o=>WORLD.C[o.c]).slice(0,10);
   let svg=`<svg viewBox="${x0.toFixed(0)} ${y0.toFixed(0)} ${vw.toFixed(0)} ${(y1-y0).toFixed(0)}" role="img" aria-label="나라별 수출 물량 지도" style="stroke-width:${k}">`;
   for(const d of WORLD.O)svg+=`<path d="${d}"/>`;
-  for(const [c,d] of Object.entries(WORLD.P))svg+=byC[c]?`<path class="on" d="${d}" style="fill:${tier(byC[c].kg)}" data-c="${c}"><title>${nm(c)} · ${NUM_MT(byC[c].kg)} MT</title></path>`:`<path d="${d}"/>`;
-  for(const o of countries){const p=WORLD.C[o.c];if(p)svg+=`<circle class="bub" data-c="${o.c}" cx="${p[0]}" cy="${p[1]}" r="${R(o.kg).toFixed(2)}" style="stroke-width:${(1.2*k).toFixed(2)}"><title>${nm(o.c)} · ${NUM_MT(o.kg)} MT</title></circle>`}
+  for(const [c,d] of Object.entries(WORLD.P))svg+=byC[c]?`<path class="on" d="${d}" style="fill:${tier(byC[c].kg)}" data-c="${c}"><title>${nm(c)} · ${QTY(byC[c].kg)}</title></path>`:`<path d="${d}"/>`;
+  for(const o of countries){const p=WORLD.C[o.c];if(p)svg+=`<circle class="bub" data-c="${o.c}" cx="${p[0]}" cy="${p[1]}" r="${R(o.kg).toFixed(2)}" style="stroke-width:${(1.2*k).toFixed(2)}"><title>${nm(o.c)} · ${QTY(o.kg)}</title></circle>`}
   // Greedy label placement: try right / left / above / below the bubble, skip spots that overlap earlier labels or bubbles
   const fs=12.5*k,fs2=11*k,placed=[],bubs=countries.map(o=>WORLD.C[o.c]?{x:WORLD.C[o.c][0],y:WORLD.C[o.c][1],r:R(o.kg)}:null).filter(Boolean);
   const hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h;
@@ -190,7 +192,7 @@ function render(){
     const opts=[{x:x+r+g,y:y-hgt/2},{x:x-r-g-w,y:y-hgt/2},{x:x-w/2,y:y-r-g-hgt},{x:x-w/2,y:y+r+g}];
     const box=opts.map(b=>({...b,w,h:hgt})).find(b=>!placed.some(q=>hit(b,q))&&!bubs.some(c=>c.x!==x&&hit(b,{x:c.x-c.r,y:c.y-c.r,w:2*c.r,h:2*c.r})))||null;
     if(!box)continue;placed.push(box);
-    svg+=`<text class="lab" x="${box.x}" y="${box.y+fs}" style="font-size:${fs}px;stroke-width:${3*k}px">${esc(name)}</text><text class="lab2" x="${box.x}" y="${box.y+fs+fs2+2*k}" style="font-size:${fs2}px;stroke-width:${3*k}px">${NUM_MT(o.kg)} MT</text>`;
+    svg+=`<text class="lab" x="${box.x}" y="${box.y+fs}" style="font-size:${fs}px;stroke-width:${3*k}px">${esc(name)}</text><text class="lab2" x="${box.x}" y="${box.y+fs+fs2+2*k}" style="font-size:${fs2}px;stroke-width:${3*k}px">${QTY(o.kg)}</text>`;
     if(o.isNew){const bx=box.x+name.length*fs*.98+4*k,by=box.y+1*k;svg+=`<rect class="nb" x="${bx}" y="${by}" width="${28*k}" height="${13*k}" rx="${3*k}"/><text class="nbt" x="${bx+14*k}" y="${by+9.6*k}" text-anchor="middle" style="font-size:${9*k}px">NEW</text>`}}
   svg+='</svg>';
   const uprice=o=>`${fPv(o.usd/o.kg)}`;
@@ -205,7 +207,7 @@ function render(){
       <div class="card"><div class="ttl"><h2>물량 Top 5</h2><span class="u">MT</span><a class="more" href="${dl({scope:'all',per})}">전체 보기 ›</a></div>${rankTable(byVol,o=>NUM_MT(o.kg),'물량')}</div>
       <div class="card"><div class="ttl"><h2>금액 Top 5</h2><span class="u">USD</span><a class="more" href="${dl({scope:'all',per})}">전체 보기 ›</a></div>${rankTable(byVal,o=>fUSD(o.usd),'금액')}</div>
       <div class="card"><div class="ttl"><h2>신규 진출국</h2><span class="u">이전 12개월 실적 없음</span></div>
-        ${newC.length?`<table><thead><tr><th class="l">나라</th><th>물량</th><th>단가 $/kg</th></tr></thead><tbody>${newC.map(o=>`<tr class="go" data-href="${dl({c:o.c,per})}"><td class="l"><b>${nm(o.c)}</b><span class="badge">NEW</span><span class="sub2">${esc(o.main.k)}</span></td><td class="num"><b>${NUM_MT(o.kg)} MT</b></td><td class="num"><b>${uprice(o)}</b></td></tr>`).join('')}</tbody></table>`:'<div class="note" style="margin-top:0">이번 달 새로 진출한 나라가 없습니다.</div>'}</div>
+        ${newC.length?`<table><thead><tr><th class="l">나라</th><th>물량</th><th>단가 $/kg</th></tr></thead><tbody>${newC.map(o=>`<tr class="go" data-href="${dl({c:o.c,per})}"><td class="l"><b>${nm(o.c)}</b><span class="badge">NEW</span><span class="sub2">${esc(o.main.k)}</span></td><td class="num"><b>${QTY(o.kg)}</b></td><td class="num"><b>${uprice(o)}</b></td></tr>`).join('')}</tbody></table>`:'<div class="note" style="margin-top:0">이번 달 새로 진출한 나라가 없습니다.</div>'}</div>
     </div>`;
 
   // ── Product × country matrix (the core view)
@@ -219,13 +221,13 @@ function render(){
     ${rows.map(o=>`<tr class="go" data-href="${dl({c:o.c,per})}"><td class="l"><b>${nm(o.c)}</b>${newTag(o)}</td>${groups.map(x=>cell(x.g,o.g[x.g.id])).join('')}<td class="tot num">${NUM_MT(o.kg)}</td></tr>`).join('')}
     ${oth?`<tr class="oth"><td class="l">그 외 ${rest.length}개국</td>${groups.map(x=>cell(x.g,oth.g[x.g.id])).join('')}<td class="tot num">${NUM_MT(oth.kg)}</td></tr>`:''}
     </tbody></table></div>
-    <div class="note">제품은 수출 단가(USD/kg)를 사료첨가제 벌크 거래 단가대에 대입한 <b>추정</b>입니다. 한 나라·한 세부코드 안에 여러 제품이 섞이면 평균 단가로 분류됩니다.</div></div>`;
+    <div class="note">세부코드가 비타민·미량광물질·항생물질 위주면 <b>세관 분류</b>를 그대로 쓰고, '그 밖의 사료첨가제'만 수출 단가(USD/kg)를 단가대에 대입해 <b>추정</b>합니다. 한 나라·한 세부코드에 여러 제품이 섞이면 평균 단가로 분류됩니다. 기준은 맨 아래 <a href="#method" style="text-decoration:underline">단가대 기준표 · 추정 방법</a> 참고.</div></div>`;
 
   // ── Product distribution: volume + coverage
   const cov=[...groups].sort((a,b)=>b.cs.length-a.cs.length||b.kg-a.kg),maxCov=cov[0].cs.length;
   h+=`<div class="grid g2">
-    <div class="card"><div class="ttl"><h2>제품별 물량</h2><span class="u">합계 ${NUM_MT(W)} MT</span></div><div class="bars">
-      ${groups.map(x=>`<div class="b"><span class="nm"><i class="dot" style="background:${x.g.c}"></i><span>${esc(x.g.k)}</span></span><span class="t"><i style="width:${x.kg/groups[0].kg*100}%;background:${x.g.c}"></i></span><span class="v num">${NUM_MT(x.kg)} MT <b>${pct(x.kg)}</b></span></div>`).join('')}</div></div>
+    <div class="card"><div class="ttl"><h2>제품별 물량</h2><span class="u">합계 ${QTY(W)}</span></div><div class="bars">
+      ${groups.map(x=>`<div class="b"><span class="nm"><i class="dot" style="background:${x.g.c}"></i><span>${esc(x.g.k)}</span></span><span class="t"><i style="width:${x.kg/groups[0].kg*100}%;background:${x.g.c}"></i></span><span class="v num">${QTY(x.kg)} <b>${pct(x.kg)}</b></span></div>`).join('')}</div></div>
     <div class="card"><div class="ttl"><h2>제품별 진출 국가 수</h2><span class="u">시장 침투 범위</span></div><div class="bars">
       ${cov.map(x=>`<div class="b" title="${x.cs.map(plain).join(', ')}"><span class="nm"><i class="dot" style="background:${x.g.c}"></i><span>${esc(x.g.k)}</span></span><span class="t"><i style="width:${x.cs.length/maxCov*100}%;background:${x.g.c}"></i></span><span class="v num"><b>${x.cs.length}</b>개국</span></div>`).join('')}</div></div>
   </div>`;
@@ -234,8 +236,8 @@ function render(){
   const narrow=groups.filter(x=>x.cs.length<=2);
   const cross=x=>countries.filter(o=>!x.cs.includes(o.c)).slice(0,3).map(o=>plain(o.c));
   h+=`<div class="card opp" id="opp" style="margin-top:12px"><div class="ttl"><h2>신규 시장 · 제품 확장 기회</h2><span class="u">${korM(M)} 데이터에서 자동 도출</span></div><div class="opps">
-    <div class="op new"><div class="l">신규 시장</div>${newC.length?newC.slice(0,3).map(o=>`<div class="v">${nm(o.c)} <span style="font-size:14px">${NUM_MT(o.kg)} MT</span></div><div class="s">주로 ${esc(o.main.k)}</div>`).join(''):'<div class="s">이번 달 새로 들어온 나라가 없습니다. (이전 12개월 기준)</div>'}</div>
-    <div class="op"><div class="l">물량 집중</div><div class="v">${joinKo(top.cs.slice(0,2).map(c=>nm(c)))}${top.cs.length>2?` 외 ${top.cs.length-2}`:''}</div><div class="s">${esc(top.g.k)} ${NUM_MT(top.kg)} MT · 전체의 <b>${pct(top.kg)}</b></div></div>
+    <div class="op new"><div class="l">신규 시장</div>${newC.length?newC.slice(0,3).map(o=>`<div class="v">${nm(o.c)} <span style="font-size:14px">${QTY(o.kg)}</span></div><div class="s">주로 ${esc(o.main.k)}</div>`).join(''):'<div class="s">이번 달 새로 들어온 나라가 없습니다. (이전 12개월 기준)</div>'}</div>
+    <div class="op"><div class="l">물량 집중</div><div class="v">${joinKo(top.cs.slice(0,2).map(c=>nm(c)))}${top.cs.length>2?` 외 ${top.cs.length-2}`:''}</div><div class="s">${esc(top.g.k)} ${QTY(top.kg)} · 전체의 <b>${pct(top.kg)}</b></div></div>
     <div class="op"><div class="l">가장 넓게 팔린 제품</div><div class="v">${esc(widest.g.k)}</div><div class="s"><b>${widest.cs.length}개국</b> · ${widest.cs.slice(0,4).map(c=>nm(c)).join(', ')}${widest.cs.length>4?' 등':''}</div></div>
     <div class="op"><div class="l">교차 판매 후보</div>${narrow.length?narrow.slice(0,2).map(x=>`<div class="s"><b>${esc(x.g.k)}</b> — 지금 ${x.cs.map(c=>nm(c)).join('·')}${x.cs.length===1?'만':''} → ${esc(joinKo(cross(x)))}에 제안 검토</div>`).join(''):'<div class="s">모든 제품이 3개국 이상에 나갔습니다.</div>'}</div>
   </div></div>`;
@@ -250,6 +252,24 @@ function render(){
     <div class="flow"><div class="step"><b>① 수출신고</b>회사가 세관에 품목·나라·무게·금액 신고</div><div class="step"><b>② 관세청 집계</b>한 달 신고를 나라별·품목별로 합산</div><div class="step"><b>③ 공공데이터 공개</b>매달 15일쯤 지난달 통계 공개</div><div class="step"><b>④ 이 페이지</b>매달 16~20일 '사료첨가제'만 자동 정리</div></div>
     <ul class="facts"><li><b>HS 2309.90-30</b> = 관세율표상 '사료첨가제'. 세부 품목: ${Object.values(ITEM_LABEL).join(' · ')}</li><li>회사별 내역은 비공개이며 <b>한국 전체의 합계</b>입니다.</li><li>평균단가 = 금액 ÷ 중량 (USD/kg). 신고 금액은 FOB 기준입니다.</li>
     <li>데이터 ${esc(DATA.latest)}까지 · 마지막 갱신 ${esc(DATA.updated)} · 출처 <a href="${LINK}" target="_blank" rel="noopener" style="text-decoration:underline">공공데이터포털</a></li></ul></details>`;
+  // ── Price bands + estimation method (folded)
+  const lg=v=>Math.min(100,Math.max(0,Math.log(v/.25)/Math.log(30/.25)*100));
+  const inBand=t=>A.cur.filter(r=>r.h==='2309903090'&&r.p>=t.lo&&r.p<=t.hi).length;
+  h+=`<details class="fold" id="method"><summary><span class="arr">▶</span><h2>📏 단가대 기준표 · 추정 방법</h2><span class="u" style="color:var(--mute);font-size:12px">누르면 펼쳐집니다</span></summary>
+    <div class="flow" style="grid-template-columns:repeat(3,1fr)">
+      <div class="step"><b>① 세관 분류 우선</b>세부코드가 <b>비타민·미량광물질·항생물질 위주</b>(…3020·3030·3010)면 단가와 관계없이 그 분류를 씁니다.</div>
+      <div class="step"><b>② 나머지는 단가로 추정</b>'그 밖의 사료첨가제'(…3090)만 금액 ÷ 중량(USD/kg)을 아래 단가대에 대입합니다.</div>
+      <div class="step"><b>③ 겹치면 중심에 가까운 순</b>단가가 여러 범위에 걸치면 모두 후보로 두고, 범위의 중심(로그 기준)에 가장 가까운 유형을 1순위로 표시합니다.</div>
+    </div>
+    <div class="mx" style="margin-top:4px"><table style="border-spacing:0"><thead><tr><th class="l">유형</th><th>단가대 (USD/kg)</th><th class="l" style="width:45%">범위 <span style="font-weight:400">(로그 눈금 $0.25 ~ $30)</span></th><th>${korM(M)} 해당 건</th></tr></thead><tbody>
+      ${TYPES.map(t=>{const g=groupOf(t.n);return`<tr><td class="l" style="background:none;font-weight:500"><i class="dot" style="background:${g.c};display:inline-block;margin-right:6px"></i>${esc(t.k)} <span style="color:var(--mute);font-size:12px">${esc(t.n)}</span></td><td style="background:none" class="num">$${t.lo} – $${t.hi}</td><td style="background:none"><div style="position:relative;height:10px;background:#f1f4f8;border-radius:99px"><i style="position:absolute;left:${lg(t.lo)}%;width:${lg(t.hi)-lg(t.lo)}%;top:0;bottom:0;background:${g.c};opacity:.75;border-radius:99px"></i></div></td><td style="background:none" class="num">${inBand(t)||'–'}</td></tr>`}).join('')}
+    </tbody></table></div>
+    <ul class="facts">
+      <li><b>단일 제품 / 혼합:</b> 물량이 MT 단위로 딱 떨어지면 한 제품일 가능성이 높아 신뢰도(높음·중간·낮음)를 매기고, 끝자리가 있으면 여러 건이 섞인 평균 단가로 보고 '혼합'으로 표시합니다. 자세한 근거는 <a href="scenario.html" style="text-decoration:underline">제품 추정 시나리오</a>.</li>
+      <li><b>단가대 출처:</b> 국제 벌크 거래 오퍼·무역 기록을 바탕으로 한 대략적인 범위입니다. 참고 사례 — 한국산 Lipidol 20 MT CIF $3.325/kg, 산제(Centacid) 약 $2/kg, 저가 독소흡착제 오퍼 CIF $0.35~0.45/kg, 복합 독소흡착제 $0.79~0.90/kg.</li>
+      <li><b>한계:</b> 세관 금액은 <b>FOB</b>라 CIF 오퍼보다 운임·보험료만큼 낮게 나옵니다. 범위가 서로 겹쳐 단가만으로는 한 제품으로 확정할 수 없고, 실제 제품명은 수출업체·B/L 자료로 확인해야 합니다.</li>
+      <li><b>정확도를 높이려면:</b> 우리 회사·경쟁사 실제 FOB 가격표로 단가대를 바꾸면 됩니다 (<code>estimate.js</code>의 <code>TYPES</code> 한 곳만 수정).</li>
+    </ul></details>`;
   const ext=EXTERNAL_LINKS.filter(x=>x.url);
   if(ext.length)h+=`<div class="bigs">${ext.map(x=>big(x.emoji,esc(x.label),esc(x.url),esc(x.url))).join('')}</div>`;
 
@@ -266,7 +286,8 @@ else loadData().then(({CN:c,DATA:d})=>{CN=c;DATA=d;
   $('#mon').innerHTML=Array.from({length:12},(_,i)=>mkey(addM(L,-i))).map(m=>`<option value="${m}">${korM(m)}</option>`).join('');
   $('#meta').textContent=`HS 2309.90-30 · 갱신 ${d.updated}`;
   $('#mon').onchange=render;
-  if(location.hash==='#about')setTimeout(()=>{$('#about').open=true;$('#about').scrollIntoView()},0);
+  const openFold=()=>{let d=null;try{d=location.hash&&document.querySelector(location.hash)}catch(e){}if(d&&d.tagName==='DETAILS'){d.open=true;d.scrollIntoView()}};
+  window.addEventListener('hashchange',openFold);setTimeout(openFold,0);
   render();
 }).catch(()=>{$('#app').innerHTML='<div class="err"><b>아직 데이터가 만들어지지 않았습니다.</b><br>관세청 데이터 파일(data/feed_additive.json)이 생성되기 전입니다. GitHub 저장소의 Actions 탭 → <b>Update customs data</b> → <b>Run workflow</b>를 실행하고 몇 분 뒤 새로고침해 주세요.</div>'});
 </script>
