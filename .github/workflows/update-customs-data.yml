@@ -6,6 +6,12 @@ on:
   schedule:
     - cron: "0 1 16-20 * *"
   workflow_dispatch:
+  # 수집 스크립트나 이 워크플로를 바꿔 기본 브랜치에 반영하면 바로 한 번 실행합니다.
+  push:
+    branches: [claude/optimistic-brahmagupta-uhwtyu]
+    paths:
+      - feed-additive-dashboard/scripts/**
+      - .github/workflows/update-customs-data.yml
 
 permissions:
   contents: write
