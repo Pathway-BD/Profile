@@ -6,13 +6,15 @@ data/feed_additive.json 으로 저장합니다. (Python 기본 라이브러리�
 GitHub Actions 에서는 저장소 Secret 으로 넣어 두면 됩니다. 코드/저장소에 키를 적지 마세요.
 """
 import json, os, sys, time
-import urllib.request, urllib.parse
+import urllib.request, urllib.parse, urllib.error
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
 
 KEY = os.environ.get("DATA_GO_KR_KEY", "").strip()
 BASE = os.environ.get("CUSTOMS_BASE", "https://apis.data.go.kr/1220000")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "feed_additive.json")
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36",
+           "Accept": "application/xml, text/xml, */*"}
 QUERY = "230990"            # 6자리로 조회하면 10자리 세부코드 행이 옴
 KEEP_PREFIX = "23099030"    # 관세율표상 '사료첨가제'
 MONTHS_BACK = 36            # 화면에서 최근 24개월 + 전년 비교용 12개월
@@ -31,7 +33,9 @@ def fetch(start, end):
     last = None
     for attempt in range(3):
         try:
-            with urllib.request.urlopen(url, timeout=180) as r:
+            # 기본 User-Agent(Python-urllib)는 data.go.kr 방화벽에서 403으로 막힐 수 있어 브라우저처럼 보냄
+            req = urllib.request.Request(url, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=180) as r:
                 text = r.read().decode("utf-8", "replace")
             root = ET.fromstring(text)
             code = (root.findtext(".//resultCode") or root.findtext(".//returnReasonCode") or "").strip()
@@ -39,7 +43,13 @@ def fetch(start, end):
                 msg = (root.findtext(".//resultMsg") or root.findtext(".//returnAuthMsg") or text[:300]).strip()
                 raise RuntimeError(f"API 오류 {code}: {msg}")
             return root
+        except urllib.error.HTTPError as e:  # 응답 본문을 남겨 원인을 알 수 있게 함 (본문에 인증키는 없음)
+            body = e.read().decode("utf-8", "replace")[:300].strip()
+            print(f"  HTTP {e.code} (시도 {attempt + 1}/3): {body or '본문 없음'}", flush=True)
+            last = e
+            time.sleep(5 * (attempt + 1))
         except Exception as e:  # 일시 오류는 재시도
+            print(f"  {type(e).__name__} (시도 {attempt + 1}/3): {e}", flush=True)
             last = e
             time.sleep(5 * (attempt + 1))
     raise last
