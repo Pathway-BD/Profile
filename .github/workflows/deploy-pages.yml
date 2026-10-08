@@ -29,6 +29,7 @@ jobs:
           mkdir -p _site
           cp index.html _site/
           cp -r assets _site/
+          cp -r feed-additive-dashboard _site/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
