@@ -28,23 +28,20 @@ button,select{font:inherit;color:inherit}
 .ttl .u{font-size:12px;color:var(--mute)}
 .ttl a.more{margin-left:auto;font-size:12px;color:var(--navy2);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
 .ttl a.more:hover{background:var(--soft)}
-.row1{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr 1.6fr;gap:12px;margin-top:18px}
+.row1{display:grid;grid-template-columns:1.1fr .9fr .9fr 2.6fr;gap:12px;margin-top:18px}
 .kpi .l{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--mute)}
 .kpi .v{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-top:6px;color:var(--navy)}
 .kpi .s{font-size:12.5px;color:var(--ink2);margin-top:2px}
 .kpi.hero{background:var(--navy);border-color:var(--navy);color:#fff}
 .kpi.hero .l{color:#9fb3da}.kpi.hero .v{color:#fff;font-size:42px}.kpi.hero .s{color:#dbe4f5}
-.kpi.ref .v{font-size:24px;color:var(--ink2)}
 .take{background:var(--blue-soft);border-color:#d7e2f6}
 .take .l{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--navy2)}
-.take p{margin:6px 0 0;font-size:13.5px;line-height:1.65}
+.take p{margin:8px 0 0;font-size:15px;line-height:1.75}
 .take b{color:var(--navy)}
 .badge{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#fff;background:var(--new);border-radius:4px;padding:1px 6px;vertical-align:1px;margin-left:5px}
 .grid{display:grid;gap:12px;margin-top:12px}
 .g2{grid-template-columns:1fr 1fr}
 .g3{grid-template-columns:1fr 1fr 1fr}
-.newc{border-color:#fbc8d1;background:#fff8f9}
-.newc h2{color:var(--new)}
 .sub2{display:block;font-size:11.5px;color:var(--mute);font-weight:400}
 .g-map{grid-template-columns:1.7fr 1fr}
 .map{position:relative}
@@ -104,7 +101,7 @@ details.fold[open]>summary .arr{transform:rotate(90deg)}
 ul.facts{margin:6px 0 0;padding-left:20px;color:var(--ink2);font-size:13.5px}
 .note{font-size:12px;color:var(--mute);margin-top:8px;line-height:1.6}
 .err{background:#fef3f2;border:1px solid #fecdca;color:#7a271a;border-radius:10px;padding:16px 18px;margin-top:20px}
-@media(max-width:1000px){.g3{grid-template-columns:1fr 1fr}.g3 .newc{grid-column:1/-1}.row1{grid-template-columns:1fr 1fr}.row1 .take{grid-column:1/-1}.g-map{grid-template-columns:1fr}.opps{grid-template-columns:1fr 1fr}}
+@media(max-width:1000px){.g3{grid-template-columns:1fr 1fr}.g3>.card:last-child{grid-column:1/-1}.row1{grid-template-columns:1fr 1fr 1fr}.row1 .take{grid-column:1/-1}.g-map{grid-template-columns:1fr}.opps{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.page{padding:20px 14px 48px}.top h1{font-size:23px}.g2,.g3,.bigs,.flow{grid-template-columns:1fr}.opps{grid-template-columns:1fr}.kpi .v{font-size:28px}.kpi.hero .v{font-size:34px}.hide-m{display:none}}
 </style>
 </head>
@@ -166,7 +163,6 @@ function render(){
     <a class="card kpi hero" href="#opp"><div class="l">신규 시장</div><div class="v num">${newC.length}</div><div class="s">${newC.length?newC.slice(0,2).map(o=>`${esc(plain(o.c))} · ${NUM_MT(o.kg)} MT`).join('<br>'):'이번 달 신규 시장 없음'}</div></a>
     <div class="card kpi"><div class="l">활성 시장</div><div class="v num">${A.active}</div><div class="s">${A.prevActive?`<span class="${A.active>=A.prevActive?'':'down'}" style="color:${A.active>=A.prevActive?'var(--up)':'var(--down)'};font-weight:700">${A.active-A.prevActive>=0?'+':''}${A.active-A.prevActive}</span> vs ${korM(A.prevM).replace(/^\d+년 /,'')}`:'개국'}</div></div>
     <div class="card kpi"><div class="l">제품 카테고리</div><div class="v num">${groups.length}</div><div class="s">단가 기반 추정 분류</div></div>
-    <div class="card kpi ref"><div class="l">총 물량</div><div class="v num">${NUM_MT(W)} MT</div><div class="s">참고용</div></div>
     <div class="card take"><div class="l">💡 KEY TAKEAWAY</div><p>${take}</p></div>
   </div>`;
 
@@ -208,8 +204,8 @@ function render(){
     <div class="grid g3">
       <div class="card"><div class="ttl"><h2>물량 Top 5</h2><span class="u">MT</span><a class="more" href="${dl({scope:'all',per})}">전체 보기 ›</a></div>${rankTable(byVol,o=>NUM_MT(o.kg),'물량')}</div>
       <div class="card"><div class="ttl"><h2>금액 Top 5</h2><span class="u">USD</span><a class="more" href="${dl({scope:'all',per})}">전체 보기 ›</a></div>${rankTable(byVal,o=>fUSD(o.usd),'금액')}</div>
-      <div class="card newc"><div class="ttl"><h2>신규 진출국</h2><span class="u">이전 12개월 실적 없음</span></div>
-        ${newC.length?`<table><thead><tr><th class="l">나라</th><th>물량</th><th>단가 $/kg</th><th>금액</th></tr></thead><tbody>${newC.map(o=>`<tr class="go" data-href="${dl({c:o.c,per})}"><td class="l"><b>${nm(o.c)}</b><span class="badge">NEW</span><span class="sub2">${esc(o.main.k)}</span></td><td class="num"><b>${NUM_MT(o.kg)} MT</b></td><td class="num"><b>${uprice(o)}</b></td><td class="num">${fUSD(o.usd)}</td></tr>`).join('')}</tbody></table>`:'<div class="note" style="margin-top:0">이번 달 새로 진출한 나라가 없습니다.</div>'}</div>
+      <div class="card"><div class="ttl"><h2>신규 진출국</h2><span class="u">이전 12개월 실적 없음</span></div>
+        ${newC.length?`<table><thead><tr><th class="l">나라</th><th>물량</th><th>단가 $/kg</th></tr></thead><tbody>${newC.map(o=>`<tr class="go" data-href="${dl({c:o.c,per})}"><td class="l"><b>${nm(o.c)}</b><span class="badge">NEW</span><span class="sub2">${esc(o.main.k)}</span></td><td class="num"><b>${NUM_MT(o.kg)} MT</b></td><td class="num"><b>${uprice(o)}</b></td></tr>`).join('')}</tbody></table>`:'<div class="note" style="margin-top:0">이번 달 새로 진출한 나라가 없습니다.</div>'}</div>
     </div>`;
 
   // ── Product × country matrix (the core view)
