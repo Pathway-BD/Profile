@@ -14,7 +14,7 @@ header{background:var(--brand-ink);color:#fff}
 .hd{max-width:1280px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .hd h1{margin:0;font-size:18px;letter-spacing:-.01em}.hd h1 small{font-size:12px;font-weight:500;color:#a8c9bb;margin-left:6px}
 .hd .sub{font-size:12px;color:#a8c9bb}
-.hd .r{margin-left:auto}.hd a{color:#fff;font-size:13px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:6px 12px}
+.hd .r{margin-left:auto;display:flex;gap:8px}.hd a{color:#fff;font-size:13px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:6px 12px}
 .hd a:hover{background:rgba(255,255,255,.1)}
 main{max-width:1280px;margin:0 auto;padding:18px 20px 40px;display:flex;flex-direction:column;gap:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(16,24,20,.04)}
@@ -37,6 +37,7 @@ p{margin:4px 0 0;color:var(--ink2);font-size:13.5px;line-height:1.7}
 .kpi{padding:14px 18px}.kpi .l{font-size:12px;color:var(--mute)}.kpi .v{font-size:24px;font-weight:800;letter-spacing:-.02em}.kpi .s{font-size:12.5px;color:var(--ink2)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:900px){.two{grid-template-columns:1fr}}
+.two>.card{min-width:0;overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:8px 10px;border-bottom:1px solid var(--line2);text-align:right;white-space:nowrap;vertical-align:top}
 th{font-size:12px;color:var(--ink2);font-weight:600;background:#fafbf9;position:sticky;top:0}
@@ -52,11 +53,11 @@ td.wrap{white-space:normal;min-width:220px}
 .cand div{display:flex;gap:6px;align-items:baseline}
 .cand div:first-child b{color:var(--brand-ink)}
 .cand div+div{color:var(--mute);font-size:12px}
-.hbar{display:grid;grid-template-columns:170px 1fr 70px;gap:8px;align-items:center;padding:5px 0;border-top:1px solid var(--line2);font-size:13px}
+.hbar{display:grid;grid-template-columns:minmax(0,170px) minmax(40px,1fr) 64px;gap:8px;align-items:center;padding:5px 0;border-top:1px solid var(--line2);font-size:13px}
 .hbar:first-of-type{border-top:0}
 .hbar i{display:block;height:8px;border-radius:99px;background:var(--brand)}
 .hbar .t{background:#e8ece9;border-radius:99px;overflow:hidden}
-.band{position:relative;height:16px;background:#f3f5f2;border-radius:4px;min-width:160px}
+.band{position:relative;height:16px;background:#f3f5f2;border-radius:4px;min-width:80px}
 .band i{position:absolute;top:3px;height:10px;border-radius:3px;background:#9cc9b6}
 .note{font-size:12px;color:var(--mute);line-height:1.6}
 .state{padding:40px 20px;text-align:center;color:var(--ink2)}
@@ -67,7 +68,7 @@ tr.rp td{background:#fcfbff}
 <body>
 <header><div class="hd">
   <div><h1>제품 추정 시나리오<small>HS 2309.90-30</small></h1><div class="sub" id="sub">단일 제품으로 나간 것처럼 보이는 수출 건을 골라 단가로 제품 유형을 추정합니다</div></div>
-  <div class="r"><a href="index.html">← 수출 현황 대시보드</a></div>
+  <div class="r"><a href="index.html">← 개요</a> <a href="dashboard.html">📊 대시보드</a></div>
 </div></header>
 <main id="main"><div class="card state"><b>불러오는 중…</b></div></main>
 

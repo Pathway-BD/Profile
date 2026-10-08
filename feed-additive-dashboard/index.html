@@ -3,369 +3,255 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>사료첨가제 수출 현황</title>
+<title>Pathway 사료첨가제 수출 인텔리전스</title>
+<script src="common.js"></script>
 <script src="chart.umd.js"></script>
 <style>
-:root{--bg:#f4f5f2;--card:#fff;--ink:#17201b;--ink2:#47524c;--mute:#7b857f;--line:#e2e5e0;--line2:#eef0ec;--brand:#0f5c43;--brand-2:#e7f1ec;--brand-ink:#0a3f2e;--up:#0f7b4f;--down:#c2410c;--new:#7c3aed}
+:root{--ink:#37352f;--ink2:#6b6a66;--mute:#9b9a97;--line:#e9e9e7;--soft:#f7f6f3;--hover:#efefed;--brand:#0f5c43;--brand-2:#e7f1ec;--up:#0f7b4f;--down:#c2410c;--new:#7c3aed}
 *{box-sizing:border-box}html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:14px/1.55 "Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-button{font:inherit;color:inherit;cursor:pointer}
+html{scroll-behavior:smooth}
+body{background:#fff;color:var(--ink);font:15px/1.65 "Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
 .num{font-variant-numeric:tabular-nums}
-header{background:var(--brand-ink);color:#fff}
-.hd{max-width:1280px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.hd h1{margin:0;font-size:18px;letter-spacing:-.01em}.hd h1 small{font-size:12px;font-weight:500;color:#a8c9bb;margin-left:6px}
-.hd .sub{font-size:12px;color:#a8c9bb}
-.hd .r{margin-left:auto;display:flex;gap:10px;align-items:center}
-.hd select{border:0;border-radius:8px;padding:7px 10px;font:inherit;font-size:13px;background:#fff;color:var(--ink);cursor:pointer}
-.seg{display:inline-flex;background:#f0f2ef;border-radius:9px;padding:3px;gap:3px}
-.seg button{border:0;background:transparent;border-radius:7px;padding:5px 12px;font-size:13px;color:var(--ink2);white-space:nowrap}
-.seg button.on{background:#fff;color:var(--ink);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.1)}
-.hd .seg{background:rgba(255,255,255,.12)}.hd .seg button{color:#cfe3da}.hd .seg button.on{color:var(--ink)}
-.hd .lbl{font-size:12px;color:#a8c9bb}
-main{max-width:1280px;margin:0 auto;padding:18px 20px 40px;display:flex;flex-direction:column;gap:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(16,24,20,.04)}
-.sh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.sh h2{font-size:15px;margin:6px 2px 0}.sh .seg{margin-left:auto}
-.hintc{font-size:12px;color:var(--mute);margin-top:6px}
-
-.crumb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 14px;font-size:14px}
-.crumb button{border:0;background:transparent;padding:4px 8px;border-radius:7px;color:var(--brand);font-weight:600}
-.crumb button:hover{background:var(--brand-2)}
-.crumb .cur{font-weight:800;padding:4px 8px}.crumb .sep{color:#b9c1bc}
-.crumb .chipc{display:inline-flex;align-items:center;gap:4px;background:var(--brand-2);color:var(--brand-ink);border-radius:99px;padding:3px 4px 3px 11px;font-weight:700;font-size:13px}
-.crumb .chipc button{padding:0 6px;color:#4f7a68;font-weight:400}
-.crumb .back{margin-left:auto;border:1px solid var(--line);color:var(--ink2);font-weight:500;background:#fff}
-
-.regions{display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
-.rg{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:7px 13px;text-align:left;line-height:1.3;transition:.12s}
-.rg b{display:block;font-size:13.5px}.rg span{font-size:11.5px;color:var(--mute);font-variant-numeric:tabular-nums}
-.rg:hover{border-color:#9cc9b6}.rg.on{border-color:var(--brand);background:var(--brand-2)}.rg.on b{color:var(--brand-ink)}
-.rsep{width:1px;background:var(--line);margin:4px 2px}
-
-/* 설명 */
-.explain{padding:16px 18px}
-.explain h2{margin:0 0 4px;font-size:15px}
-.explain p{margin:4px 0 0;color:var(--ink2);font-size:13.5px;line-height:1.7}
-.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 4px}
-@media(max-width:800px){.flow{grid-template-columns:1fr 1fr}}
-.step{background:#f7f8f6;border-radius:10px;padding:10px 12px;position:relative}
-.step i{font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;font-weight:700;margin-right:6px}
-.step b{font-size:13px}.step div{font-size:12px;color:var(--ink2);margin-top:3px;line-height:1.55}
-.facts{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:12.5px;color:var(--ink2)}
-.facts span::before{content:"• ";color:var(--brand)}
-details.more summary{cursor:pointer;color:var(--brand);font-size:12.5px;font-weight:600;margin-top:8px}
-
-/* 인사이트 */
-.ins{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:900px){.ins{grid-template-columns:1fr}}
-.ins .card{padding:14px 16px}
-.ins h2{margin:0;font-size:15px}.ins .hintc{margin:2px 0 8px}
-.rank{display:flex;flex-direction:column}
-.rank button{display:grid;grid-template-columns:24px 1fr auto auto;gap:10px;align-items:center;border:0;background:transparent;border-top:1px solid var(--line2);padding:8px 4px;text-align:left}
-.rank button:first-child{border-top:0}
-.rank button:hover{background:#f3f8f5}
-.rank .no{font-weight:800;color:var(--mute);text-align:center}
-.rank .nm b{display:block}.rank .nm span{font-size:11.5px;color:var(--mute)}
-.rank .bar{height:6px;background:#e8ece9;border-radius:99px;overflow:hidden;margin-top:4px}.rank .bar i{display:block;height:100%;background:var(--brand)}
-.rank .amt{font-weight:800;font-variant-numeric:tabular-nums}
-.rank .chg{font-size:12.5px;min-width:70px;text-align:right}
-.badge{font-size:10.5px;padding:1px 6px;border-radius:4px;background:#f1ebfd;color:var(--new);font-weight:700}
-.emptyl{color:var(--mute);font-size:13px;padding:12px 4px}
-
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-@media(max-width:800px){.kpis{grid-template-columns:1fr 1fr}}
-.kpi{padding:14px 18px}.kpi .l{font-size:12px;color:var(--mute)}.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.02em}.kpi .s{font-size:12.5px;color:var(--ink2)}
+.page{max-width:920px;margin:0 auto;padding:56px 24px 80px}
+.icon{font-size:64px;line-height:1}
+h1{font-size:34px;line-height:1.25;margin:14px 0 6px;letter-spacing:-.02em;word-break:keep-all}
+.subtitle{color:var(--ink2);font-size:14px}
+section{margin-top:44px;scroll-margin-top:16px}
+h2{font-size:21px;margin:0 0 14px;letter-spacing:-.01em}
+h3{font-size:15px;margin:0 0 10px}
+.muted{color:var(--mute);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff;transition:background .12s}
+.chip:hover{background:var(--hover)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.kpi .l{font-size:12.5px;color:var(--ink2)}.kpi .v{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-top:2px}.kpi .s{font-size:12.5px;color:var(--mute)}
 .up{color:var(--up)}.down{color:var(--down)}
-
-.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
-.g{padding:14px 16px;border-top:4px solid var(--c);text-align:left;cursor:pointer;transition:.12s;width:100%}
-.g:hover{box-shadow:0 4px 14px rgba(16,24,20,.1);transform:translateY(-1px)}
-.g .n{font-weight:800;font-size:15px;display:flex;justify-content:space-between;gap:6px}.g .n span{font-size:12px;color:var(--brand);font-weight:600;white-space:nowrap}
-.g .p{font-size:11.5px;color:var(--mute);margin-bottom:8px}
-.g .stats{background:#f7f8f6;border-radius:8px;padding:4px 10px;margin-bottom:4px}
-.g .stats div{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0}
-.g .stats div+div{border-top:1px solid #ebeee9}
-.g .stats .l{font-size:12px;color:var(--mute)}.g .stats .v{font-size:16px;font-weight:800;letter-spacing:-.01em}
-.g .row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink2);padding-top:6px}
-.g .top{font-size:12px;color:var(--ink2);margin-top:6px;line-height:1.6;border-top:1px solid var(--line2);padding-top:6px}
-
-.chart{padding:14px 16px}.cbox{position:relative;height:300px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:8px 12px;border-bottom:1px solid var(--line2);text-align:right;white-space:nowrap}
-th{font-size:12px;color:var(--ink2);font-weight:600;background:#fafbf9}
-th:first-child,td:first-child{text-align:left}
-th.grp{border-left:1px solid var(--line)}td.grp{border-left:1px solid var(--line2)}
-td.z{color:#c3c9c5}
-tbody tr.go{cursor:pointer}tbody tr.go:hover td{background:#f3f8f5}
-tbody tr.go td:first-child b::after{content:" ›";color:var(--brand)}
-td.cl{cursor:pointer}td.cl:hover{background:#e7f1ec!important;color:var(--brand-ink);font-weight:700}
-.tw{overflow-x:auto}
-tfoot td{font-weight:700;background:#fafbf9;border-top:1px solid var(--line);border-bottom:0}
-.share{display:inline-block;height:6px;background:#bcd9cc;border-radius:3px;vertical-align:middle;margin-left:6px}
-.tagm{font-size:10.5px;padding:1px 5px;border-radius:4px;background:var(--brand-2);color:var(--brand-ink);font-weight:600;vertical-align:1px}
-.state{padding:40px 20px;text-align:center;color:var(--ink2)}.state b{display:block;font-size:16px;color:var(--ink);margin-bottom:6px}
-.pbar{height:6px;background:#e8ece9;border-radius:99px;overflow:hidden;max-width:360px;margin:12px auto 0}.pbar i{display:block;height:100%;background:var(--brand);width:0;transition:width .2s}
-.err{color:#7a271a;background:#fef3f2;border:1px solid #fecdca;border-radius:12px;padding:14px 16px;font-size:13px}.err a{color:inherit;font-weight:700}
-.note{font-size:12px;color:var(--mute);line-height:1.6}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.box{border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.cbox{position:relative;height:200px}
+.row{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 6px;border-radius:6px}
+a.row:hover{background:var(--hover)}
+.row .no{color:var(--mute);font-weight:700;text-align:center}
+.row .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .r{text-align:right;font-size:13px;white-space:nowrap}
+.row .r b{font-size:14px}
+.chg{font-size:12px;margin-left:4px}
+.badge{font-size:11px;padding:1px 6px;border-radius:4px;background:#f1ebfd;color:var(--new);font-weight:700}
+.reg{display:block;padding:6px;border-radius:6px}
+a.reg:hover{background:var(--hover)}
+.reg .top{display:flex;justify-content:space-between;font-size:14px}
+.reg .t{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:4px}
+.reg .t i{display:block;height:100%;background:var(--brand);border-radius:99px}
+.callout{display:flex;gap:12px;background:var(--soft);border-radius:8px;padding:16px 18px;margin-top:14px;align-items:flex-start}
+.callout .e{font-size:22px;line-height:1.3}
+.callout .txt{flex:1;min-width:0}
+.btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 10px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink2);white-space:nowrap}
+.btn:hover{background:var(--hover)}
+.list a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:7px 6px;border-radius:6px;align-items:center}
+.list a:hover{background:var(--hover)}
+.list .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list .r{font-size:13px;color:var(--ink2);text-align:right;white-space:nowrap}
+.none{color:var(--mute);font-size:14px;padding:6px}
+.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.menu h3{color:var(--ink2);font-size:13px;font-weight:600;margin:0 0 6px}
+.menu a{display:flex;gap:10px;padding:7px 8px;border-radius:6px;align-items:flex-start}
+.menu a:hover{background:var(--hover)}
+.menu .e{font-size:18px;line-height:1.4}
+.menu b{display:block;font-weight:500;font-size:14.5px}
+.menu span.d{display:block;color:var(--mute);font-size:12.5px;line-height:1.45}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.step{background:var(--soft);border-radius:8px;padding:12px 14px}
+.step b{display:block;font-size:14px}.step div{font-size:13px;color:var(--ink2);margin-top:2px;line-height:1.55}
+.step .n{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;font-weight:700;margin-right:6px;vertical-align:1px}
+ul.facts{margin:8px 0 0;padding-left:20px;color:var(--ink2);font-size:14px}
+ul.facts li{margin:3px 0}
+hr{border:0;border-top:1px solid var(--line);margin:44px 0 0}
+.err{background:#fef3f2;border:1px solid #fecdca;color:#7a271a;border-radius:10px;padding:16px 18px;margin-top:24px}
+.foot{margin-top:40px;color:var(--mute);font-size:12px}
+@media(max-width:760px){
+  .page{padding:32px 16px 60px}
+  h1{font-size:26px}.icon{font-size:48px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .grid2,.menu{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr 1fr}
+  .kpi .v{font-size:20px}
+}
 </style>
 </head>
 <body>
-<header><div class="hd">
-  <div><h1>사료첨가제 수출 현황<small>HS 2309.90-30</small></h1><div class="sub" id="sub">관세청 무역통계</div></div>
-  <div class="r">
-    <span class="lbl">물량 단위 (단가는 USD/kg)</span><div class="seg" id="unit"><button data-v="MT">MT</button><button data-v="kg">kg</button></div>
-    <select id="per"></select>
-    <a href="scenario.html" style="color:#fff;font-size:13px;font-weight:600;text-decoration:none;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:6px 12px;white-space:nowrap">🔎 제품 추정</a>
-  </div>
-</div></header>
-<main id="main"><div class="card state"><b>불러오는 중…</b>관세청 데이터를 가져오고 있습니다<div class="pbar"><i id="pb"></i></div></div></main>
+<div class="page">
+  <div class="icon">✈️</div>
+  <h1>Pathway 사료첨가제 수출 인텔리전스</h1>
+  <div class="subtitle" id="subtitle">관세청 무역통계 · HS 2309.90-30</div>
+  <div id="app"></div>
+</div>
 
 <script>
-/* ── 대상: 관세율표상 '사료첨가제'(HSK 2309.90-30xx)만 ── */
-const QUERY='230990';                                  // API는 6자리로 조회 → 10자리 행 중 2309.90-30만 사용
-const KEEP=c=>c.startsWith('23099030');
-const ITEM_LABEL={'2309903010':'항생물질 위주','2309903020':'비타민 위주','2309903030':'미량광물질 위주','2309903090':'기타 사료첨가제'};
-const ITEM_DESC={'2309903010':'항생물질을 주로 한 것','2309903020':'비타민을 주로 한 것','2309903030':'미량광물질을 주로 한 것','2309903090':'그 밖의 사료첨가제'};
-const MARKETS=['SA','AE','QA','KW','OM','BH','JO','IQ','EG','KE','NG','TZ','BD','PK','NP','KZ'];
-const REGIONS=["아시아","서남아","중앙아시아","중동","아프리카","유럽","미주"];
-const REG={};
-'CN JP TW HK MO MN KP VN TH MY SG ID PH MM KH LA BN TL AU NZ PG FJ NC PF WS TO VU SB KI FM MH PW NR TV GU MP AS CK NU'.split(' ').forEach(c=>REG[c]='아시아');
-'IN PK BD NP LK BT MV AF'.split(' ').forEach(c=>REG[c]='서남아');
-'KZ UZ TM KG TJ AZ AM GE'.split(' ').forEach(c=>REG[c]='중앙아시아');
-'SA AE QA KW OM BH JO IQ IR IL PS LB SY YE TR'.split(' ').forEach(c=>REG[c]='중동');
-'DZ AO BJ BW BF BI CV CM CF TD KM CG CD CI DJ EG GQ ER SZ ET GA GM GH GN GW KE LS LR LY MG MW ML MR MU MA MZ NA NE NG RW ST SN SC SL SO ZA SS SD TZ TG TN UG ZM ZW EH RE YT SH'.split(' ').forEach(c=>REG[c]='아프리카');
-'GB IE FR DE NL BE LU CH AT IT ES PT GR CY MT DK SE NO FI IS PL CZ SK HU RO BG HR SI RS BA ME MK AL XK EE LV LT BY UA MD RU AD MC SM VA LI GI FO GG JE IM'.split(' ').forEach(c=>REG[c]='유럽');
-'US CA MX GT BZ SV HN NI CR PA CU DO HT JM TT BS BB AG DM GD KN LC VC PR AR BO BR CL CO EC GY PY PE SR UY VE AW CW KY BM VG VI TC GP MQ GF FK MS AI SX BQ BL MF PM GL'.split(' ').forEach(c=>REG[c]='미주');
-const regOf=c=>REG[c]||'기타';
-const LINK='https://www.data.go.kr/data/15100475/openapi.do';
-const PAL=['#0f5c43','#1d5fd1','#d97706','#7c3aed','#0891b2','#65a30d'];
+/* External link slots — fill in url to show them (section hides when every url is empty) */
+const EXTERNAL_LINKS=[
+  {emoji:'📝',label:'Notion 워크스페이스',url:''},
+  {emoji:'🏢',label:'회사 홈페이지',url:''},
+  {emoji:'📮',label:'문의·공유 채널',url:''},
+];
 
-const $=s=>document.querySelector(s);
-const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let CN={}, LAST=null, chart=null, DATA=null;
-const ST={unit:'MT',tbl:'price',ch:'amt',scope:'all'};
-try{Object.assign(ST,JSON.parse(localStorage.getItem('feedView')||'{}'))}catch(e){}
-const saveST=()=>{try{localStorage.setItem('feedView',JSON.stringify(ST))}catch(e){}};
-let F={h:null,c:null};   // 드릴다운: 세부 품목 / 국가
+const D='dashboard.html';
+const dl=o=>D+'#'+Object.entries(o).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&');
+const cnm=(CN,c)=>CN[c]||c;
+const hasBatchim=w=>{const ch=String(w).trim().slice(-1).charCodeAt(0);return ch>=0xAC00&&ch<=0xD7A3?(ch-0xAC00)%28>0:false};
+const ga=w=>w+(hasBatchim(w)?'이':'가');           // 주격 조사 이/가
+const joinKo=a=>a.length<=1?a.join(''):a.slice(0,-1).join('·')+'·'+a[a.length-1];
 
-const pad=n=>String(n).padStart(2,'0');
-const addM=([y,m],k)=>{m+=k;while(m<1){m+=12;y--}while(m>12){m-=12;y++}return[y,m]};
-const yyyymm=a=>`${a[0]}${pad(a[1])}`, dot=s=>`${s.slice(0,4)}.${s.slice(4)}`;
-const latest=()=>{if(DATA&&DATA.latest){const[y,m]=DATA.latest.split('.').map(Number);return[y,m]}const d=new Date();return addM([d.getFullYear(),d.getMonth()+1],d.getDate()>=16?-1:-2)};
-function range(p){const L=latest();if(p.startsWith('m:')){const m=[+p.slice(2,6),+p.slice(6,8)];return[m,m]}
-  let f,t=L;if(p==='12')f=addM(L,-11);else if(p==='ytd')f=[L[0],1];else{f=[L[0]-1,1];t=[L[0]-1,12]}return[f,t]}
-function wins(f,t){const out=[];let c=f;while(c[0]*12+c[1]<=t[0]*12+t[1]){let e=addM(c,11);if(e[0]*12+e[1]>t[0]*12+t[1])e=t;out.push([yyyymm(c),yyyymm(e)]);c=addM(e,1)}return out}
+/* Sum rows into {usd,kg} per key */
+function sumBy(rows,key){const m={};for(const r of rows){const k=key(r);(m[k]=m[k]||{usd:0,kg:0}).usd+=r.usd;m[k].kg+=r.kg}return m}
+const rank=m=>Object.keys(m).sort((a,b)=>m[b].usd-m[a].usd);
 
-const fUSD=v=>{const a=Math.abs(v);return a>=1e6?`$${(v/1e6).toFixed(2)}M`:a>=1e3?`$${(v/1e3).toFixed(0)}K`:`$${Math.round(v)}`};
-const vol=kg=>ST.unit==='MT'?kg/1000:kg;
-const fV=kg=>ST.unit==='MT'?`${(kg/1000).toLocaleString(undefined,{maximumFractionDigits:kg<100000?1:0})} MT`:`${Math.round(kg).toLocaleString()} kg`;
-const price=(d,kg)=>kg>0?d/kg:null;
-const fPv=v=>v==null?'-':`$${v.toFixed(2)}`;
-const fP=(d,kg)=>{const v=price(d,kg);return v==null?'-':`${fPv(v)}/kg`};
-const yoy=(c,p)=>p>0?c/p-1:null;
-const fY=v=>v==null?'<span class="badge">신규</span>':`<span class="${v>=0?'up':'down'}">${v>=0?'▲':'▼'} ${Math.abs(v*100).toFixed(1)}%</span>`;
-const cNm=c=>CN[c]||c;
-const hNm=h=>ITEM_LABEL[h]||h;
-const seg=(id,opts,cur)=>`<div class="seg" id="${id}">${opts.map(([v,t])=>`<button data-v="${v}" class="${v===cur?'on':''}">${t}</button>`).join('')}</div>`;
-function bindSeg(id,on){document.querySelectorAll(`#${id} button`).forEach(b=>b.onclick=()=>{document.querySelectorAll(`#${id} button`).forEach(x=>x.classList.toggle('on',x===b));on(b.dataset.v)})}
+function build(CN,DATA){
+  const rows=DATA.rows.map(([m,c,h,usd,kg])=>({m,c,h,usd,kg}));
+  const L=parseM(DATA.latest),Lk=mkey(L),Pk=mkey(addM(L,-1)),Yk=mkey(addM(L,-12));
+  const inMonths=ks=>{const s=new Set(ks);return rows.filter(r=>s.has(r.m))};
+  const months=(from,n)=>Array.from({length:n},(_,i)=>mkey(addM(from,i)));
+  const last12=months(addM(L,-11),12),prev12=months(addM(L,-23),12);
 
-/* ── 데이터 ── */
-async function load(p){   // data/feed_additive.json (GitHub Actions가 매달 갱신)에서 기간만 잘라 씀
-  const[f,t]=range(p),pf=addM(f,-12),pt=addM(t,-12);
-  const inR=(m,a,b)=>{const k=+m.replace('.','');return k>=+yyyymm(a)&&k<=+yyyymm(b)};
-  const rows=[];
-  for(const[m,c,h,ed,ew] of DATA.rows){if(inR(m,f,t))rows.push({t:'c',p:m,c,h,ed,ew});else if(inR(m,pf,pt))rows.push({t:'p',p:m,c,h,ed,ew})}
-  return{rows,fails:[],total:1,f,t};
-}
+  $('#subtitle').textContent=`관세청 무역통계 · HS 2309.90-30 · 데이터 ${DATA.latest}까지 · 갱신 ${DATA.updated}`;
 
-function go(nf){F={h:null,c:null,...nf};history.pushState(F,'');render();window.scrollTo({top:0,behavior:'smooth'})}
-window.onpopstate=e=>{F=e.state||{h:null,c:null};render()};
+  // Latest month vs same month last year
+  const cur=inMonths([Lk]),ly=inMonths([Yk]);
+  const U=cur.reduce((s,r)=>s+r.usd,0),W=cur.reduce((s,r)=>s+r.kg,0),UY=ly.reduce((s,r)=>s+r.usd,0);
+  const yoy=UY>0?U/UY-1:null;
+  const byC=sumBy(cur,r=>r.c),order=rank(byC);
+  const byPrev=sumBy(inMonths([Pk]),r=>r.c),prevOrder=rank(byPrev);
 
-/* ── 첫 화면 설명 ── */
-function explainCard(R){
-  return`<div class="card explain">
-    <h2>📘 이 숫자는 어디서 오나요?</h2>
-    <p>우리나라에서 물건을 해외로 팔 때는 반드시 <b>세관(관세청)에 수출신고</b>를 해야 합니다. 신고서에는 <b>무슨 물건인지(HS코드)</b>, <b>어느 나라로</b>, <b>몇 kg</b>, <b>얼마(달러)</b>에 보내는지가 적힙니다. 관세청은 이 신고서를 매달 모아 합계를 공개하고, 이 화면은 그 공개 자료를 자동으로 불러와 보여줍니다.</p>
+  // New in latest month = no exports in the 12 months before it
+  const before=new Set(inMonths(months(addM(L,-12),12)).map(r=>r.c));
+  const freshNow=order.filter(c=>!before.has(c));
+
+  // 12-month bars
+  const mTot=sumBy(inMonths(last12),r=>r.m);
+
+  // Region share, last 12 months
+  const r12=inMonths(last12),T12=r12.reduce((s,r)=>s+r.usd,0);
+  const byR=sumBy(r12,r=>regOf(r.c)),regs=rank(byR);
+
+  // New / lost markets: last 12 vs previous 12
+  const curP=sumBy(r12,r=>r.c),prvRows=inMonths(prev12),prvP=sumBy(prvRows,r=>r.c);
+  const firstM={},lastM={};
+  for(const r of r12)if(!firstM[r.c]||r.m<firstM[r.c])firstM[r.c]=r.m;
+  for(const r of prvRows)if(!lastM[r.c]||r.m>lastM[r.c])lastM[r.c]=r.m;
+  const newM=rank(curP).filter(c=>!prvP[c]),lostM=rank(prvP).filter(c=>!curP[c]);
+
+  // One-line summary (plain text, no flags, so it copies cleanly)
+  let line='';
+  if(U>0){
+    line=`${korM(Lk)} 사료첨가제 수출은 ${fUSD(U)}로`+(yoy==null?' 집계되었습니다.':` 전년 같은 달보다 ${Math.abs(yoy*100).toFixed(0)}% ${yoy>=0?'늘었습니다':'줄었습니다'}.`);
+    const top=cnm(CN,order[0]);
+    const fresh=freshNow.slice(0,3).map(c=>cnm(CN,c));
+    line+=fresh.length?` ${ga(top)} 1위이며, ${ga(joinKo(fresh))} 새로 수출국에 들어왔습니다.`:` ${ga(top)} 1위입니다.`;
+  }
+
+  let h='';
+
+  // 2. Shortcuts
+  h+=`<section><h2>🧭 바로가기</h2><div class="chips">
+    <a class="chip" href="#summary">📌 이번 달 요약</a>
+    <a class="chip" href="${dl({scope:'mine'})}">🎯 담당 시장</a>
+    <a class="chip" href="#markets">🆕 신규 시장</a>
+    <a class="chip" href="#about">📘 데이터 설명</a>
+    <a class="chip" href="${D}">📊 전체 대시보드</a></div></section>`;
+
+  // 3. At a glance
+  if(U>0){
+    h+=`<section id="summary"><h2>📊 한눈에 보기 <span class="muted" style="font-weight:400">${korM(Lk)} · 전년 같은 달 대비</span></h2>
+    <div class="kpis">
+      <div class="kpi"><div class="l">수출액</div><div class="v num">${fUSD(U)}</div><div class="s">${fMT(W)}</div></div>
+      ${yoy!=null?`<div class="kpi"><div class="l">전년 같은 달 대비</div><div class="v num ${yoy>=0?'up':'down'}">${fPct(yoy)}</div><div class="s">${korM(Yk)} ${fUSD(UY)}</div></div>`:''}
+      ${W>0?`<div class="kpi"><div class="l">평균단가</div><div class="v num">${fPv(U/W)}<span style="font-size:13px;font-weight:500">/kg</span></div><div class="s">금액 ÷ 중량</div></div>`:''}
+      <div class="kpi"><div class="l">수출국 수</div><div class="v num">${order.length}개국</div><div class="s">1위 ${esc(cnm(CN,order[0]))}</div></div>
+    </div>
+    ${line?`<div class="callout"><div class="e">💬</div><div class="txt"><b>이번 달 한 줄 요약</b><div id="line" style="margin-top:4px">${esc(line)}</div></div><button class="btn" id="copy">복사</button></div>`:''}
+    <div class="grid2">
+      ${Object.keys(mTot).length?`<div class="box"><h3>월별 수출액 <span class="muted" style="font-weight:400">최근 12개월 · 막대를 누르면 그 달 상세</span></h3><div class="cbox"><canvas id="ch"></canvas></div></div>`:''}
+      <div class="box"><h3>🔥 인기 국가 Top 5 <span class="muted" style="font-weight:400">${korM(Lk)} · 순위는 전월 대비</span></h3>
+        ${order.slice(0,5).map((c,i)=>{const p=prevOrder.indexOf(c),d=p<0?null:p-i;
+          const chg=d==null?'<span class="badge">신규</span>':d>0?`<span class="chg up">▲${d}</span>`:d<0?`<span class="chg down">▼${-d}</span>`:'<span class="chg" style="color:var(--mute)">–</span>';
+          return`<a class="row" href="${dl({c})}"><span class="no">${i+1}</span><span class="nm">${esc(cnm(CN,c))} ${chg}</span><span class="r num"><b>${fUSD(byC[c].usd)}</b> · ${(byC[c].usd/U*100).toFixed(0)}%</span></a>`}).join('')}
+      </div>
+    </div>
+    ${T12>0?`<div class="box" style="margin-top:14px"><h3>🌍 지역 비중 <span class="muted" style="font-weight:400">최근 12개월 (${last12[0]} ~ ${Lk}) · 누르면 그 지역만</span></h3>
+      <div class="grid2" style="margin-top:0;gap:2px 18px">${regs.map(k=>`<a class="reg" href="${dl({scope:k})}"><div class="top"><span>${esc(k)}</span><span class="num">${fUSD(byR[k].usd)} · <b>${(byR[k].usd/T12*100).toFixed(1)}%</b></span></div><div class="t"><i style="width:${byR[k].usd/byR[regs[0]].usd*100}%"></i></div></a>`).join('')}</div></div>`:''}
+    </section>`;
+  }
+
+  // 4. New / lost markets
+  h+=`<section id="markets"><h2>🆕 신규 · 이탈 시장 <span class="muted" style="font-weight:400">최근 12개월 vs 그 전 12개월</span></h2><div class="grid2" style="margin-top:0">
+    <div class="box"><h3>🌱 신규 시장 <span class="muted" style="font-weight:400">${newM.length}개국 · 이전 12개월엔 실적 없음</span></h3><div class="list">
+      ${newM.length?newM.map(c=>`<a href="${dl({c})}"><span class="nm">${esc(cnm(CN,c))}</span><span class="r">첫 수출 ${firstM[c]} · <b>${fUSD(curP[c].usd)}</b></span></a>`).join(''):'<div class="none">해당 없음</div>'}</div></div>
+    <div class="box"><h3>🍂 이탈 시장 <span class="muted" style="font-weight:400">${lostM.length}개국 · 최근 12개월 실적 없음</span></h3><div class="list">
+      ${lostM.length?lostM.map(c=>`<a href="${dl({c,per:'m:'+lastM[c].replace('.','')})}"><span class="nm">${esc(cnm(CN,c))}</span><span class="r">마지막 ${lastM[c]} · 이전 ${fUSD(prvP[c].usd)}</span></a>`).join(''):'<div class="none">해당 없음</div>'}</div></div>
+  </div></section>`;
+
+  // 5. Menu
+  const item=(e,l,d,href)=>`<a href="${href}"><span class="e">${e}</span><span><b>${l}</b><span class="d">${d}</span></span></a>`;
+  h+=`<section><h2>🗂️ 메뉴</h2><div class="menu">
+    <div><h3>📂 시장 보기</h3>
+      ${item('🌏','국가별 순위','전체 수출국을 금액 순으로',dl({scope:'all'}))}
+      ${item('🗺️','지역별','아시아·중동·아프리카 등 7개 지역',dl({scope:'아시아'}))}
+      ${item('🎯',`담당 시장 ${MARKETS.length}개국`,'중동·아프리카·서남아 담당국만',dl({scope:'mine'}))}
+      ${item('🆕','신규·이탈 시장','새로 생기거나 끊긴 수출국','#markets')}</div>
+    <div><h3>📦 품목·가격</h3>
+      ${item('🧪','세부 품목','비타민·미량광물질·항생물질·기타',dl({scope:'all'}))}
+      ${item('💲','평균단가 추이','월별 USD/kg 변화 (차트에서 평균단가 선택)',dl({scope:'all',per:'12'}))}
+      ${item('📅','월별 상세','최근 12개월 월별 표',dl({scope:'all',per:'12'}))}
+      ${item('🔎','제품 추정 시나리오','단일 제품으로 보이는 건의 제품 유형 추정','scenario.html')}</div>
+    <div><h3>📚 참고</h3>
+      ${item('📘','이 데이터는 어디서 오나요?','수출신고부터 이 페이지까지','#about')}
+      ${item('🔢','HS코드 안내','2309.90-30이 무엇인지','#hs')}
+      ${item('🔄','업데이트 기록',`최근 갱신 ${esc(DATA.updated)}`,'#updates')}</div>
+  </div></section>`;
+
+  // 6. About the data
+  h+=`<section id="about"><h2>📘 이 데이터는 어디서 오나요?</h2>
+    <p style="margin:0;color:var(--ink2)">우리나라에서 물건을 해외로 팔 때는 반드시 <b>세관(관세청)에 수출신고</b>를 해야 합니다. 신고서에는 <b>무슨 물건인지(HS코드)</b>, <b>어느 나라로</b>, <b>몇 kg</b>, <b>얼마(달러)</b>에 보내는지가 적힙니다. 관세청은 이 신고서를 매달 모아 합계를 공개하고, 이 페이지는 그 공개 자료를 자동으로 불러와 보여줍니다.</p>
     <div class="flow">
-      <div class="step"><i>1</i><b>수출신고</b><div>회사가 물건을 보낼 때 세관에 품목·나라·무게·금액을 신고</div></div>
-      <div class="step"><i>2</i><b>관세청 집계</b><div>한 달 동안의 신고를 나라별·품목별로 더해 통계로 만듦</div></div>
-      <div class="step"><i>3</i><b>공공데이터 공개</b><div>매달 15일쯤 지난달 통계를 공공데이터포털(API)에 공개</div></div>
-      <div class="step"><i>4</i><b>이 페이지</b><div>매달 16~20일 그중 '사료첨가제' 번호만 자동으로 받아와 표·차트로 정리</div></div>
+      <div class="step"><b><span class="n">1</span>수출신고</b><div>회사가 물건을 보낼 때 세관에 품목·나라·무게·금액을 신고</div></div>
+      <div class="step"><b><span class="n">2</span>관세청 집계</b><div>한 달 동안의 신고를 나라별·품목별로 더해 통계로 만듦</div></div>
+      <div class="step"><b><span class="n">3</span>공공데이터 공개</b><div>매달 15일쯤 지난달 통계를 공공데이터포털(API)에 공개</div></div>
+      <div class="step"><b><span class="n">4</span>이 페이지</b><div>매달 16~20일 '사료첨가제' 번호만 자동으로 받아와 정리</div></div>
     </div>
-    <div class="facts">
-      <span><b>사료첨가제</b>: 가축 사료에 조금 섞어 넣는 비타민·미량광물질·항생물질 등 (HS 2309.90-30)</span>
-      <span>회사 이름은 비공개 → <b>한국 전체의 합계</b>입니다</span>
-      <span><b>평균단가</b> = 금액 ÷ 무게</span>
-      <span>기간: ${dot(yyyymm(R.f))}${yyyymm(R.f)!==yyyymm(R.t)?' ~ '+dot(yyyymm(R.t)):''}, 작년 같은 기간과 비교</span>
-    </div>
-    <details class="more"><summary>조금 더 자세히</summary><p>HS코드는 전 세계가 함께 쓰는 '물건 분류 번호'입니다. 앞 6자리(2309.90 = 사료용 조제품 중 기타)는 국제 공통이고, 뒤 4자리는 우리나라가 더 잘게 나눈 번호입니다. 한국 관세율표에서 2309.90-30이 이름 그대로 <b>'사료첨가제'</b>로 분류된 항목이라 이것만 골랐습니다. 배합사료(완제품 사료)나, 식품·의약용과 섞이는 레시틴·효소·효모 등은 사료용인지 구분이 안 되어 뺐습니다. 같은 제품이라도 회사가 다른 번호로 신고하면 여기 잡히지 않을 수 있습니다.</p></details>
-  </div>`;
-}
+    <div id="hs" style="scroll-margin-top:16px"><h3>🔢 HS코드 안내</h3>
+    <ul class="facts">
+      <li><b>2309.90-30</b> = 관세율표상 이름 그대로 <b>'사료첨가제'</b>로 분류된 항목입니다. 세부 품목: ${Object.values(ITEM_LABEL).join(' · ')}</li>
+      <li>회사별 내역은 공개되지 않으며, <b>한국 전체의 합계</b>입니다.</li>
+      <li><b>평균단가 = 금액 ÷ 중량</b> (USD/kg). 같은 제품이라도 다른 HS코드로 신고되면 집계되지 않습니다.</li>
+    </ul></div>
+    <div id="updates" class="callout" style="scroll-margin-top:16px"><div class="e">🔄</div><div class="txt"><b>업데이트 기록</b><div class="muted" style="font-size:14px;margin-top:2px">데이터 ${esc(DATA.latest)}까지 · 마지막 갱신 ${esc(DATA.updated)} · 매달 16~20일 오전 10시 자동 갱신<br>출처: ${esc(DATA.source||'관세청 품목별 국가별 수출입실적')} · <a href="${LINK}" target="_blank" rel="noopener" style="text-decoration:underline">공공데이터포털</a></div></div></div>
+  </section>`;
 
-/* ── 최근 많이 나가는 나라 / 신규 국가 ── */
-function insights(R,inScope,MONTHS,scopeNm){
-  const all=R.rows.filter(r=>inScope(r.c));
-  const recentN=Math.min(3,MONTHS.length),recent=MONTHS.slice(-recentN);
-  const prevOf=p=>`${+p.slice(0,4)-1}${p.slice(4)}`,recentPrev=recent.map(prevOf);
-  const sumBy=(rows,ms)=>{const m={};for(const r of rows)if(ms.includes(r.p)){(m[r.c]=m[r.c]||{ed:0,ew:0}).ed+=r.ed;m[r.c].ew+=r.ew}return m};
-  const rc=sumBy(all.filter(r=>r.t==='c'),recent),rp=sumBy(all.filter(r=>r.t==='p'),recentPrev);
-  const top=Object.keys(rc).sort((a,b)=>rc[b].ed-rc[a].ed).slice(0,7),max=top.length?rc[top[0]].ed:1;
-  const recentLabel=recentN===1?recent[0]:`${recent[0]} ~ ${recent[recentN-1]}`;
-  // 신규: 이번 기간 실적 있음 & 전년 같은 기간 실적 없음
-  const curC={},prevC={},first={};
-  for(const r of all){if(r.t==='c'){(curC[r.c]=curC[r.c]||{ed:0,ew:0}).ed+=r.ed;curC[r.c].ew+=r.ew;if(!first[r.c]||r.p<first[r.c])first[r.c]=r.p}else prevC[r.c]=(prevC[r.c]||0)+r.ed}
-  const news=Object.keys(curC).filter(c=>!prevC[c]).sort((a,b)=>curC[b].ed-curC[a].ed);
-  const tag=c=>`${regOf(c)}${MARKETS.includes(c)?' · 담당':''}`;
-  return`<div class="ins">
-    <div class="card"><h2>🔥 최근 많이 나가는 나라</h2><div class="hintc">${recentLabel} 수출액 순 · 오른쪽은 작년 같은 달 대비 · ${esc(scopeNm)}</div>
-      <div class="rank">${top.length?top.map((c,i)=>`<button data-go='${JSON.stringify({c})}'><span class="no">${i+1}</span><span class="nm"><b>${esc(cNm(c))}</b><span>${tag(c)} · ${fV(rc[c].ew)} · ${fP(rc[c].ed,rc[c].ew)}</span><div class="bar"><i style="width:${rc[c].ed/max*100}%"></i></div></span><span class="amt">${fUSD(rc[c].ed)}</span><span class="chg">${fY(yoy(rc[c].ed,rp[c]?.ed||0))}</span></button>`).join(''):'<div class="emptyl">최근 실적이 없습니다.</div>'}</div></div>
-    <div class="card"><h2>🆕 새로 수출이 생긴 나라</h2><div class="hintc">작년 같은 기간엔 실적이 없었는데 이번 기간에 수출된 나라 · ${news.length}개국</div>
-      <div class="rank">${news.length?news.slice(0,7).map((c,i)=>`<button data-go='${JSON.stringify({c})}'><span class="no">${i+1}</span><span class="nm"><b>${esc(cNm(c))} <span class="badge">신규</span></b><span>${tag(c)} · 첫 수출 ${first[c]} · ${fV(curC[c].ew)}</span></span><span class="amt">${fUSD(curC[c].ed)}</span><span class="chg">${fP(curC[c].ed,curC[c].ew)}</span></button>`).join('')+(news.length>7?`<div class="emptyl">그 외 ${news.slice(7).map(c=>esc(cNm(c))).join(', ')}</div>`:''):'<div class="emptyl">전년 대비 새로 생긴 수출국이 없습니다.</div>'}</div></div>
-  </div>`;
-}
+  // 7. External links
+  const ext=EXTERNAL_LINKS.filter(x=>x.url);
+  if(ext.length)h+=`<section><h2>🔗 외부 바로가기</h2><div class="chips">${ext.map(x=>`<a class="chip" href="${esc(x.url)}" target="_blank" rel="noopener">${x.emoji} ${esc(x.label)}</a>`).join('')}</div></section>`;
 
-function render(){
-  const R=LAST;if(!R)return;
-  const single=yyyymm(R.f)===yyyymm(R.t);
-  $('#sub').textContent=single?`관세청 무역통계 · ${dot(yyyymm(R.f))} 한 달 · 전년 같은 달 대비 · 갱신 ${DATA.updated}`:`관세청 무역통계 · ${dot(yyyymm(R.f))} ~ ${dot(yyyymm(R.t))} · 전년 동기 대비 · 갱신 ${DATA.updated}`;
-  if(R.fails.length===R.total){
-    const m=R.fails[0]?.msg||'';const reg=/REGISTERED|등록|인증|SERVICE.?KEY/i.test(m);
-    $('#main').innerHTML=`<div class="err"><b>데이터를 불러오지 못했습니다.</b><br>${reg?`인증키가 아직 반영되지 않았습니다. 활용신청 직후라면 최대 1시간 뒤 다시 열어 주세요. (<a href="${LINK}" target="_blank">활용신청 확인</a>)`:R.fails[0]?.kind==='local'?'검은 창(서버)이 꺼져 있습니다. run_dashboard.bat 을 다시 실행하세요.':R.fails[0]?.kind==='network'?'관세청 서버에 접속하지 못했습니다. 인터넷 연결을 확인하세요.':esc(m)}</div>`;return}
-  if(!R.rows.some(r=>r.t==='c')){$('#main').innerHTML=`<div class="card state"><b>이 기간에 사료첨가제 수출 실적이 없습니다</b>위에서 기간을 바꿔 보세요.</div>`;return}
+  $('#app').innerHTML=h;
 
-  const inScope=c=>ST.scope==='all'?true:ST.scope==='mine'?MARKETS.includes(c):regOf(c)===ST.scope;
-  const scopeNm=ST.scope==='all'?'전체 국가':ST.scope==='mine'?'담당 시장':ST.scope;
-  if(F.c&&!inScope(F.c))F.c=null;
-  const match=r=>inScope(r.c)&&(!F.h||r.h===F.h)&&(!F.c||r.c===F.c);
-  const cur=R.rows.filter(r=>r.t==='c'&&match(r)),prev=R.rows.filter(r=>r.t==='p'&&match(r));
-  if(!cur.length){if(F.h||F.c){F={h:null,c:null};return render()}if(ST.scope!=='all'){ST.scope='all';return render()}}
-
-  const sum=(a,k)=>a.reduce((s,r)=>s+r[k],0);
-  const MONTHS=[];for(let c=R.f;c[0]*12+c[1]<=R.t[0]*12+R.t[1];c=addM(c,1))MONTHS.push(`${c[0]}.${pad(c[1])}`);
-  const by=(a,key)=>{const m={};for(const r of a){const k=key(r);(m[k]=m[k]||{ed:0,ew:0}).ed+=r.ed;m[k].ew+=r.ew}return m};
-  const D=sum(cur,'ed'),W=sum(cur,'ew'),DP=sum(prev,'ed'),WP=sum(prev,'ew');
-  const isMonth=MONTHS.length===1,home=!F.h&&!F.c;
-
-  // 지역 버튼
-  const base=R.rows.filter(r=>r.t==='c'&&(!F.h||r.h===F.h));
-  const regAmt={};let allAmt=0,mineAmt=0;for(const r of base){const k=regOf(r.c);regAmt[k]=(regAmt[k]||0)+r.ed;allAmt+=r.ed;if(MARKETS.includes(r.c))mineAmt+=r.ed}
-  const regBtn=(v,label,amt)=>`<button class="rg ${ST.scope===v?'on':''}" data-scope="${v}"><b>${label}</b><span>${fUSD(amt)}${v!=='all'&&allAmt?` · ${(amt/allAmt*100).toFixed(0)}%`:''}</span></button>`;
-  const regionBar=`<div class="regions">${regBtn('all','전체',allAmt)}${mineAmt?regBtn('mine','담당 시장',mineAmt):''}<span class="rsep"></span>${REGIONS.filter(k=>regAmt[k]).sort((a,b)=>regAmt[b]-regAmt[a]).map(k=>regBtn(k,k,regAmt[k])).join('')}${regAmt['기타']?regBtn('기타','기타',regAmt['기타']):''}</div>`;
-
-  // 세분화: 세부 품목(HS10) → 없음
-  const dim=!F.h?'h':null;
-  const dC=dim?by(cur,r=>r.h):{},dP=dim?by(prev,r=>r.h):{};
-  const dims=dim?Object.keys(dC).sort((a,b)=>dC[b].ed-dC[a].ed):[];
-  const colorOf=k=>PAL[Object.keys(ITEM_LABEL).indexOf(k)%PAL.length]||PAL[5];
-  const cC=by(cur,r=>r.c),cP=by(prev,r=>r.c),dcC=dim?by(cur,r=>r.h+'|'+r.c):{};
-  const countries=Object.keys(cC).sort((a,b)=>cC[b].ed-cC[a].ed);
-  const nm=c=>esc(cNm(c));
-
-  // 경로
-  const parts=[`<button data-go='{}'>전체</button>`];
-  if(F.h)parts.push(`<span class="sep">›</span><span class="cur">${esc(hNm(F.h))} <span class="note">${F.h}</span></span>`);
-  if(F.c)parts.push(`<span class="sep">·</span><span class="chipc">${nm(F.c)}<button data-go='${JSON.stringify({h:F.h})}' title="국가 해제">✕</button></span>`);
-  if(isMonth)parts.push(`<span class="sep">·</span><span class="chipc">📅 ${MONTHS[0]}<button id="monthX" title="월 선택 해제">✕</button></span>`);
-  const crumb=(!home||isMonth)?`<div class="card crumb">${parts.join('')}${!home?'<button class="back" onclick="history.back()">← 뒤로</button>':''}</div>`:'';
-
-  const title=[F.c?cNm(F.c):scopeNm,F.h?hNm(F.h):''].filter(Boolean).join(' · ');
-  const partial=R.fails.length?`<div class="note">※ 일부 데이터(${R.fails.length}/${R.total})를 불러오지 못해 합계가 실제보다 작을 수 있습니다.</div>`:'';
-  const pNow=price(D,W),pPrev=price(DP,WP),cmp=isMonth?'전년 같은 달':'전년 동기';
-
-  let html=`${partial}${regionBar}${crumb}`;
-  if(home)html+=explainCard(R);
-  html+=`<div class="kpis">
-    <div class="card kpi"><div class="l">${esc(title)} 수출액</div><div class="v num">${fUSD(D)}</div><div class="s">${cmp} ${fY(yoy(D,DP))}</div></div>
-    <div class="card kpi"><div class="l">수출 물량</div><div class="v num">${fV(W)}</div><div class="s">${cmp} ${fY(yoy(W,WP))}</div></div>
-    <div class="card kpi"><div class="l">평균 단가</div><div class="v num">${fP(D,W)}</div><div class="s">${pPrev?`전년 ${fPv(pPrev)} → ${fY(pNow/pPrev-1)}`:'금액 ÷ 물량'}</div></div>
-    ${F.c?`<div class="card kpi"><div class="l">${dim?'최대 세부 품목':'수출 실적 월'}</div><div class="v" style="font-size:19px;line-height:1.7">${dim?esc(hNm(dims[0])):`${new Set(cur.map(r=>r.p)).size} / ${MONTHS.length}개월`}</div><div class="s">${dim?`${fUSD(dC[dims[0]].ed)} · 비중 ${(dC[dims[0]].ed/D*100).toFixed(1)}%`:''}</div></div>`
-         :`<div class="card kpi"><div class="l">수출국 수</div><div class="v num">${countries.length}개국</div><div class="s">최대 ${nm(countries[0])} · ${(cC[countries[0]].ed/D*100).toFixed(1)}%</div></div>`}
-  </div>`;
-  if(home)html+=insights(R,inScope,MONTHS,scopeNm);
-
-  // 세부 품목 카드
-  if(dim){
-    html+=`<div class="sh"><h2>세부 품목별</h2><span class="hintc">카드를 누르면 해당 품목만 봅니다</span></div>
-    <div class="groups">${dims.map(k=>{const x=dC[k],xp=dP[k],pn=price(x.ed,x.ew),pp=xp?price(xp.ed,xp.ew):null;
-      const tops=F.c?[]:countries.filter(c=>dcC[k+'|'+c]).sort((a,b)=>dcC[k+'|'+b].ed-dcC[k+'|'+a].ed).slice(0,3);
-      return`<button class="card g" style="--c:${colorOf(k)}" data-go='${JSON.stringify({h:k,c:F.c})}'>
-      <div class="n">${esc(hNm(k))}<span>자세히 ›</span></div><div class="p">${esc(ITEM_DESC[k]||'')} · HS ${k}</div>
-      <div class="stats"><div><span class="l">수출액</span><span class="v num">${fUSD(x.ed)}</span></div><div><span class="l">물량</span><span class="v num">${fV(x.ew)}</span></div><div><span class="l">평균단가</span><span class="v num">${fPv(pn)}/kg</span></div></div>
-      <div class="row"><span>금액 전년비</span><span>${fY(yoy(x.ed,xp?.ed||0))}</span></div>
-      <div class="row"><span>단가 전년비</span><span>${pp?fY(pn/pp-1):'-'}</span></div>
-      ${tops.length?`<div class="top">주요 시장: ${tops.map(c=>`<b>${nm(c)}</b> ${fUSD(dcC[k+'|'+c].ed)}`).join(' · ')}</div>`:''}</button>`}).join('')}</div>`;
+  if($('#copy'))$('#copy').onclick=()=>{
+    const done=()=>{$('#copy').textContent='복사됨 ✓';setTimeout(()=>$('#copy').textContent='복사',1500)};
+    (navigator.clipboard?.writeText(line)||Promise.reject()).then(done).catch(()=>{const t=document.createElement('textarea');t.value=line;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();done()});
+  };
+  if($('#ch')){
+    const labels=last12,vals=last12.map(k=>mTot[k]?.usd||0);
+    new Chart($('#ch'),{type:'bar',data:{labels:labels.map(k=>k.slice(2)),datasets:[{data:vals,backgroundColor:labels.map(k=>k===Lk?'#0f5c43':'#9cc9b6'),borderRadius:3}]},
+      options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:it=>korM(labels[it[0].dataIndex]),label:c=>` ${fUSD(c.parsed.y)}`}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:11}}},y:{border:{display:false},grid:{color:'#f1f1ef'},ticks:{font:{size:11},callback:v=>fUSD(v)}}},
+        onHover:(e,els)=>{e.native.target.style.cursor=els.length?'pointer':'default'},
+        onClick:(e,els)=>{if(els.length)location.href=dl({per:'m:'+labels[els[0].index].replace('.','')})}}});
   }
-
-  if(!isMonth)html+=`<div class="card chart"><div class="sh" style="margin-bottom:8px"><h2 style="margin:0">월별 추이${dim?' · 세부 품목별':''}</h2><span class="hintc" style="margin-top:0">막대를 누르면 그 달만 봅니다</span>${seg('chS',[['amt','금액'],['vol','물량'],['price','평균단가']],ST.ch)}</div><div class="cbox"><canvas id="ch"></canvas></div></div>`;
-
-  const tblUnit=ST.tbl==='amt'?'USD':ST.tbl==='vol'?ST.unit:'USD/kg';
-  const cell=x=>!x?'–':ST.tbl==='amt'?fUSD(x.ed):ST.tbl==='vol'?fV(x.ew):fPv(price(x.ed,x.ew));
-  if(!F.c){
-    html+=`<div class="sh"><h2>국가별${dim?' × 세부 품목':''}</h2><span class="hintc">국가를 누르면 그 나라만, 칸을 누르면 해당 조합으로 들어갑니다 · 오른쪽 칸 단위 ${tblUnit}</span>${dim?seg('tbS',[['price','평균단가'],['vol','물량'],['amt','금액']],ST.tbl):''}</div>
-    <div class="card tw"><table>
-      <thead><tr><th>국가</th><th>지역</th><th>수출액</th><th>전년비</th><th>물량</th><th>평균단가</th>${dims.map(k=>`<th class="grp" style="color:${colorOf(k)}">${esc(hNm(k))}</th>`).join('')}</tr></thead>
-      <tbody>${countries.map(c=>`<tr class="go" data-go='${JSON.stringify({h:F.h,c})}'><td><b>${nm(c)}</b>${ST.scope!=='mine'&&MARKETS.includes(c)?' <span class="tagm">담당</span>':''}</td><td style="text-align:left;color:var(--mute)">${regOf(c)}</td><td class="num">${fUSD(cC[c].ed)}</td><td>${fY(yoy(cC[c].ed,cP[c]?.ed||0))}</td><td class="num">${fV(cC[c].ew)}</td><td class="num">${fP(cC[c].ed,cC[c].ew)}</td>
-        ${dims.map(k=>{const x=dcC[k+'|'+c];return x?`<td class="num grp cl" data-go='${JSON.stringify({h:k,c})}'>${cell(x)}</td>`:'<td class="num grp z">–</td>'}).join('')}</tr>`).join('')}</tbody>
-      <tfoot><tr><td>합계</td><td></td><td class="num">${fUSD(D)}</td><td>${fY(yoy(D,DP))}</td><td class="num">${fV(W)}</td><td class="num">${fP(D,W)}</td>${dims.map(k=>`<td class="num grp">${cell(dC[k])}</td>`).join('')}</tr></tfoot>
-    </table></div>`;
-  }else if(dim){
-    html+=`<div class="sh"><h2>${nm(F.c)} · 세부 품목별</h2><span class="hintc">행을 누르면 해당 품목만 봅니다</span></div>
-    <div class="card tw"><table>
-      <thead><tr><th>세부 품목</th><th>수출액</th><th>전년비</th><th>물량</th><th>평균단가</th><th>단가 전년비</th><th>비중</th></tr></thead>
-      <tbody>${dims.map(k=>{const x=dC[k],xp=dP[k],pn=price(x.ed,x.ew),pp=xp?price(xp.ed,xp.ew):null,sh=x.ed/D;
-        return`<tr class="go" data-go='${JSON.stringify({h:k,c:F.c})}'><td><b>${esc(hNm(k))}</b> <span class="note">${k}</span></td><td class="num">${fUSD(x.ed)}</td><td>${fY(yoy(x.ed,xp?.ed||0))}</td><td class="num">${fV(x.ew)}</td><td class="num">${fP(x.ed,x.ew)}</td><td>${pp?fY(pn/pp-1):'-'}</td><td class="num">${(sh*100).toFixed(1)}%<span class="share" style="width:${Math.max(2,sh*60)}px"></span></td></tr>`}).join('')}</tbody>
-    </table></div>`;
-  }
-
-  if(!isMonth){
-    const mC=by(cur,r=>r.p),mP=by(prev,r=>r.p),mdC=dim?by(cur,r=>r.p+'|'+r.h):{};
-    const prevKey=p=>`${+p.slice(0,4)-1}${p.slice(4)}`;
-    html+=`<div class="sh"><h2>월별 상세${dim?' × 세부 품목':''}</h2><span class="hintc">월을 누르면 그 달만 봅니다${dim?' · 오른쪽 칸 단위 '+tblUnit:''}</span>${dim&&F.c?seg('tbS',[['price','평균단가'],['vol','물량'],['amt','금액']],ST.tbl):''}</div><div class="card tw"><table>
-      <thead><tr><th>월</th><th>수출액</th><th>물량</th><th>평균단가</th><th>전년 같은 달</th><th>전년비</th>${dims.map(k=>`<th class="grp" style="color:${colorOf(k)}">${esc(hNm(k))}</th>`).join('')}</tr></thead>
-      <tbody>${[...MONTHS].reverse().map(p=>{const x=mC[p],xp=mP[prevKey(p)],mv=`m:${p.replace('.','')}`;
-        return x?`<tr class="go" data-month="${mv}"><td><b>${p}</b></td><td class="num">${fUSD(x.ed)}</td><td class="num">${fV(x.ew)}</td><td class="num">${fP(x.ed,x.ew)}</td><td class="num">${xp?fUSD(xp.ed):'-'}</td><td>${fY(yoy(x.ed,xp?.ed||0))}</td>${dims.map(k=>{const y=mdC[p+'|'+k];return`<td class="num grp ${y?'':'z'}">${cell(y)}</td>`}).join('')}</tr>`
-         :`<tr><td><b>${p}</b></td><td class="num z" colspan="3" style="text-align:center">실적 없음</td><td class="num">${xp?fUSD(xp.ed):'-'}</td><td>-</td>${dims.map(()=>'<td class="num grp z">–</td>').join('')}</tr>`}).join('')}</tbody>
-      <tfoot><tr><td>합계</td><td class="num">${fUSD(D)}</td><td class="num">${fV(W)}</td><td class="num">${fP(D,W)}</td><td class="num">${fUSD(DP)}</td><td>${fY(yoy(D,DP))}</td>${dims.map(k=>`<td class="num grp">${cell(dC[k])}</td>`).join('')}</tr></tfoot></table></div>`;
-  }
-  html+=`<div class="note">한국 → ${esc(scopeNm)} 사료첨가제(HS 2309.90-30) 수출 합계입니다(회사별 내역은 비공개). 평균단가 = 금액 ÷ 물량. 실적이 없는 품목·국가는 표시하지 않습니다. 관세청 실적은 매월 15일경 전월분이 반영되고, 이 페이지는 매달 16~20일 자동 갱신됩니다.</div>`;
-  $('#main').innerHTML=html;
-
-  document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();go(JSON.parse(el.dataset.go))}));
-  document.querySelectorAll('[data-scope]').forEach(el=>el.onclick=()=>{ST.scope=el.dataset.scope;saveST();render()});
-  document.querySelectorAll('[data-month]').forEach(el=>el.onclick=()=>pickMonth(el.dataset.month));
-  if($('#monthX'))$('#monthX').onclick=()=>{$('#per').value='12';run()};
-  if($('#tbS'))bindSeg('tbS',v=>{ST.tbl=v;saveST();render()});
-  if(!isMonth){bindSeg('chS',v=>{ST.ch=v;saveST();drawChart(cur,dims,colorOf,MONTHS)});drawChart(cur,dims,colorOf,MONTHS)}
 }
 
-function drawChart(cur,dims,colorOf,MONTHS){
-  const ps=MONTHS,m=ST.ch;
-  const series=dims.length?dims.map(k=>({label:hNm(k),color:colorOf(k),f:r=>r.h===k})):[{label:'수출',color:'#0f5c43',f:()=>true}];
-  const val=(p,f)=>{const x=cur.filter(r=>r.p===p&&f(r));const d=x.reduce((s,r)=>s+r.ed,0),w=x.reduce((s,r)=>s+r.ew,0);return m==='amt'?d:m==='vol'?vol(w):(w?price(d,w):null)};
-  const fmt=m==='amt'?fUSD:m==='vol'?(v=>`${Math.round(v).toLocaleString()} ${ST.unit}`):(v=>v==null?'-':`${fPv(v)}/kg`);
-  const stacked=m!=='price';
-  chart?.destroy();
-  chart=new Chart($('#ch'),{type:stacked?'bar':'line',data:{labels:ps,datasets:series.map(s=>({label:s.label,data:ps.map(p=>val(p,s.f)),backgroundColor:s.color,borderColor:s.color,stack:stacked?'s':undefined,borderRadius:2,tension:.3,cubicInterpolationMode:'monotone',pointRadius:3,borderWidth:2,spanGaps:true}))},
-    options:{maintainAspectRatio:false,onClick:(e,_,c)=>{const els=c.getElementsAtEventForMode(e,'index',{intersect:false},true);if(els.length)pickMonth('m:'+ps[els[0].index].replace('.',''))},onHover:e=>{e.native.target.style.cursor='pointer'},
-      interaction:{mode:'index',intersect:false},plugins:{legend:{display:series.length>1,position:'bottom',labels:{boxWidth:10,boxHeight:10,font:{size:12}}},
-      tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fmt(c.parsed.y)}`,footer:it=>stacked&&series.length>1?`합계 ${fmt(it.reduce((s,c)=>s+(c.parsed.y||0),0))}`:''}}},
-      scales:{x:{stacked,grid:{display:false}},y:{stacked,border:{display:false},grid:{color:'#eef0ec'},ticks:{callback:v=>m==='amt'?fUSD(v):m==='vol'?Math.round(v).toLocaleString():fPv(v)}}}}});
-}
-
-function buildPer(){const L=latest();let o='<option value="12">최근 12개월</option><option value="ytd">올해 누계</option><option value="ly">작년</option><optgroup label="월 선택">';
-  for(let i=0;i<24;i++){const m=addM(L,-i);o+=`<option value="m:${yyyymm(m)}">${m[0]}년 ${m[1]}월</option>`}$('#per').innerHTML=o+'</optgroup>'}
-function pickMonth(v){if(![...$('#per').options].some(o=>o.value===v))return;$('#per').value=v;run()}
-async function run(){
-  const p=$('#per').value;try{localStorage.setItem('feedPer',p)}catch(e){}
-  $('#main').innerHTML='<div class="card state"><b>불러오는 중…</b>관세청 데이터를 가져오고 있습니다<div class="pbar"><i id="pb"></i></div></div>';
-  LAST=await load(p);render();
-}
-document.querySelectorAll('#unit button').forEach(b=>b.classList.toggle('on',b.dataset.v===ST.unit));
-bindSeg('unit',v=>{ST.unit=v;saveST();render()});
-history.replaceState(F,'');
-if(location.protocol==='file:'){$('#main').innerHTML='<div class="err"><b>파일을 직접 열면 데이터를 읽을 수 없습니다.</b><br>GitHub Pages 주소로 접속하거나, 이 폴더에서 <code>python -m http.server</code> 실행 후 http://localhost:8000 으로 여세요.</div>'}
-else Promise.all([fetch('codes.json').then(r=>r.json()),fetch('data/feed_additive.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})])
-  .then(([c,d])=>{CN=Object.fromEntries(c.country);DATA=d;buildPer();try{const s=localStorage.getItem('feedPer');if(s&&[...$('#per').options].some(o=>o.value===s))$('#per').value=s}catch(e){}$('#per').onchange=run;run()})
-  .catch(()=>{$('#main').innerHTML='<div class="err"><b>아직 데이터 파일이 없습니다.</b><br>GitHub 저장소의 Actions 탭 → <b>Update customs data</b> → <b>Run workflow</b> 를 한 번 실행해 주세요. (몇 분 뒤 새로고침)</div>'});
+if(location.protocol==='file:')$('#app').innerHTML='<div class="err"><b>파일을 직접 열면 데이터를 읽을 수 없습니다.</b><br>GitHub Pages 주소로 접속하거나, 이 폴더에서 <code>python -m http.server</code> 실행 후 http://localhost:8000 으로 여세요.</div>';
+else loadData().then(({CN,DATA})=>build(CN,DATA)).catch(()=>{
+  $('#app').innerHTML='<div class="err"><b>아직 데이터가 만들어지지 않았습니다.</b><br>관세청 데이터 파일(data/feed_additive.json)이 생성되기 전입니다. GitHub 저장소의 Actions 탭 → <b>Update customs data</b> → <b>Run workflow</b>를 실행하고 몇 분 뒤 새로고침해 주세요.</div>';
+});
 </script>
 </body>
 </html>
