@@ -45,7 +45,6 @@ th{font-size:12px;color:var(--ink2);font-weight:600;background:#fafbf9;position:
 .l,th.l,td.l{text-align:left}
 .tw{overflow-x:auto}
 td.wrap{white-space:normal;min-width:220px}
-.stars{color:#d97706;letter-spacing:-1px;font-size:12px}
 .chip{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;margin:1px 3px 1px 0;font-weight:600;white-space:nowrap}
 .c-mt{background:#e7f1ec;color:#0a3f2e}.c-px{background:#e0ecff;color:#1d4ed8}.c-pn{background:#eef2ff;color:#4338ca}.c-rp{background:#f1ebfd;color:#6d28d9}.c-bg{background:#fef3c7;color:#92400e}
 .conf{font-weight:800;font-size:12px;padding:2px 8px;border-radius:6px}
@@ -78,7 +77,6 @@ const HS={'2309903010':'항생물질 위주','2309903020':'비타민 위주','23
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fUSD=v=>v>=1e6?`$${(v/1e6).toFixed(2)}M`:v>=1e3?`$${(v/1e3).toFixed(1)}K`:`$${Math.round(v)}`;
-const stars=q=>'★'.repeat(q)+'<span style="color:#e5e7eb">'+'★'.repeat(5-q)+'</span>';
 let CN={},ALL=[];
 const ST={conf:'hm',hs:'all',type:'all'};
 
@@ -127,14 +125,14 @@ function render(){
     <div class="card pad"><h2>1순위 추정 유형별 금액</h2><div class="hintc" style="margin-bottom:6px">누르면 그 유형만 표에서 봅니다 · 현재 신뢰도·품목 기준</div>
       ${tKeys.map(k=>`<div class="hbar" data-type="${esc(k)}" style="cursor:pointer"><span>${esc(k)} <span class="hintc">${byT[k].n}건</span></span><span class="t"><i style="width:${byT[k].usd/maxU*100}%"></i></span><span class="num" style="text-align:right">${fUSD(byT[k].usd)}</span></div>`).join('')||'<div class="hintc">해당 건이 없습니다.</div>'}
     </div>
-    <div class="card pad"><h2>단가대 기준표</h2><div class="hintc" style="margin-bottom:6px">막대 = 유형별 대략적인 벌크 단가 범위(로그 눈금, $0.25~$30) · 별 = 대량(100MT급) 거래 가능성</div>
-      <table><tbody>${TYPES.map(t=>`<tr><td class="l">${esc(t.n)}<div class="hintc">${esc(t.k)}</div></td><td class="num">$${t.lo}–${t.hi}</td><td><span class="stars">${stars(t.q)}</span></td><td style="width:40%"><div class="band"><i style="left:${pos(t.lo)}%;width:${pos(t.hi)-pos(t.lo)}%"></i></div></td></tr>`).join('')}</tbody></table>
+    <div class="card pad"><h2>단가대 기준표</h2><div class="hintc" style="margin-bottom:6px">막대 = 유형별 대략적인 벌크 단가 범위(로그 눈금, $0.25~$30)</div>
+      <table><tbody>${TYPES.map(t=>`<tr><td class="l">${esc(t.n)}<div class="hintc">${esc(t.k)}</div></td><td class="num">$${t.lo}–${t.hi}</td><td style="width:40%"><div class="band"><i style="left:${pos(t.lo)}%;width:${pos(t.hi)-pos(t.lo)}%"></i></div></td></tr>`).join('')}</tbody></table>
     </div>
   </div>
 
   <div class="card pad"><h2>🔁 반복 주문 패턴</h2><div class="hintc" style="margin-bottom:6px">같은 나라·세부코드·물량이 여러 달 반복 = 정기 거래처의 같은 제품일 가능성이 가장 높은 묶음</div>
     <div class="tw"><table><thead><tr><th class="l">나라</th><th class="l">세부 품목</th><th>물량/회</th><th>횟수</th><th>단가 범위</th><th class="l">추정 유형</th><th class="l">거래 월</th></tr></thead><tbody>
-    ${pats.map(g=>{const a=lowP(g),b=highP(g),c=candidates((a+b)/2,g[0].mt);return`<tr class="rp"><td class="l"><b>${esc(CN[g[0].c]||g[0].c)}</b></td><td class="l">${HS[g[0].h]}</td><td class="num">${g[0].mt} MT</td><td class="num">${g.length}회</td><td class="num">$${a.toFixed(2)}${b-a>=.005?`–${b.toFixed(2)}`:''}</td><td class="l"><b>${esc(c[0].n)}</b>${c[1]?` <span class="hintc">/ ${esc(c[1].n)}</span>`:''}</td><td class="l hintc" style="white-space:normal">${g.map(r=>r.m).sort().join(', ')}</td></tr>`}).join('')||'<tr><td class="l hintc" colspan="7">반복 패턴이 없습니다.</td></tr>'}
+    ${pats.map(g=>{const a=lowP(g),b=highP(g),c=candidates((a+b)/2,g[0].h);return`<tr class="rp"><td class="l"><b>${esc(CN[g[0].c]||g[0].c)}</b></td><td class="l">${HS[g[0].h]}</td><td class="num">${g[0].mt} MT</td><td class="num">${g.length}회</td><td class="num">$${a.toFixed(2)}${b-a>=.005?`–${b.toFixed(2)}`:''}</td><td class="l"><b>${esc(c[0].n)}</b>${c[1]?` <span class="hintc">/ ${esc(c[1].n)}</span>`:''}</td><td class="l hintc" style="white-space:normal">${g.map(r=>r.m).sort().join(', ')}</td></tr>`}).join('')||'<tr><td class="l hintc" colspan="7">반복 패턴이 없습니다.</td></tr>'}
     </tbody></table></div>
   </div>
 
@@ -145,7 +143,7 @@ function render(){
       <td class="num">${r.mt.toLocaleString()} MT</td><td class="num">${fUSD(r.usd)}</td>
       <td class="num"><b>$${r.p.toFixed(r.p<10?3:2)}</b><div class="hintc">${r.exact?`= $${r.q.toFixed(2)} 딱`:`≈ $${r.q.toFixed(2)} (${(r.dev*100).toFixed(2)}%)`}</div></td>
       <td class="l"><span class="chip c-mt">MT 정수</span>${r.exact?'<span class="chip c-px">단가 딱</span>':r.near?'<span class="chip c-pn">단가 근접</span>':''}${r.rep>=2?`<span class="chip c-rp">반복 ${r.rep}회</span>`:''}${r.big?'<span class="chip c-bg">20MT+</span>':''}</td>
-      <td class="l wrap"><div class="cand"><div><b>${esc(c[0].n)}</b><span class="stars">${stars(c[0].q)}</span></div>${c.length>1?`<div>${c.slice(1,3).map(t=>esc(t.n)).join(' · ')}</div>`:''}${r.h!=='2309903090'?`<div>세관 분류상 ${HS[r.h]} 프리믹스</div>`:''}</div></td>
+      <td class="l wrap"><div class="cand"><div><b>${esc(c[0].n)}</b></div>${c.length>1?`<div>${c.slice(1,3).map(t=>esc(t.n)).join(' · ')}</div>`:''}</div></td>
       <td class="l"><span class="conf ${r.conf}">${{h:'높음',m:'중간',lo:'낮음'}[r.conf]}</span></td></tr>`}).join('')||'<tr><td class="l hintc" colspan="9">조건에 맞는 건이 없습니다.</td></tr>'}
     </tbody></table></div>
   </div>
